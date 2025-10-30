@@ -75,5 +75,6 @@ export type ancestors = root
 export type self = typeof(public)
 export type root = typeof(root)
 
+-- Provides access to generalized tools.
 function root.GetPluginProvider () return public end
 return root

@@ -9,6 +9,7 @@ local parent = require('./')
 local provider = parent.GetPluginProvider()
 local mt = provider.GetMeta()
 local oop = provider.GetOOP()
+local link = provider.GetLinker()
 
 local private = {}
 local public = {}
@@ -35,6 +36,7 @@ function private.SetMetaObject <meta, value> (self: meta, objVal: value)
 	return self
 end
 
+-- Внутренние данных у экземпляров этого класса не требуется сохранять где-либо еще, т.к __index метатаблицы назначен на эти внутренние данные. Это предовтращает его удаление.
 function private.CreateObject <data, type> (self: data, name: type) 
 	local object = newproxy(true, name)
 	local mt = getmetatable(object)

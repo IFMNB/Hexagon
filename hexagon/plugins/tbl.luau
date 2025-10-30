@@ -88,7 +88,7 @@ function private.doSearchKeyForTable (self: {[any]: any}, value: any)
 end
 
 
-function private.DoGetKeyParent (self: {[any]:{[any]:any}}, value: any) : {[any]: any}?
+function private.DoGetKeyParent (self: {[any]:{[any]:any}}, value: any) : any?
 	for i,v in pairs(self) do
 		if private.doSearchKeyForTable(v, value) then
 			return i
@@ -126,7 +126,7 @@ end
 
 
 
--- Возвращает родительскую таблицу ключа, внутри которой было найдено целевое значение.
+-- Возвращает родителя для пары ключ-значения, если это значение было найдено.
 function public.getParentOfKey (self: {}, value: any)
 	return private.DoGetKeyParent(self :: any, value)
 end

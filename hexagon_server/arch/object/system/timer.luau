@@ -6,8 +6,11 @@ local ancestors = parent :: parent.ancestors
 
 local plugins = ancestors.GetPluginProvider()
 local oop = plugins.GetOOP()
-local obj = ancestors.GetArchProvider().GetObject()
-local watch = ancestors.GetArchProvider().GetSystem().GetWatcher().GetWatch()
+local link = plugins.GetLinker()
+
+local arch = ancestors.GetArchProvider()
+local obj = arch.GetObject()
+local watch = arch.GetSystem().GetWatcher().GetWatch()
 
 local private = {}
 local public = {}
@@ -24,11 +27,12 @@ function private.DoCreateNewTimer (self: time)
 	this.time = self
 	
 	local timer = {} :: _timer
-	timer._this = this
 	timer._watch = watch.NewWatcher(this)
 	timer._coroutine = private.DoCreateTimerCoroutine(timer)
 	timer._yield = true
 	
+	
+	link.LinkTo(this, timer)
 	oop.Expanding(timer, public)
 	local object = obj.New(timer, private.ClassName)
 	
@@ -83,7 +87,7 @@ function private.DoContinueCoroutine (self: _timer)
 end
 
 function private.DoCheckCurrentStateTimer (self: _timer)
-	return self._this.second ~= self._this.time
+	return self._watch.second ~= self._watch.time
 end
 
 function private.DoWaitCoroutine (self: _timer)
@@ -110,7 +114,7 @@ end
 
 
 function private.DoResetTimer (self: _timer)
-	self._this.second = 0
+	self._watch.second = 0
 	return self
 end
 
@@ -171,7 +175,6 @@ type this = {
 }
 
 type _timer = {
-	_this: this,
 	_watch: typeof(watch.NewWatcher({}::this)),
 	_coroutine: thread,
 	_yield: boolean
