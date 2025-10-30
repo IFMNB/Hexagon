@@ -14,6 +14,7 @@ local plugin_metatable			= plugin.mt
 local plugin_metatable_oop		= plugin.mt.oop
 local plugin_math				= plugin.math
 local plugin_vector3			= plugin.vector3
+local plugin_linker				= plugin.mt.linker
 
 local public = {}
 local root = {}
@@ -62,6 +63,10 @@ end
 -- Функционал работы с векторами.
 function public.GetVector3 ()
 	return require(plugin_vector3)
+end
+-- Функционал сохранения данных от удаления _GC.
+function public.GetLinker ()
+	return require(plugin_linker)
 end
 
 public.PluginPath = plugin

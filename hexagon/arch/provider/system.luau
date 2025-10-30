@@ -5,21 +5,29 @@
 local path = script.Parent.Parent.object.system
 
 local public = {}
--- Библиотека для создания оберток с кастом-поведением.
+-- Класс для создания оберток с кастом-поведением.
 function public.GetHook ()
 	return require(path.hooks)
 end
--- Библиотека для создания реактивных наблюдателей за изменениями объектов.
+-- Класс для создания реактивных наблюдателей за изменениями объектов.
 function public.GetWatcher ()
 	return require(path.hooks.watch)
 end
--- Библиотека для работы с коллекциями объектов.
+-- Класс для работы с коллекциями объектов.
 function public.GetCollection ()
 	return require(path.collection)
 end
--- Библиотека-аналог tweenService.
+-- Класс-аналог tweenService.
 function public.GetSwipe ()
 	return require(path.swipe)
+end
+-- Класс для хранения данных по принципу LIFO
+function public.GetStack ()
+	return require(path.stack)
+end
+-- Класс для хранения данных по принципу FIFO
+function public.GetQueue ()
+	return require(path.queue)
 end
 
 public.SystemPath = path

@@ -19,5 +19,5 @@ export type root = typeof(root)
 
 -- Возвращает специальные методы для всех, у кого есть доступ к этому модулю.
 function root.GetWorld () return public end
-ancestors.GetProviderPlugin().GetOOP().Expanding(root, parent)
+ancestors.GetPluginProvider().GetOOP().Expanding(root, parent)
 return root
