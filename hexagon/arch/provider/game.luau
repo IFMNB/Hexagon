@@ -9,9 +9,6 @@ local public = {}
 
 
 
-function public.GetOst ()
-	return require(path.ost)
-end
 
 public.GamePath = path
 

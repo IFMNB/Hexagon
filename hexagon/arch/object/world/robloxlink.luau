@@ -33,7 +33,7 @@ function private.DoInsertToClientStore (self: store, link: _rbxLink)
 end
 
 function private.DoExtendsClient (self: _rbxLink, client: Instance)
-	oop.Expanding(self, client)
+	mt.SpecifyTo(self, client)
 	private.instances[self]=client
 	client.Destroying:Once(function() 
 		private.links[client][assert(table.find(private.links[client], self), 'unable to find pos for destroyed RobloxLink')] = nil

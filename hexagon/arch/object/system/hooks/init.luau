@@ -403,7 +403,7 @@ type _iterator_origin = {
 	old: if_output
 }
 type _iterator_function = typeof(private.doIterate)
-type _value_for_iterator = (self: {})->iterator_value
+type _value_for_iterator = (self: {}) -> iterator_value
 
 type _HookParams = {
 	_actionType: action_type,

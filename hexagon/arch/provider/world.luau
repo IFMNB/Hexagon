@@ -16,6 +16,10 @@ end
 function public.GetRobloxLink ()
 	return require(path.robloxlink)
 end
+-- Класс-аналог tweenService.
+function public.GetSwipe ()
+	return require(path.swipe)
+end
 
 public.WorldPath = path
 

@@ -7,4 +7,5 @@ local ancestors = parent :: parent.ancestors
 
 local provider = ancestors.GetArchProvider()
 local plugin = ancestors.GetPluginProvider()
-local 
+
+return

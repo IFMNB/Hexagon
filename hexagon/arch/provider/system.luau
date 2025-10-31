@@ -17,10 +17,6 @@ end
 function public.GetCollection ()
 	return require(path.collection)
 end
--- Класс-аналог tweenService.
-function public.GetSwipe ()
-	return require(path.swipe)
-end
 -- Класс для хранения данных по принципу LIFO
 function public.GetStack ()
 	return require(path.stack)

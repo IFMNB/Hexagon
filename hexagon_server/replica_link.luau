@@ -1,5 +1,7 @@
 --!strict
 
+-- Стоит изменить ссылку, если переносите какие либо данные в другое место.
+
 local project = game.ReplicatedStorage.hexagon
 
 local public = {}
