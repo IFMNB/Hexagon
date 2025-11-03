@@ -199,7 +199,8 @@ type public = typeof(public)
 export type ancestors = self & parent.ancestors
 export type self = typeof(class)
 
--- Используется для отслеживания изменений в объекте. Эмулирует RBXScriptSignal.
+-- Сохраняет идею хуков, но по факту представляет Signal класс в другом виде. Не поддерживается. Используется для отслеживания изменений в объекте. Эмулирует RBXScriptSignal.
+@deprecated
 function root.GetWatch () return class end
 oop.Expanding(root, ancestors)
 return root

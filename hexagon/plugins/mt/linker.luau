@@ -44,7 +44,7 @@ end
 function plugin.Link (self: links)
 	return private.DoLink(self)
 end
--- Связывает 2 элемента, при удалении одного из которых, удаляется и второй.
+-- Связывает 2 элемента так, что первый зависит от второго.
 function plugin.LinkTo (self: links, to: links)
 	return private.DoLinkTo(self, to)
 end

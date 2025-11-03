@@ -12,6 +12,14 @@ local root = {}
 
 
 
+
+
+
+
+function public.GetClientParams ()
+	
+end
+
 type public = typeof(public)
 export type ancestors = root & parent.ancestors
 export type self = typeof(public)

@@ -46,7 +46,11 @@ function private.doSpecifyMetamethods (self: {[any]:any}, to: client)
 	return self
 end
 
-
+function private.DoCreateProxy (self: {[any]:any})
+	local proxy = {}
+	private.doSpecifyMetamethods(proxy, self)
+	return proxy
+end
 
 
 -- Запрещает любые операции с метатаблицей.
@@ -62,6 +66,10 @@ end
 -- Делегирует основные метаметоды на цель.
 function public.SpecifyTo (self: client, to: client) : {}
 	return private.doSpecifyMetamethods(self :: any, to)
+end
+-- Быстро создаст прокси на указанный объект.
+function public.DoProxy <tbl> (self: tbl) : tbl
+	return private.DoCreateProxy(self)
 end
 
 

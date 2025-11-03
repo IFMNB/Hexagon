@@ -304,6 +304,22 @@ function private.assertMainIteration (self: _HookParams)
 end
 
 
+function private.CreateNewClientTable (self: client)
+	private.hooks[self]={}
+	return self
+end
+
+function private.GetClientTable (self: client)
+	return private.hooks[self]
+end
+-- Все хуки привязаны к параметрам и семейству хуков клиента.
+function private.ShouldCreateClient (self: client, Params: _HookParams)
+	if not private.GetClientTable(self) then
+		private.CreateNewClientTable(self)
+	end
+
+	return private.DoCreateHook(self, Params)
+end
 
 
 
@@ -325,8 +341,6 @@ end
 function public.DoOverride (self: HookParams, at: override_in)
 	return private.setHookOverrideToResultType(self :: _HookParams, at) :: HookParams
 end
-
-
 -- Функция итератора самостоятельно определяет каким образом ей обрабатывать все полученные данные внутри и возвращает результат своих операций.
 function public.SetIterator (self: HookParams, iter: _iterator_function)
 	return private.setIterator(self :: _HookParams, iter) :: HookParams
@@ -336,37 +350,6 @@ function public.SetIteratorValue (self: HookParams, get: _value_for_iterator)
 	return private.setIteratorValue(self :: _HookParams, get) :: HookParams
 end
 
-
-
-
-
-
-
-
-function private.CreateNewClientTable (self: client)
-	private.hooks[self]={}
-	return self
-end
-
-function private.GetClientTable (self: client)
-	return private.hooks[self]
-end
--- Все хуки привязаны к параметрам и семейству хуков клиента.
-function private.ShouldCreateClient (self: client, Params: _HookParams)
-	if not private.GetClientTable(self) then
-		private.CreateNewClientTable(self)
-	end
-	
-	return private.DoCreateHook(self, Params)
-end
-
-
-
-
-
-
-
-
 -- Создает хук, привязанный к определенному клиенту. По умолчанию на паузе.
 function class.New <table> (self: table | client, HookParams: HookParams)
 	return private.ShouldCreateClient(self, HookParams :: _HookParams) :: Hooked<table>
@@ -375,15 +358,10 @@ end
 function class.NewParams () 
 	return private.DoCreateParams() :: HookParams
 end
--- Позволяет получить доступ к внутренним данным хука и некоторым закрытым реализациям. В основном используется подклассами и не требуется для реализации клиентом вручную. На данный момент не обладает никакой разницей с публичным NewParams.
-function protected._NewParams ()
-	return private.DoCreateParams() :: HookProtected
-end
-
 
 
 type client = {}|{[any]:any}
-type action_type = '__index'|'__newindex' | 'all'
+export type action_type = '__index'|'__newindex' | 'all'
 type override_in = 'nil'|'string'|'boolean'|'number'|'table' | 'all' | 'never'
 type no_output = typeof(private.no_output)
 type if_output = any|no_output
@@ -416,13 +394,13 @@ type _HookParams = {
 export type Hook = typeof(obj.New({}, private.hookClassName))
 export type HookParams = typeof(obj.New({} :: public, private.paramsClassName))
 
-type HookProtected = HookParams & protected_public
+export type HookProtected = HookParams & protected_public
 type Hooked <hooked> = hooked & Hook
 
 type protected_public = typeof(protected_public)
-type public = typeof(public)
-
-export type ancestors = self & parent.ancestors
+export type public = typeof(public)
+export type ancestors = root & parent.ancestors
+export type root = typeof(root)
 export type protected = self & typeof(protected)
 export type self = typeof(class)
 

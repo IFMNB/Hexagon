@@ -98,6 +98,7 @@ function public.Expanding <data> (self: data | self, ...: class)
 	return private.expandsRootPoint(self, ...)
 end
 -- Встраиват классы друг в другая, делая функционал каждого доступным для обоих.
+@deprecated
 function public.Embed <data> (self: data | self, class: class)
 	return private.DoSelfEmbedWithClass(self, class)
 end

@@ -7,10 +7,24 @@ local ancestors = parent :: parent.ancestors
 
 local private = {}
 local public = {}
-local class = {}
 local root = {}
 
 
+function private.GetServerDataByIndex (self: string)
+	
+end
+
+
+
+
+
+
+
+
+
+function public.GetServerParams (self: string)
+	
+end
 
 
 type public = typeof(public)

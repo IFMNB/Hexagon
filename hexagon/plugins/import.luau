@@ -42,11 +42,11 @@ end
 
 
 
--- Реализация блока TryCatch
+-- Реализация блока TryCatch -> делай, пока не получишь нужный результат
 function public.tryCatch (catch: any, func: (...any)->any, try: number, wait: number, ...: any)
 	return private.DoTryCatch(catch, func, try, wait, ...)
 end
--- Реализация try, отделенного от try-catch
+-- Реализация try, отделенного от try-catch -> делай, пока не успешно.
 function public.try (func: (...any)->any, try: number, wait: number, ...: any)
 	return private.DoTry(func, try, wait, ...)
 end

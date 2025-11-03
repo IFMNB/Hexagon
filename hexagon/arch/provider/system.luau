@@ -10,12 +10,21 @@ function public.GetHook ()
 	return require(path.hooks)
 end
 -- Класс для создания реактивных наблюдателей за изменениями объектов.
+@deprecated
 function public.GetWatcher ()
 	return require(path.hooks.watch)
 end
 -- Класс для работы с коллекциями объектов.
 function public.GetCollection ()
 	return require(path.collection)
+end
+-- Абстрактный класс эмулятор RBXScriptSignal.
+function public.GetSignal ()
+	return require(path.hooks.signal)
+end
+-- Класс для реактивного реагирования
+function public.GetChanged ()
+	return require(path.hooks.signal.changed)
 end
 -- Класс для хранения данных по принципу LIFO
 function public.GetStack ()
