@@ -187,7 +187,8 @@ export type ancestors = root & parent.ancestors
 export type root = typeof(root)
 export type self = typeof(class)
 
--- Класс для реактивного воздействия.
+-- Класс для реакции на прошедшее время. Депрекейнут, потому что watcher был депрекейнут.
+@deprecated
 function root.GetTimer () return class end
 oop.Expanding(root, parent)
 return root

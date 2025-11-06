@@ -1,5 +1,7 @@
 --!strict
 
+-- Высокоуровневые реализации.
+
 local plugins = require('./plugins')
 local arch = script.Parent.arch
 

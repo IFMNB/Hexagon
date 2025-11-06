@@ -20,7 +20,5 @@ function public.GetPluginProvider ()
 	return require(project.plugins).GetPluginProvider()
 end
 
-
-
 export type project_all = typeof(public)
 return public :: project_all

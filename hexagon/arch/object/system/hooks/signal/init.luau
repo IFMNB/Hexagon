@@ -18,6 +18,7 @@ local mt = plugin.GetMeta()
 
 local private = {}
 local public_link = {}
+local public_protect = {}
 local public = {}
 local protected = {}
 local class = {}
@@ -27,15 +28,26 @@ private.SignalClassName = 'Signal' :: 'Signal'
 private.SignalLinkClassName = 'SignalLink' :: 'SignalLink'
 
 private.links = mt.SetMode({} :: links, 'v')
+private.sigp = mt.SetMode({} :: sigp, 'k')
 
 type links = {[_sig_l]: _sig}
-
+type sigp = {[_sig]: parent.HookParams}
 
 
 function private.DoGetAllObservers (self: _sig) : obs_typ
 	return self._observers :: any
 end
 
+function private.DoGetOriginParams (self: _sig)
+	local params = private.sigp[self]
+	assert(params, 'fail to catch HookParams.')
+	return params
+end
+
+function private.DoSaveOriginParams (self: {}, params: parent.HookParams)
+	private.sigp[self]=params
+	return self
+end
 
 function private.DoCreateNewSignal () : Signal | SignalProtected | _sig
 	local sig = {} :: _sig
@@ -64,8 +76,12 @@ function private.DoCreateNewSignal () : Signal | SignalProtected | _sig
 		return 'never'
 	end)
 	
+
 	oop.Expanding(sig, params)
-	return obj.New(sig, private.SignalClassName)
+	oop.Expanding(sig, public_protect)
+	local o = obj.New(sig, private.SignalClassName)
+	private.DoSaveOriginParams(o, params)
+	return o
 end
 
 
@@ -155,6 +171,10 @@ end
 function public.Reset (self: Signal) : Signal
 	return private.DoResetAll(self :: _sig)
 end
+-- Возвращает оригинальный объект параметров хука.
+function public_protect.GetParams (self: SignalProtected) : HookParams
+	return private.DoGetOriginParams(self :: _sig)
+end
 
 -- Отключает текущий SignalLink
 function public_link.Disconnect (self: SignalLink) : ()
@@ -188,14 +208,15 @@ type _sig_l = SignalLink & {
 	_t: keyof<observers>,
 }
 
-export type HookParams = {[any]: any}
-export type HookSignal = parent.Hook
+export type HookParams = parent.HookParams
+export type Hook = parent.Hook
 
 
 export type SignalLink = typeof(obj.New({} :: public_link, private.SignalLinkClassName))
-export type SignalProtected = parent.HookParams & Signal
+export type SignalProtected = parent.HookParams & public_protect & Signal
 export type Signal = typeof(obj.New({} :: public, private.SignalClassName))
 
+type public_protect = typeof(public_protect)
 export type protected = self & typeof(protected)
 export type ancestors = root & parent.ancestors
 export type public_link = typeof(public_link)
@@ -204,7 +225,7 @@ export type root = typeof(root)
 export type self = typeof(class)
 
 -- Используется для подключения подсистем хуков также, как это делает RBXScriptSignal.
-function root.GetClass () return class end
+--function root.GetClass () return class end
+function root.GetProtected () return protected end
 oop.Expanding(root,ancestors)
-oop.Expanding(class, protected)
 return root

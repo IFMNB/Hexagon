@@ -170,7 +170,7 @@ end
 
 function private.DoCreateHook <client_type> (self: client, HookParams: _HookParams)
 	debug.profilebegin(private.debugname..'DoCreateHook')
-	assert(type(self)=='table' or typeof(self) == 'Instance', 'received non-table value')
+	assert(type(self)=='table' or typeof(self) == 'Instance' or typeof(self) == 'userdata', string.format('Received non-table value %q', typeof(self)))
 	
 	local Hook = private.DoHook()
 	private.DoInsertHookInParms(Hook, HookParams)
@@ -313,7 +313,7 @@ function private.GetClientTable (self: client)
 	return private.hooks[self]
 end
 -- Все хуки привязаны к параметрам и семейству хуков клиента.
-function private.ShouldCreateClient (self: client, Params: _HookParams)
+function private.DoCheckShouldCreateClient (self: client, Params: _HookParams)
 	if not private.GetClientTable(self) then
 		private.CreateNewClientTable(self)
 	end
@@ -352,7 +352,7 @@ end
 
 -- Создает хук, привязанный к определенному клиенту. По умолчанию на паузе.
 function class.New <table> (self: table | client, HookParams: HookParams)
-	return private.ShouldCreateClient(self, HookParams :: _HookParams) :: Hooked<table>
+	return private.DoCheckShouldCreateClient(self, HookParams :: _HookParams) :: Hooked<table>
 end
 -- Набор настроек для хука при его создании определяет его поведение в будущем. Как, например, метатаблицы переопределяют функционал таблиц, - так и настройки хуков определяют их реагирование.
 function class.NewParams () 

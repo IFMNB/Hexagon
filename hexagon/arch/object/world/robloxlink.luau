@@ -68,8 +68,8 @@ end
 
 
 
-
-function public.GetRobloxInstance <type> (self: RobloxLink<type>) : type
+-- Returns the original roblox instance.
+function public.GetRobloxInstance <type> (self: RobloxLink<type>|public) : type
 	return private.DoGetRobloxInstance(self)
 end
 
@@ -77,7 +77,7 @@ end
 
 
 
-
+-- Instances of this class will be automatically collected if the original roblox instance is deleted.
 function class.New <type> (self: type & Instance) : RobloxLink <type>
 	return private.DoLinkInstance(self)
 end
@@ -93,7 +93,7 @@ export type ancestors = root & parent.ancestors
 export type root = typeof(root)
 export type self = typeof(class)
 
--- 
+-- Wraps the Roblox instance in a working wrapper for __GC.
 function root.GetLink () return class end
 oop.Expanding(root, parent)
 return root

@@ -5,6 +5,7 @@
 local parent = require('./')
 local ancestors = parent :: parent.ancestors
 
+local app = ancestors.GetAppProvider()
 local arch = ancestors.GetArchProvider()
 local plugin = ancestors.GetPluginProvider()
 
@@ -12,30 +13,37 @@ local oop = plugin.GetOOP()
 local imp = plugin.GetImported()
 local mt = plugin.GetMeta()
 
+local ent = app.GetEntity().GetClass()
 local obj = arch.GetObject()
 local sys = arch.GetSystem()
-local watch = sys.GetWatcher().GetWatch()
-local col = sys.GetCollection().GetCollections()
-local rbxlink = arch .GetWorld().GetRobloxLink().GetLink()
+local rbxl = arch.GetWorld().GetRobloxLink().GetLink()
 
-type Collection = typeof(col.New())
-type RobloxLink = typeof(rbxlink.New(({}::any) :: Player))
+type Entity <this> = typeof(ent.New({} :: this))
+type RobloxLinkPlayer = typeof(rbxl.New(({}::any) :: Player))
 
 local private = {}
 local public = {}
 local class = {}
 local root = {}
 
-private.RoundClassName = 'Round'
+private.RoundClassName = 'Round' :: 'Round'
 
 function private.DoCreateNewRound () : Round | _round
 	local rnd = {} :: _round
 	
-	rnd._players = col.New()
-	rnd._container = col.New()
+	rnd._players = ent.New({})
+	
+	rnd._container = {} :: any
+	rnd._container.unknown = ent.New({})
+	rnd._container.murder = ent.New({})
+	rnd._container.survivor = ent.New({})
+	rnd._container.watcher = ent.New({})
+	rnd._container.dead = ent.New({})
+	rnd._container.last = ent.New({})
+	rnd._container.revived = ent.New({})
+	
 	rnd._public = {} :: any
-	rnd._public._state = {} :: any
-	rnd._public._state.state = 'init'
+	rnd._public.round_status = ent.New({state = 'init'}) :: public_state
 	
 	oop.Expanding(rnd, public)
 	return obj.New(rnd, private.RoundClassName)
@@ -47,57 +55,43 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
 function class.New ()
-
+	return private.DoCreateNewRound()
 end
 
 
 
-type ActivePlayers = {Player}
-type ActiveRbxLinksPlayers = {RobloxLink}
-type PlayerUsedRole = {[Player]:role_container}
-type ContainerName = string
-type role_container = {RobloxLink}
-type roles = keyof<_round_container>
+type RoundEntity = Entity<{RobloxLinkPlayer}>
+type RoundRoles = keyof<RoundObject>
 type round_states = 'running'|'escaped'|'LMS'|'ended'|'started'|'canceled'|'init'
 
-type _round_container = {
-	survivor: role_container,
-	murder: role_container,
-	watcher: role_container,
-	dead: role_container,
-	lastlife: role_container,
-	revived: role_container,
-	unknown: role_container
-	--[ContainerName]: role_container
+type RoundObject = {
+	survivor: RoundEntity,
+	murder: RoundEntity,
+	watcher: RoundEntity,
+	dead: RoundEntity,
+	last: RoundEntity,
+	revived: RoundEntity,
+	unknown: RoundEntity
+	--[ContainerName]: RoundEntity
 } 
-type _round_tags = {
-	_roles: PlayerUsedRole
-}
-type public_state = {
-	state: round_states
-}
+type public_state = Entity<{state: round_states}>
 type _public_round = {
-	_state: public_state
+	round_status: public_state
 }
-type _round = {
-	_players: Collection,
-	_container: Collection, --_round_container,
+type _round = Round & {
+	_players: RoundEntity,
+	_container: RoundObject,
 	_public: _public_round
-} & Round
-type Round = public
+} 
+type Round = typeof(obj.New({} :: public, private.RoundClassName))
 
-type public = typeof(public)
-export type ancestors = self
+export type public = typeof(public)
+export type ancestors = root & parent.ancestors
+export type root = typeof(root)
 export type self = typeof(class)
 
-return class
+
+function root.GetClass () return class end
+oop.Expanding(root, ancestors)
+return root

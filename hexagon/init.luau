@@ -7,7 +7,7 @@ local public = {}
 
 -- Основной узел маршрутизации по низшим деталям проекта.
 function public.GetPlugins ()
-	return require(script.plugins).GetProviderPlugin()
+	return require(script.plugins).GetPluginProvider()
 end
 -- Основной узел маршрутизации по низшим классам проекта.
 function public.GetArchProvider ()

@@ -48,7 +48,9 @@ end
 
 function private.DoCreateProxy (self: {[any]:any})
 	local proxy = {}
-	private.doSpecifyMetamethods(proxy, self)
+	local mt = {}
+	private.doSpecifyMetamethods(mt, self)
+	setmetatable(proxy, mt)
 	return proxy
 end
 

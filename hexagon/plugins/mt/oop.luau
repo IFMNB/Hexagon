@@ -40,14 +40,23 @@ end
 
 function private.multipleExpandsIterator (self: {[any]:any}, i: any) : any?
 	local list : any = private.getMEList(self)
-	assert(list :: {}, 'Unknown error. This error has occurred before, but it was related to garbageCollector.')
+	assert(list :: {}, 'Error related to garbageCollector.')
+	
 	
 	private.createChecked(self)
 	private.setToChecked(self, self)
-
+	
+	-- I don't know why some data gets lost and some gets found. If you need help, look up the manual workflow.
+	
+	--print('list counter ', #list)
+	--print('list is a ', list)
+	
 	for inum=1, #list do
 		local tbl = list[inum]
 		local v = tbl[i]
+		
+		--print('iterate table by inum ', inum, ' - ', tbl)
+		--print('get value by index ', v)
 		
 		if private.checkIsItOnline(tbl) then continue end
 		if private.checkIsItChecked(self, tbl) then continue end
@@ -56,6 +65,7 @@ function private.multipleExpandsIterator (self: {[any]:any}, i: any) : any?
 	end
 	
 	private.destroyChecked(self)
+	--warn('fail to catch index', i, self)
 	return nil
 end
 
@@ -94,22 +104,16 @@ end
 
 
 -- Мультиполярное наследование. Первый класс будет наследовать поля других классов по очереди. Используется первый найденный результат.
-function public.Expanding <data> (self: data | self, ...: class)
+function public.Expanding <data> (self: data | self, ...: class) : data
 	return private.expandsRootPoint(self, ...)
 end
 -- Встраиват классы друг в другая, делая функционал каждого доступным для обоих.
 @deprecated
-function public.Embed <data> (self: data | self, class: class)
+function public.Embed <data> (self: data | self, class: class) : data
 	return private.DoSelfEmbedWithClass(self, class)
 end
 
 private.meta = {__index = private.multipleExpandsIterator}
-
-task.spawn(function()
-	while task.wait(0.5) do
-		print(private.metastore)
-	end
-end)
 
 type class = {}
 export type ancestors = self & parent.ancestors
