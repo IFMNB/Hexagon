@@ -44,7 +44,7 @@ function private.DoGetOriginParams (self: _sig)
 	return params
 end
 
-function private.DoSaveOriginParams (self: {}, params: parent.HookParams)
+function private.DoSaveOriginParams (self: _sig, params: parent.HookParams)
 	private.sigp[self]=params
 	return self
 end
@@ -80,7 +80,7 @@ function private.DoCreateNewSignal () : Signal | SignalProtected | _sig
 	oop.Expanding(sig, params)
 	oop.Expanding(sig, public_protect)
 	local o = obj.New(sig, private.SignalClassName)
-	private.DoSaveOriginParams(o, params)
+	private.DoSaveOriginParams(o :: _sig, params)
 	return o
 end
 
@@ -191,7 +191,7 @@ function protected.NewSignal () : Signal
 end
 
 type client = {}|{[any]:any}
-type func = (self: {}|{[any]:any}, index: any, newindex: any, oldindex: any)->()
+type func = (self: any, index: any, newindex: any, oldindex: any)->()
 type listSL = {_sig_l}
 type obs_typ = {[string]: listSL}
 type observers = {

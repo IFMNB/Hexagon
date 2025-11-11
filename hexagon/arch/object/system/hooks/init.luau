@@ -2,7 +2,7 @@
 
 -- 
 
-local parent = require('./')
+local parent = require('../')
 local ancestors = parent :: parent.ancestors
 
 local provider = ancestors.GetPluginProvider()
@@ -213,7 +213,7 @@ function private.DoParams ()
 end
 
 function private.DoParamsField (self: HookParams)
-	private.params[self]=mt.SetMode({} :: HooksTable, 'v')
+	private.params[self :: _HookParams]=mt.SetMode({} :: HooksTable, 'v')
 	return self
 end
 

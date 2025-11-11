@@ -11,7 +11,19 @@ local root = {}
 
 
 function public.GetInvoke ()
-	return path.invoke
+	return require(path.invoke)
+end
+
+
+
+@deprecated
+function public.GetPart ()
+	return require(path.part)
+end
+
+@deprecated
+function public.GetModel ()
+	return require(path.part.mdl)
 end
 
 export type ancestors = root

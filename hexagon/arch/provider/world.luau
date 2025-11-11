@@ -1,6 +1,6 @@
 --!strict
 
-local path = script.Parent.Parent.object.world
+local path = script.Parent.Parent.object.roblox
 
 local public = {}
 

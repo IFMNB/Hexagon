@@ -1,6 +1,6 @@
 --!strict
 
-local parent = require('./')
+local parent = require('../')
 local ancestors = parent :: parent.ancestors
 
 local plugin = ancestors.GetPluginProvider()

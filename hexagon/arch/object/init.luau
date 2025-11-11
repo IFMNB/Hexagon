@@ -17,8 +17,8 @@ local public = {}
 local class = {}
 local root = {}
 
-private.COClassName = 'CodeObject' :: 'CodeObject'
-private.Hierarchy = mt.SetMode({} :: {[CodeObject<any, unknown>]: {[any]:any}}, 'kv')
+private.COClassName = 'AbstractObject' :: 'AbstractObject'
+private.Hierarchy = mt.SetMode({} :: {[userdata]: {[any]:any}}, 'kv')
 
 function private.InjectObjectDataToClass <class, type> (self: class, name: type)
 	local this = oop.Expanding({} :: any, self)
@@ -88,12 +88,8 @@ function private.DoCheckIsItA (self: CodeObject<any, string>)
 	return origin.ClassName or private.COClassName
 end
 
-
-
-
-
 -- Вернет ClassName родителя этого класса.
-function public:AncestorName () : string | typeof(private.COClassName)
+function public.AncestorName (self: any) : string | typeof(private.COClassName)
 	return private.DoCheckIsItA(self) :: string
 end
 
@@ -102,10 +98,6 @@ end
 -- Создает над данными инкапсуляцию. Эмулирует классовую структуру роблокса.
 function class.New <data, type> (self: data, ClassName: type)
 	return private.NewBaseObject(self, ClassName) :: CodeObject<data, type>
-end
-
-function class.test ()
-	return private.Hierarchy
 end
 
 type COId = string

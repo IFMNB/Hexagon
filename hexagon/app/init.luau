@@ -6,8 +6,12 @@ local plugins = require('./plugins')
 local arch = script.Parent.arch
 
 local public = {}
-local root = {}
+local _G = {}
 
+-- Контейнер _G для app части.
+function public.Global ()
+	return _G
+end
 
 -- Возвращает главный провайдер архитектуры.
 function public.GetArchProvider ()

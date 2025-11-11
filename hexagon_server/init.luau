@@ -6,11 +6,11 @@ local public = {}
 
 
 -- Основной узел маршрутизации по низшим деталям для серверной части проекта.
-function public.GetServerPlugin ()
+function public.GetServerPluginProvider ()
 	return require(script.plugins).GetServerPlugin()
 end
 -- Основной узел маршрутизации к реплицируемой на клиент части проекта.
-function public.GetReplicated ()
+function public.GetReplicatedProvider ()
 	return require(script.replica_link)
 end
 -- Основной узел маршрутизации по низшим классам для серверной части проекта.

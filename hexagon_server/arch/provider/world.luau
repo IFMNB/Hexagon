@@ -1,6 +1,6 @@
 --!strict
 
-local path = script.Parent.Parent.object
+local path = script.Parent.Parent.roblox
 local public = {}
 
 
@@ -8,7 +8,13 @@ local public = {}
 
 
 
+function public.GetSetter ()
+	return require(path.setter)
+end
 
+function public.GetSetterHumanoid ()
+	return require(path.setter.humanoid)
+end
 
 public.Path = path
 

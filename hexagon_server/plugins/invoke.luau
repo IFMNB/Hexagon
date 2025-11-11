@@ -8,7 +8,9 @@ private.time = 6
 private.coroutine_fail = private.debugname..'coroutine_fail'
 
 
-
+-- Механизм работы похож с механизмом работы из плагина coroutine в клиенте hexagon, 
+-- однако я не буду делать этот плагин зависимым от него, потому что
+-- мне просто лень чинить его позже в случае чего.
 
 
 function private.doInvokeClient (Event: RemoteEvent, player: Player, ...: any)
@@ -89,15 +91,15 @@ end
 
 
 
-
+-- Вызывает функцию на клиенте, и возвращает результат.
 function public.InvokeClient (self: Player, Event: RemoteEvent, ...: any)
 	return private.doInvokeClient(Event, self, ...)
 end
-
+-- Вызывает функцию на массив клиентов, и возвращает таблицу с результатами.
 function public.InvokeList (self: {Player}, Event: RemoteEvent, ...: any)
 	return private.doInvokeClients(Event, self, ...)
 end
-
+-- Вызывает функцию на всех клиентах, и возвращает таблицу с результатами.
 function public.InvokeAll (self: RemoteEvent, ...: any)
 	return private.doInvokeAll(self, ...)
 end
