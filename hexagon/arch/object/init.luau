@@ -42,6 +42,7 @@ function private.CreateObject <data, type> (self: data, name: type)
 	local value : any = oop.Expanding(self, public)
 	
 	
+
 	private.SetMetaObject(mt, value)
 	
 	return object
@@ -62,6 +63,7 @@ function private.NewBaseObject <data, type> (self: data, name: type)
 	local data = private.InjectObjectDataToClass(self, name)
 	local object = private.CreateObject(data, name)
 	private.DoRelativeTo(object, self)
+	link.LinkTo(self, object)
 
 	debug.profileend()
 	return object
@@ -89,16 +91,16 @@ function private.DoCheckIsItA (self: CodeObject<any, string>)
 end
 
 -- Вернет ClassName родителя этого класса.
-function public.AncestorName (self: any) : string | typeof(private.COClassName)
-	return private.DoCheckIsItA(self) :: string
+function public:AncestorName () : string | typeof(private.COClassName)
+	return private.DoCheckIsItA(self :: any)
 end
-
-
 
 -- Создает над данными инкапсуляцию. Эмулирует классовую структуру роблокса.
-function class.New <data, type> (self: data, ClassName: type)
-	return private.NewBaseObject(self, ClassName) :: CodeObject<data, type>
+function class.New <data, type> (self: data, ClassName: type) : CodeObject<data, type>
+	return private.NewBaseObject(self, ClassName)
 end
+
+
 
 type COId = string
 type userdata = setmetatable<{},{[string]:any}>
@@ -108,6 +110,8 @@ type InjectedObjectData <classname> = {
 	ClassName: classname,
 	Identificator: COId
 }
+
+
 export type CodeObject <this, name> = setmetatable<this & public & InjectedObjectData<name>, {[string]: string|(...any)->()|any}>
 
 type public = typeof(public)

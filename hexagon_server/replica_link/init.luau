@@ -2,7 +2,7 @@
 
 -- Стоит изменить ссылку, если переносите какие либо данные в другое место.
 
-local project = require(game.ReplicatedStorage.hexagon)
+local project = require(script.HexagonLink.Value)
 
 local public = {}
 

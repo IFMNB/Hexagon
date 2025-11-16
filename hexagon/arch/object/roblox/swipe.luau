@@ -18,6 +18,7 @@ private.classname = 'Swipe' :: 'Swipe'
 private.current = mt.SetMode({} :: {[client]: RBXScriptConnection|'init'}, 'k')
 private.iterators = {
 	linear = function (self: _client, at: parameter, to: value, lerp: _lerp_F, alpha: number) : value 
+		print(self,at,to,lerp,alpha)
 		return lerp(self[at], to, alpha)
 	end,
 	quadric = function (self: _client, at: parameter, to: value, lerp: _lerp_F, alpha: number) : value 
@@ -228,7 +229,8 @@ export type ancestors = root & parent.ancestors
 export type self = typeof(class)
 export type root = typeof(root)
 
--- Используется как альтернатива TweenService.
-function root.GetSwipe () return class end
+-- Используется как альтернатива TweenService. На данный момент на переработке.
+@deprecated
+function root.GetClass () return class end
 oop.Expanding(root, ancestors)
 return root 

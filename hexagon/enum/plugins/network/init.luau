@@ -1,6 +1,6 @@
 --!strict
 
-assert(not game["Run Service"]:IsServer(), 'server cant use this api')
+local enum = require('../')
 
 local private = {}
 local plugin = {}
@@ -28,6 +28,10 @@ function private.DoRequestPing ()
 	return is and result-request or private.error
 end
 
+function private.DoOnlyInClient (func: (...any)->()|any?, ...: any) : any
+	assert(not game["Run Service"]:IsServer(), 'server cant use this api')
+	return func(...)
+end
 
 
 
@@ -37,12 +41,13 @@ end
 
 -- Возвращает результат сетевого запроса между клиентом и сервером.
 function plugin.GetPing ()
-	return private.DoRequestPing()
+	return private.DoOnlyInClient(private.DoRequestPing())
 end
 -- Возвращает время между сетевыми запросами от клиента до сервера, а затем к цели и обратно.
 function plugin.GetPlayerPing (to: Player) 
-	return private.DoRequestPingToPlayer(to)
+	return private.DoOnlyInClient(private.DoRequestPingToPlayer(to))
 end
+
 
 export type ancestors = self
 export type self = typeof(plugin)

@@ -7,6 +7,7 @@ local provider = ancestors.GetPluginProvider()
 local oop = provider.GetOOP()
 local mt = provider.GetMeta()
 local obj = ancestors.GetObject()
+local lnk = provider.GetLinker()
 
 local private = {}
 local public = {}
@@ -44,7 +45,9 @@ end
 function private.DoNewRobloxLink ()
 	local link = {} :: _rbxLink
 	oop.Expanding(link, public)
+	
 	local object = obj.New(link, private.classname)
+	lnk.LinkTo(link, object)
 	return object
 end
 
@@ -75,7 +78,7 @@ end
 
 
 -- Returns the original roblox instance.
-function public.GetRobloxInstance (self: RobloxLink) : Instance
+function public.GetRobloxInstance (self: RobloxLink) : Instance?
 	return private.DoGetRobloxInstance(self)
 end
 

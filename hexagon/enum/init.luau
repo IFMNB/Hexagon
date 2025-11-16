@@ -52,26 +52,40 @@ export type public = typeof(public)
 
 private.RC = 'RobloxCamera' :: 'RobloxCamera'
 private.NW = 'Network' :: 'Network'
+private.ER = 'Error' :: 'Error'
+private.ST = 'State' :: 'State'
+private.AC = 'Access' :: 'Access'
 
 public.Roblox = {}
 public.Roblox.Camera = {}
 public.Roblox.Camera.SmoothMovement = private.New('SmoothMovement' :: 'SmoothMovement', private.RC)
 public.Roblox.Camera.SmoothFollow = private.New('SmoothFollow' :: 'SmoothFollow', private.RC)
 public.Roblox.Camera.SmoothRotate = private.New('SmoothRotate' :: 'SmoothRotate', private.RC)
-public.Roblox.Camera.Error = {}
-public.Roblox.Camera.Error.CurrentCamera = private.New('CurrentCamera' :: 'CurrentCamera', private.RC)
+public.Roblox.Camera.SmoothWatchCamera = private.New('SmoothWatchCamera' :: 'SmoothWatchCamera', private.RC)
+public.Roblox.Camera.SmoothCameraLookAt = private.New('SmoothCameraLookAt' :: 'SmoothCameraLookAt', private.RC)
+public.Roblox.Camera.SmoothCameraPosition = private.New('SmoothCameraPosition' :: 'SmoothCameraPosition', private.RC)
+
+public.State = {}
+public.State.Run = private.New('Run' :: 'Run', private.ST)
+public.State.Pause = private.New('Pause' :: 'Pause', private.ST)
+public.State.Dead = private.New('Dead' :: 'Dead', private.ST)
+public.State.Idle = private.New('Idle' :: 'Idle', private.ST)
+
+public.Error = {}
+public.Error.Forbidden = private.New('Forbidden' :: 'Forbidden', private.ER)
+public.Error.Unknown = private.New('Unknown' :: 'Unknown', private.ER)
+public.Error.Unstable = private.New('Unstable' :: 'Unstable', private.ER)
+public.Error.Reset = private.New('Reset' :: 'Reset', private.ER)
+public.Error.Never = private.New('Never' :: 'Never', private.ER)
+
+public.Access = {}
+public.Access.Developer = private.New('Developer' :: 'Developer', private.AC)
+public.Access.Moderator = private.New('Moderator' :: 'Moderator', private.AC)
+public.Access.Default = private.New('Default' :: 'Default', private.AC)
 
 public.Network = {}
-public.Network.Config = {}
-public.Network.Error = {}
-public.Network.Error.Forbidden = private.New('Forbidden' :: 'Forbidden', private.NW)
-public.Network.Error.Unknown = private.New('Unknown' :: 'Unknown', private.NW)
-public.Network.Error.Unstable = private.New('Unstable' :: 'Unstable', private.NW)
-public.Network.Error.Reset = private.New('Reset' :: 'Reset', private.NW)
-
-public.Replicated = {}
-public.Replicated.PlayerData = {}
-public.Replicated.Character = {}
+public.Network.Store = {}
+public.Network.Store.Main = private.New('Main' :: 'Main', private.NW)
 
 
 -- Возвращает HexagonEnum по переданному значению.
@@ -82,6 +96,9 @@ end
 function public.GetStart () : number
 	return private.startGeneration
 end
-
+-- Создает новый hexagonEnum с заданным именем и группой.
+function public.Create <name, group> (name: name, group: group) : HexagonEnum<name, group>
+	return private.New(name,group)
+end
 
 return public

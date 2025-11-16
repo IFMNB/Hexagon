@@ -50,8 +50,8 @@ function private.doInvokeClients (Event: RemoteEvent, Clients: {Player}, ...: an
 	debug.profilebegin(private.debugname..'InvokeClients')
 	
 	local this = coroutine.running()
-	local result = {}
-	local fail = {}
+	local result = {} :: {[Player]: any?}
+	local fail = {} :: {Player}
 	
 	for i=1, #Clients do
 		task.spawn(function(...: any)
@@ -92,7 +92,7 @@ end
 
 
 -- Вызывает функцию на клиенте, и возвращает результат.
-function public.InvokeClient (self: Player, Event: RemoteEvent, ...: any)
+function public.InvokeClient (self: Player, Event: RemoteEvent, ...: any) : any?
 	return private.doInvokeClient(Event, self, ...)
 end
 -- Вызывает функцию на массив клиентов, и возвращает таблицу с результатами.

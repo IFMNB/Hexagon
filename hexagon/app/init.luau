@@ -2,7 +2,7 @@
 
 -- Высокоуровневые реализации.
 
-local plugins = require('./plugins')
+local plugins = require('./enum/plugins')
 local arch = script.Parent.arch
 
 local public = {}

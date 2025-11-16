@@ -8,7 +8,7 @@ local plugin = {}
 
 
 
--- Возвращает список функционала над камерой
+-- Возвращает список с функционалом для управления камерой.
 function plugin.GetCamera ()
 	return require(path.camera)
 end

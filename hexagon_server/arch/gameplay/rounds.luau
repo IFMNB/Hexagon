@@ -166,7 +166,6 @@ function class.New ()
 	return private.DoCreateNewRound()
 end
 
-
 type RoundPlayerCurrentRole = {[RobloxLink]: RoundRoles}
 type RoundEntity = Entity<typeof(mt.SetMode({} :: {RobloxLink}, {}::any))>
 type RoundRoles = keyof<RoundObject>

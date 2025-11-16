@@ -1,5 +1,31 @@
 --!strict
 
+--[[
+
+Вы можете использовать энтити в разных ситуациях, поскольку сущность реагирует на изменения в себе.
+Одним из способов сэкономить на оптимизации объекта будет выставлять не каждую сущность отдельно для
+каждого контейнера, а обернуть весь объект в одну сущность.
+Спрашивается, каким образом это позволит охватить реакцию на все изменения в энтити?
+Достаточно все поля объекта реализовывать не в подтаблицах, а в самом объекте.
+
+function private.DoCreateActivitiesInter (template: ClassInterjection)
+	template.Activities = template
+	template.InAfk = false
+	template.InGame = false
+	template.IsLoaded = false
+	return template
+end
+
+Тогда при любом изменении в сущности, вы получите сигнал из любого места,
+при этом сохраняя типизацию и рантайм безопасность, если позже привести типы
+в ожидаемый результат.
+Подобный паттерн требует, чтобы тип ClassInterjection состоял из всех подтаблиц оригинальна
+
+]]
+
+
+
+
 local app = require('./')
 local plugin = app.GetPluginProvider()
 local arch = app.GetArchProvider()
@@ -37,7 +63,8 @@ function class.New <this> (self: this) : Entity<this>
 	return private.DoCreateNewEntity(self)
 end
 
--- Аналогичен New, за исключением того, что оборачивается указанный параметр. Ссылка на сигнал встраивается в таблице родителя
+-- Аналогичен New, за исключением того, что оборачивается указанный параметр. Ссылка на сигнал встраивается в таблице родителя. Нерекомендуемая мутация.
+@deprecated
 function class.NewEmulate <this> (self: this, parameter: any) : Entity<this>
 	return private.DoEmulateNew(self, parameter)
 end

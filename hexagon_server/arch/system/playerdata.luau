@@ -1,6 +1,7 @@
 --!strict
 
 local arch = require('../')
+
 local enums = arch.GetEnums()
 local plugin = arch.GetPluginProvider()
 
@@ -27,15 +28,22 @@ function private.DoCreateNewClass (player: Player) : PlayerSystemData
 	local link = rbxl.New(player)
 	local proxy = oop.Expanding({} :: ThisData, link, public)
 	local object = obj.New(proxy, private.DataClassName) :: PlayerSystemData
-	local shadow = shd.New(object) :: _Shadow
+	local shadow : _Shadow = shd.New(object)
 	
 	local Activities : Activities = {
 		IsLoaded = false,
-		InAfk = false,
-		InGame = false
+		IsAfk = false,
+		InGame = false,
+		IsLocked = false
 	}
 	
-	local ServerStore = {} :: ServerStore
+	local ServerStore : ServerStore = {
+		IsNewbie = false,
+		AccessLevel = enums.Access.Default,
+		PlayedTime = 0,
+		GameLevel = 0,
+		LastPlayedDate = enums.Error.Unknown
+	}
 	
 	
 	
@@ -58,6 +66,7 @@ end
 
 
 function private.RootGet (player: Player)
+	assert(player.Parent ~= nil, 'player is destroyed')
 	return private.DoGetPlayerData(player) or private.DoCreateNewClass(player)
 end
 
@@ -78,17 +87,28 @@ end
 
 
 
+type AccessLevelEnum = typeof(enums.Access.Default) | typeof(enums.Access.Moderator) | typeof(enums.Access.Developer)
+type LastPlayedDate = typeof(enums.Error.Unknown) | string
+
+
+
+
 type Activities = {
-	InAfk: boolean,
+	IsAfk: boolean,
 	InGame: boolean,
-	IsLoaded: boolean
+	IsLoaded: boolean,
+	IsLocked: boolean
 }
 type ServerStore = {
-	
+	IsNewbie: boolean,
+	PlayedTime: number,
+	GameLevel: number,
+	AccessLevel: AccessLevelEnum,
+	LastPlayedDate: LastPlayedDate
 }
 type ThisData = {
 	Activities: Entity<Activities>,
-	ServerStore: Entity<ServerStore> 
+	ServerStore: Entity<ServerStore>
 }
 
 
@@ -101,12 +121,12 @@ type Entity<type> = typeof(ent.New({})) & type
 type RobloxLink = typeof(rbxl.New({}::any))
 export type PlayerSystemData = typeof(obj.New({} :: public, private.DataClassName)) & RobloxLink & ThisData
 
-export type ancestors = self & arch.hierarchy_server_start
+export type ancestors = root & arch.hierarchy_server_start
 export type public = typeof(public)
 export type self = typeof(class)
 export type root = typeof(root)
 
-
+-- Класс PlayerSystemData хранит базовые данные об игроке.
 function root.GetClass () return class end
 oop.Expanding(root, arch)
 return root

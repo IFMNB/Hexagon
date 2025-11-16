@@ -16,23 +16,23 @@ function private.DoCreateNewShadow (to: any, inject: shadow?)
 end
 
 function private.DoGetShadow (from: any)
-	return private.shadows[from]
+	return assert(private.shadows[from], string.format('Shadow is not exists for request %q', tostring(from)))
 end
 
 
 
 
--- 
+-- Создает новую таблицу "тень", привязанную своим существованием к указанной цели. По сути, приватные поля.
 function plugin.New (to: any, inject: shadow?) : shadow
 	return private.DoCreateNewShadow(to)
 end
-
-function plugin.Get (from: any) : shadow?
+-- Получает "тень" для указанного объекта.
+function plugin.Get (from: any) : shadow
 	return private.DoGetShadow(from)
 end
 
 
-type shadow = {[any]:any}
+type shadow = any
 export type ancestors = self
 export type self = typeof(plugin)
 

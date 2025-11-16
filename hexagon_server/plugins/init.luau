@@ -14,6 +14,9 @@ function public.GetInvoke ()
 	return require(path.invoke)
 end
 
+function public.GetNetwork ()
+	return require(path.invoke.network)
+end
 
 
 @deprecated

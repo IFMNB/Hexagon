@@ -2,7 +2,7 @@
 
 -- Самостоятельные низкоуровневые классы.
 
-local plugins = require('./plugins')
+local plugins = require('./enum/plugins')
 
 local root = {}
 

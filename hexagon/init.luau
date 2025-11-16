@@ -6,8 +6,8 @@ local arch = script.arch
 local public = {}
 
 -- Основной узел маршрутизации по низшим деталям проекта.
-function public.GetPlugins ()
-	return require(script.plugins).GetPluginProvider()
+function public.GetPluginProvider ()
+	return require(script.enum.plugins).GetPluginProvider()
 end
 -- Основной узел маршрутизации по низшим классам проекта.
 function public.GetArchProvider ()
@@ -17,7 +17,10 @@ end
 function public.GetAppProvider ()
 	return require(app.provider)
 end
-
+-- Энумераторы проекта.
+function public.GetEnums ()
+	return require(script.enum)
+end
 
 
 
@@ -29,7 +32,7 @@ export type project_replica = typeof(public)
 --[[
 
 	plugin
-		Провайдит доступ к низним деталям проекта.
+		Провайдит доступ к нижним деталям проекта.
 	Arch.provider
 		Провайдит доступ ко всем классам Arch.
 	App.provider

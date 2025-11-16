@@ -13,6 +13,9 @@ function public.GetEntity ()
 	return require(app.entity)
 end
 
+function public.GetTimecast ()
+	return require(app.entity.timecast)
+end
 
 public.AppProviderPath = provider
 

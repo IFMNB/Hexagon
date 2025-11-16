@@ -88,6 +88,6 @@ export type root = typeof(root)
 export type self = typeof(class)
 
 -- Используется для листинга по принципу FIFO.
-function root.GetQueue () return class end
+function root.GetClass () return class end
 oop.Expanding(root, ancestors)
 return root

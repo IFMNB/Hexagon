@@ -78,6 +78,7 @@ function private.DoCreateNewSignal () : Signal | SignalProtected | _sig
 	
 
 	oop.Expanding(sig, params)
+	oop.Expanding(sig, public)
 	oop.Expanding(sig, public_protect)
 	local o = obj.New(sig, private.SignalClassName)
 	private.DoSaveOriginParams(o :: _sig, params)

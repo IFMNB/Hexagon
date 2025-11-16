@@ -106,6 +106,6 @@ export type root = typeof(root)
 export type self = typeof(class)
 
 -- Используется для стека. LIFO структура.
-function root.GetStack () return class end
+function root.GetClass () return class end
 oop.Expanding(root, ancestors)
 return root

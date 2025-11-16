@@ -2,7 +2,7 @@
 
 -- Независимый провайдер, который предоставляет доступ к независимым плагинам для примитивов языка или объектов роблокса в реплицируемой для клиента части игры.
 
-local plugin 					= script
+local plugin 					= script 
 
 local public = {}
 local root = {}
@@ -56,9 +56,17 @@ end
 function public.GetLinker ()
 	return require(plugin.mt.linker)
 end
-
+-- Функционал для хранения привязанных к конкретному объекту данных.
+function public.GetShadow ()
+	return require(plugin.mt.linker.shadow)
+end
+-- Функционал сетевого клиентского взаимодействия.
 function public.GetNetwork ()
 	return require(plugin.network)
+end
+-- Функционал клиента для манипуляциями с роблокс объектами.
+function public.GetRoblox ()
+	return require(plugin.roblox)
 end
 
 public.PluginPath = plugin
