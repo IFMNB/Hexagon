@@ -10,10 +10,10 @@ local imp = plugin.GetImported()
 local mt = plugin.GetMeta()
 local lnk = plugin.GetLinker()
 local shd = plugin.GetShadow()
+local rbxl = plugin.GetReference()
 
 local obj = arch.GetArchProvider().GetObject()
-local ent = arch.GetAppProvider().GetEntity().GetClass()
-local rbxl = arch.GetArchProvider().GetWorld().GetRobloxLink().GetClass()
+local ent = arch.GetArchProvider().GetSystem().GetEntity().GetClass()
 
 
 local private = {}
@@ -25,7 +25,7 @@ private.store = mt.SetMode({} :: {PlayerSystemData}, 'v')
 private.DataClassName = 'PlayerSystemData' :: 'PlayerSystemData'
 
 function private.DoCreateNewClass (player: Player) : PlayerSystemData
-	local link = rbxl.New(player)
+	local link = rbxl.Link({}, player)
 	local proxy = oop.Expanding({} :: ThisData, link, public)
 	local object = obj.New(proxy, private.DataClassName) :: PlayerSystemData
 	local shadow : _Shadow = shd.New(object)
@@ -57,7 +57,7 @@ end
 
 function private.DoGetPlayerData (player: Player) : PlayerSystemData?
 	for i,v in pairs(private.store) do
-		if v:GetRobloxInstance() == player then
+		if rbxl.Get(v) == player then
 			return v
 		end
 	end
@@ -118,7 +118,7 @@ type _Shadow = {
 }
 
 type Entity<type> = typeof(ent.New({})) & type
-type RobloxLink = typeof(rbxl.New({}::any))
+type RobloxLink = {}
 export type PlayerSystemData = typeof(obj.New({} :: public, private.DataClassName)) & RobloxLink & ThisData
 
 export type ancestors = root & arch.hierarchy_server_start

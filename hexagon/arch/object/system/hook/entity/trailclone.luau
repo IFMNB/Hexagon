@@ -1,17 +1,14 @@
 --!strict
 
 local main = require('./')
-local parent = main :: main.ancestors
-local arch = parent.GetArchProvider()
-
-local world = arch.GetWorld()
+local arch = main :: main.ancestors
 
 local debris = game:GetService('Debris')
 
 local obj = arch.GetObject()
 local ent = main.GetClass()
-local enum = parent.Enum()
-local plugin = parent.GetPluginProvider()
+local enum = arch.Enum()
+local plugin = arch.GetPluginProvider()
 
 local oop = plugin.GetOOP()
 local imp = plugin.GetImported()

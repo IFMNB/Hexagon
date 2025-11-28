@@ -5,7 +5,7 @@
 local project = require(script.HexagonLink.Value)
 
 local public = {}
-
+public.Path = script.HexagonLink.Value
 
 ---- Основной узел маршрутизации по низшим классам проекта.
 --function public.GetArchProvider ()
@@ -22,5 +22,5 @@ local public = {}
 
 setmetatable(public, {__index = project})
 
-export type project_all = project.project_replica typeof(public)
+export type project_all = project.project_replica & typeof(public)
 return public :: project_all

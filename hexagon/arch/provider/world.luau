@@ -12,10 +12,6 @@ local public = {}
 function public.GetRaySolid ()
 	return require(path.raysolid)
 end
--- Самостоятельная, расширенная реализация функций TweenService. Также распространяется на код.
-function public.GetRobloxLink ()
-	return require(path.robloxlink)
-end
 -- Класс-аналог tweenService.
 function public.GetSwipe ()
 	return require(path.swipe)

@@ -12,14 +12,14 @@ local plugin = ancestors.GetPluginProvider()
 local oop = plugin.GetOOP()
 local imp = plugin.GetImported()
 local mt = plugin.GetMeta()
+local rbxl = plugin.GetReference()
 
-local ent = app.GetEntity().GetClass()
+local ent = arch.GetSystem().GetEntity().GetClass()
 local obj = arch.GetObject()
 local sys = arch.GetSystem()
-local rbxl = arch.GetWorld().GetRobloxLink().GetClass()
+
 
 type Entity <this> = typeof(ent.New({} :: this))
-type RobloxLink = typeof(rbxl.New({}::any))
 
 local private = {}
 local public = {}
@@ -166,6 +166,7 @@ function class.New ()
 	return private.DoCreateNewRound()
 end
 
+type RobloxLink = {}
 type RoundPlayerCurrentRole = {[RobloxLink]: RoundRoles}
 type RoundEntity = Entity<typeof(mt.SetMode({} :: {RobloxLink}, {}::any))>
 type RoundRoles = keyof<RoundObject>

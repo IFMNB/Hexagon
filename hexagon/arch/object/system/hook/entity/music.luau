@@ -5,7 +5,6 @@ local ancestors = parent :: parent.ancestors
 
 local plugin = ancestors.GetPluginProvider()
 
-local obj = parent.GetObject()
 local oop = plugin.GetOOP()
 local rbxl = plugin.GetLinker()
 

@@ -41,11 +41,11 @@ end
 
 -- Возвращает результат сетевого запроса между клиентом и сервером.
 function plugin.GetPing ()
-	return private.DoOnlyInClient(private.DoRequestPing())
+	return private.DoOnlyInClient(private.DoRequestPing)
 end
 -- Возвращает время между сетевыми запросами от клиента до сервера, а затем к цели и обратно.
 function plugin.GetPlayerPing (to: Player) 
-	return private.DoOnlyInClient(private.DoRequestPingToPlayer(to))
+	return private.DoOnlyInClient(private.DoRequestPingToPlayer,to)
 end
 
 

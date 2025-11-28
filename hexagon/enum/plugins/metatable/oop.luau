@@ -3,12 +3,14 @@
 -- Плагин реализует наследование.
 
 local parent = require('./')
+local enum = require('../..')
 
 local private = {}
 local public = {}
 
 private.currentiter = {} --parent.SetMode({} :: {[class]: {[class]: any}}, 'k')
 private.metastore = parent.SetMode({} :: {[class]: typeof(parent.SetMode({} :: {class}, 'v'))}, 'k')
+private.cache = parent.SetMode({} :: {[class]: typeof(parent.SetMode({} :: {[any]: any}, 'kv'))}, 'k')
 
 function private.getMEList (self: any)
 	local list = private.metastore[self]
@@ -38,34 +40,85 @@ function private.checkIsItOnline (self: class) : boolean
 	return not not private.currentiter[self]
 end
 
+
+function private.CreateCache (at: any)
+	private.cache[at]=parent.SetMode({}, 'kv')
+end
+function private.CacheData (at: any, i: any, to: any)
+	private.cache[at][i]=to
+end
+function private.ReturnCache (at: any, i:any)
+	return private.cache[at][i]
+end
+function private.IsCached (at: any) : boolean
+	return not not private.cache[at]
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@native
 function private.multipleExpandsIterator (self: {[any]:any}, i: any) : any?
 	local list : any = private.getMEList(self)
-	assert(list :: {}, 'Error related to garbageCollector.')
+	assert(list :: {}, tostring(enum.Error.Reset))
 	
+	local cache = private.IsCached(self) and private.ReturnCache(self, i)
+	if cache then
+		print(tostring(enum.State.Live), i, cache, self)
+		return cache
+		
+		--[[
+		
+		Whenever you create public functions, you must check whether their names match those of any other function in the public namespace.
+		This is because caching stores data based on the access key, and only for functions.
+		The current cache compares the search results with what was previously found for a particular instance.
+		This reduces the chance of finding matches, but it's still worth keeping in mind.
+		
+		]]
+	end
 	
 	private.createChecked(self)
 	private.setToChecked(self, self)
 	
-	-- I don't know why some data gets lost and some gets found. If you need help, look up the manual workflow.
-	
-	--print('list counter ', #list)
-	--print('list is a ', list)
-	
 	for inum=1, #list do
-		local tbl = list[inum]
+		local tbl = list[inum] assert(list[inum], string.format('%s, %q, %q', tostring(enum.Error.Reset), tostring(i), tostring(self)))
 		local v = tbl[i]
-		
-		--print('iterate table by inum ', inum, ' - ', tbl)
-		--print('get value by index ', v)
 		
 		if private.checkIsItOnline(tbl) then continue end
 		if private.checkIsItChecked(self, tbl) then continue end
-		if v ~= nil then private.destroyChecked(self) return v end
+		
+		if v ~= nil then
+			private.destroyChecked(self)
+			if type(v) == 'function' then
+				if not private.IsCached(self) then
+					private.CreateCache(self)
+				end
+				private.CacheData(self, i, v)
+			end
+			
+			warn(tostring(enum.State.Run), i)
+			return v
+		end
+		
 		private.setToChecked(self, tbl)
 	end
 	
 	private.destroyChecked(self)
-	--warn('fail to catch index', i, self)
+	warn(tostring(enum.Error.Never), i, self, list)
 	return nil
 end
 
@@ -84,6 +137,7 @@ end
 
 function private.expandsRootPoint <data> (self: data, ...: class)
 	debug.profilebegin(script.Name..'.ExpandRootPoint')
+	assert(type(self)=='table', tostring(enum.Error.Forbidden))
 
 	if private.getMEList(self) then
 		private.insertDataToMulti(self, {...})
@@ -103,11 +157,11 @@ function private.DoSelfEmbedWithClass <data> (self: data, class: class)
 end
 
 
--- Мультиполярное наследование. Первый класс будет наследовать поля других классов по очереди. Используется первый найденный результат.
+-- Multipolar inheritance. The first class will inherit the fields of the other classes in turn. The first result found is used.
 function public.Expanding <data> (self: data | self, ...: class) : data
 	return private.expandsRootPoint(self, ...)
 end
--- Встраиват классы друг в другая, делая функционал каждого доступным для обоих.
+-- Embed classes within each other, making each class's functionality available to both. This is marked as unsupported because it is a mutagen, leading to a circular dependency.
 @deprecated
 function public.Embed <data> (self: data | self, class: class) : data
 	return private.DoSelfEmbedWithClass(self, class)
@@ -116,7 +170,7 @@ end
 private.meta = {__index = private.multipleExpandsIterator}
 
 type class = {}
-export type ancestors = self & parent.ancestors
+export type ancestors = self
 export type self = typeof(public)
-public:Expanding(parent)
+
 return public

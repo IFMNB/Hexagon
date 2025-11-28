@@ -1,5 +1,7 @@
 --!strict
 
+local enum = require('../')
+
 local private = {}
 local public = {}
 
@@ -14,7 +16,7 @@ end
 
 function private.recursive (self: {}, iter: recursiveIter, callback: (this: anytbl, gate: any) -> any, name: string?)
 	local r
-	if iter == 'preEnter' then
+	if iter == enum.Lua.Iterator.Enter.Before then
 		r = callback(self ::anytbl, name)
 		if r ~= nil then return r end
 	end
@@ -23,7 +25,7 @@ function private.recursive (self: {}, iter: recursiveIter, callback: (this: anyt
 			private.recursive(v, iter, callback, i)
 		end
 	end
-	if iter == 'postEnter' then
+	if iter == enum.Lua.Iterator.Enter.After then
 		r = callback(self :: anytbl, name)
 		if r ~= nil then return r end
 	end
@@ -80,7 +82,7 @@ function private.merge <key1,val1,key2,val2> (self: tbl<key1,val1>, with: tbl<ke
 end
 
 function private.freezer (self: empt)
-	public.doRecursive(self, 'postEnter', function(self: anytbl, gate) 
+	public.Recursive(self, enum.Lua.Iterator.Enter.After, function(self: anytbl, gate) 
 		table.freeze(self)
 	end)
 end
@@ -117,12 +119,12 @@ function private.DoSearchAndEnter (self: {anytbl}, tbl2: anytbl) : anytbl?
 end
 
 function private.DoRecursiveSearchKey (self: anytbl, key: any)
-	return public.doRecursive(self, 'postEnter', function(cur_tbl, cur_tbl_name): any
+	return public.Recursive(self, enum.Lua.Iterator.Enter.After, function(cur_tbl, cur_tbl_name): any
 		return cur_tbl == key and cur_tbl or cur_tbl_name ==key and cur_tbl or cur_tbl[key] or nil
 	end)
 end
 function private.DoRecursiveSearchValue (self: anytbl, value: any)
-	return public.doRecursive(self, 'postEnter', function(cur_tbl, cur_tbl_name): any 
+	return public.Recursive(self, enum.Lua.Iterator.Enter.After, function(cur_tbl, cur_tbl_name): any 
 		for i,v in pairs(cur_tbl) do
 			if v == value then
 				return i
@@ -147,56 +149,56 @@ end
 
 
 -- Рекурсивно выполняет для каждого элемента функцию callback. Момент выполнения зависит от точки входа.
-function public.doRecursive (self: empt, iter: recursiveIter, callback: (cur_tbl: anytbl, cur_tbl_name: any)->any)
+function public.Recursive (self: empt, iter: recursiveIter, callback: (cur_tbl: anytbl, cur_tbl_name: any)->any)
 	return private.recursive(self, iter, callback)
 end
 -- Изменяет оригинальную таблицу, переворачивая ее значения.
-function public.doFlip <key, val> (self: tbl<key,val>, iter: iter)
+function public.Flip <key, val> (self: tbl<key,val>, iter: iter)
 	return private.flipper(self, false, iter) :: {[val]: key}
 end
 -- Соединяет уже существующую таблицу с другой таблицей. 
-function public.doMerge <key1,val1,key2,val2> (self: tbl<key1,val1>, with: tbl<key2,val2>, iter: iter)
+function public.Merge <key1,val1,key2,val2> (self: tbl<key1,val1>, with: tbl<key2,val2>, iter: iter)
 	return private.merge(self, with, iter, false)
 end
 -- Рекурсивно заморозит таблицу.
-function public.doFreeze <class> (self: class&empt) : class
+function public.Freeze <class> (self: class&empt) : class
 	return private.freezer(self) :: class
 end
 -- Рекурсивно ищет по таблице указанный индекс-ключ. Вернет значение ключа.
-function public.doSearchKey <tbl> (self: tbl, index: any) : any
+function public.SearchKey <tbl> (self: tbl, index: any) : any
 	return private.DoRecursiveSearchKey(self, index)
 end
 -- Рекурсивно ищет по таблице указанное индекс-значение. Вернет ключ значения.
-function public.doSearchValue <tbl> (self: tbl, index: any) : any
+function public.SearchValue <tbl> (self: tbl, index: any) : any
 	return private.DoRecursiveSearchValue(self, index)
 end
 
 
 -- Возвращает родителя для пары ключ-значения, если это значение было найдено.
-function public.getParentOfKey (self: empt, value: any)
+function public.ParentOfKey (self: empt, value: any)
 	return private.DoGetKeyParent(self :: any, value)
 end
 -- Возвращает ключ, под которым было найдено целевое значение.
-function public.getKey (self: empt, value: any) : any
+function public.ExpectedKey (self: empt, value: any) : any
 	return private.doSearchKeyForTable(self :: any, value)
 end
 -- Возвращает самостоятельную поверхностную версию таблицы, соединенную с другой таблицей.
-function public.getMerge <tp1, tp2> (self: tp1, with: tp2, iter: iter) : tp1 & tp2
+function public.CloneMerge <tp1, tp2> (self: tp1, with: tp2, iter: iter) : tp1 & tp2
 	return private.merge(self, with, iter, true)
 end
 -- Возвращает самостоятельную полную копию таблицы. Метатаблица не копируется, а переиспользуется. 
-function public.getCopy <table> (self: table) : table
+function public.Clone <table> (self: table) : table
 	return private.copy(self)
 end
 -- Создает копию таблицы с перевернутыми значениями.
-function public.getFlip <key,val> (self: tbl<key,val>, iter: iter) : tbl<val,key>
+function public.CloneFlip <key,val> (self: tbl<key,val>, iter: iter) : tbl<val,key>
 	return private.flipper(self, true, iter) :: {[val]: key}
 end
 
 type empt = {}
 type tbl<k,v> = {[k]:v}
 type anytbl = {[any]:any}
-type recursiveIter = 'preEnter' | 'postEnter'
+type recursiveIter = index<typeof(enum.Lua.Iterator.Enter), keyof<typeof(enum.Lua.Iterator.Enter)>>
 type iter = 'ipairs'|'pairs'|'rpairs'
 
 export type ancestors = self

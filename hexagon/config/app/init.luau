@@ -2,8 +2,8 @@
 
 -- Высокоуровневые реализации.
 
-local plugins = require('./enum/plugins')
-local arch = script.Parent.arch
+local plugins = require('../enum/plugins')
+local arch = script.Parent.Parent.arch
 
 local public = {}
 local _G = {}
@@ -12,10 +12,17 @@ local _G = {}
 function public.Global ()
 	return _G
 end
-
 -- Возвращает главный провайдер архитектуры.
-function public.GetArchProvider ()
+function public.Arch ()
 	return require(arch.provider)
+end
+-- Конфиг Hexagon
+function public.Config ()
+	return require('../config')
+end
+-- Энумераторы Hexagon
+function public.Enum ()
+	return require('../enum')
 end
 
 export type all = self & plugins.ancestors

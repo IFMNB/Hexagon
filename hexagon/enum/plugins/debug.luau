@@ -1,5 +1,6 @@
 --!strict
 
+local HttpService = game:GetService('HttpService')
 local Debris = game:GetService('Debris')
 
 local private = {}
@@ -142,6 +143,15 @@ function private.DoMeasureTimeForCalledFunction (func: (...any)->()|any, ...: an
 	return os.clock() - start
 end
 
+function private.DoTaskReturnTest (func: (...any)->any, ...: any)
+	local time = os.clock()
+	local id = HttpService:GenerateGUID(false)
+	print('Received new task, arguments is ', {...}, ' , time is ', time, ' , id is ', id)
+	local res = func(...) :: any
+	warn('Task end for id ', id, ' , time is ', os.clock()-time)
+	return res
+end
+
 
 -- Вернет корутину-наблюдателя за жизненным циклом таблицы. Сборщик мусора уничтожает объект не сразу, поэтому возможны серьезные неточности.
 function plugin.Translate (data: {}|{[any]:any}) : thread
@@ -162,6 +172,10 @@ end
 -- Замеряет время выполнения функции.
 function plugin.DoMeasureTime (func: (...any)->()|any, ...: any)
 	return private.DoMeasureTimeForCalledFunction(func, ...)
+end
+-- Замеряет время выполнения функции, не влияя на работу кода.
+function plugin.TaskReturn (func: (...any)->any, ...: any)
+	return private.DoTaskReturnTest(func, ...)
 end
 
 export type ancestors = self

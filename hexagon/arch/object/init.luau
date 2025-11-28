@@ -19,51 +19,61 @@ local root = {}
 
 private.COClassName = 'AbstractObject' :: 'AbstractObject'
 private.Hierarchy = mt.SetMode({} :: {[userdata]: {[any]:any}}, 'kv')
+private.DebugID = game["Run Service"]:IsStudio() and mt.SetMode({} :: {[string]: any}, 'v')
 
-function private.InjectObjectDataToClass <class, type> (self: class, name: type)
-	local this = oop.Expanding({} :: any, self)
-	this.ClassName = name
-	this.Identificator = http:GenerateGUID(false)
-	return this :: class
+
+function private.DebugNew (id: string, to: any)
+	if private.DebugID then
+		private.DebugID[id]=to
+		print(private.DebugID)
+	end
 end
-
-function private.SetMetaObject <meta, value> (self: meta, objVal: value)
-	local this : any = self
-	mt.SpecifyTo(this, objVal)
-	this.__tostring = private.GetClassName --private.getClassNameForAbstractInstance  
-	this.__metatable = 'Locked metatable'
-	return self
-end
-
--- Внутренние данные у экземпляров этого класса не требуется сохранять где-либо еще, т.к __index метатаблицы назначен на эти внутренние данные. Это предовтращает его удаление.
-function private.CreateObject <data, type> (self: data, name: type) 
-	local object = newproxy(true, name)
-	local mt = getmetatable(object)
-	local value : any = oop.Expanding(self, public)
-	
-	
-
-	private.SetMetaObject(mt, value)
-	
-	return object
-end
-
 function private.DoRelativeTo (self: userdata, to: {})
 	private.Hierarchy[self]=to
-	return self
 end
-
 function private.DoGetRelative (self: CodeObject<any, string>)
 	return private.Hierarchy[self]
 end
 
+
+
+
+
+function private.InjectObjectDataToClass <class, type> (self: class, name: type)
+	local this : any = table.clone(public)
+	this.ClassName = name
+	this.Identificator = http:GenerateGUID(false)
+	
+	
+	private.DebugNew(this.Identificator, this)
+	
+	return mt.DoProxy(self,this)
+end
+
+function private.CreateObject <data, type> (self: data, name: type) 
+	local object = newproxy(true, name)
+	local meta = getmetatable(object)
+
+	mt.SpecifyTo(meta, self)
+	meta.__tostring = private.GetClassName
+	meta.__metatable = 'Locked metatable'
+	
+	return object
+end
+
+
+
+
+
+
 function private.NewBaseObject <data, type> (self: data, name: type)
 	debug.profilebegin(script.Name..'.CreateAbstractInstance')
 	
-	local data = private.InjectObjectDataToClass(self, name)
-	local object = private.CreateObject(data, name)
+	local inject = private.InjectObjectDataToClass(self, name)
+	local object = private.CreateObject(inject, name)
+	
 	private.DoRelativeTo(object, self)
-	link.LinkTo(self, object)
+	link.Link(object,self)
 
 	debug.profileend()
 	return object
@@ -99,8 +109,6 @@ end
 function class.New <data, type> (self: data, ClassName: type) : CodeObject<data, type>
 	return private.NewBaseObject(self, ClassName)
 end
-
-
 
 type COId = string
 type userdata = setmetatable<{},{[string]:any}>

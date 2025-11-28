@@ -79,7 +79,7 @@ end
 
 function private.DoRemoveTaskFrom (self: _schedule, func: func)
 	local tasks = private.GetTasks(self)
-	local num : number = tbl.getParentOfKey(tasks, func)
+	local num : number = tbl.ParentOfKey(tasks, func)
 	table.remove(tasks, num)
 	return self
 end

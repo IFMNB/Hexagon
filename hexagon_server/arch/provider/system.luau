@@ -5,15 +5,15 @@ local public = {}
 
 
 
--- Планировщик
+-- Task-scenario packs.
 function public.GetSchedule ()
 	return require(path.schedule)
 end
-
-@deprecated
-function public.GetTimer ()
-	return require(path.timer)
+-- Handles playerdata to strict typesolver.
+function public.GetPlayerData ()
+	return require(path.playerdata)
 end
+
 
 public.Path = path
 

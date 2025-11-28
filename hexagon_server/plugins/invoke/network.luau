@@ -1,17 +1,26 @@
 --!strict
 
 local replica = require('../../replica_link')
+
+
+local enum = replica.GetEnums()
 local network = replica.GetPluginProvider().GetNetwork()
-local parent = require('./')
+local invoke = require('./')
 
 local private = {}
 local plugin = {}
 
 function private.DoGetPlayerCamera (target: Player)
 	local call = network.PathToRemote.GetCamera
-	local camera : CFrame? = parent.InvokeClient(target, call)
+	local camera : CFrame? = invoke.InvokeClient(target, call)
 	return camera and typeof(camera) == 'CFrame' and camera or nil
 end
+
+
+
+
+
+
 
 -- Attempts to safely get the player's camera CFrame.
 function plugin.GetPlayerCamera (player: Player) : CFrame?

@@ -6,6 +6,19 @@ local public = {}
 private.modek = {__mode = 'k'} :: {__mode: 'k'}
 private.modev = {__mode = 'v'} :: {__mode: 'v'}
 private.modekv = {__mode = 'kv'} :: {__mode: 'kv'}
+private.modes = {__mode = 's'} :: {__mode: 's'}
+private.modevs = {__mode = 'vs'} :: {__mode: 'vs'}
+private.modekvs = {__mode = 'kvs'} :: {__mode: 'kvs'}
+--[[
+
+	What is the 's' operator in __mode?
+	
+	Allows you to compress the table size by reducing the table's hash size. Use with caution, as keys may behave unpredictably during loop iterations.
+	
+	Why is it possible to use meta keys for __mode out of order?
+	
+	Because cpp checks for the presence of a key via strchar(), therefore it doesn't care about the order and only needs the presence of the character.
+]]
 
 function private.set__modeMt <class, mode> (self: class, mode: mode )
 	return setmetatable(self, private[assert('mode'..(mode :: string), 'Injected __mode key is not exists.')]) :: setmetatable<class, {__mode: mode}>
@@ -26,31 +39,18 @@ function private.lock__metatableMt (self: client)
 end
 
 function private.doSpecifyMetamethods (self: {[any]:any}, to: client)
---	self.__add = to  
---	self.__sub = to  
---	self.__mul = to  
---	self.__div = to  
---	self.__mod = to  
---	self.__pow = to  
---	self.__unm = to  
---	self.__concat = to  
---	self.__len = to  
---	self.__eq = to  
---	self.__lt = to  
---	self.__le = to  
 	self.__index = to  
 	self.__newindex = to  
 	self.__call = to  
---	self.__pairs = to  
---	self.__ipairs = to  
 	return self
 end
 
-function private.DoCreateProxy (self: {[any]:any})
-	local proxy = {}
-	local mt = {}
-	private.doSpecifyMetamethods(mt, self)
-	setmetatable(proxy, mt)
+function private.DoCreateProxy (self: {[any]:any}, proxy)
+	local mt = private.doSpecifyMetamethods({}, self)
+	--mt.__tostring = function ()
+	--	return tostring(self)
+	--end
+	local proxy = setmetatable(proxy or {}, mt)
 	return proxy
 end
 
@@ -70,12 +70,11 @@ function public.SpecifyTo (self: client, to: client) : {}
 	return private.doSpecifyMetamethods(self :: any, to)
 end
 -- Быстро создаст прокси на указанный объект.
-function public.DoProxy <tbl> (self: tbl) : tbl
-	return private.DoCreateProxy(self)
+function public.DoProxy <tbl,t0> (self: tbl, proxy: t0?) : tbl&t0
+	return private.DoCreateProxy(self, proxy)
 end
-
-
-type __mode = 'k'|'kv'|'v'
+	
+type __mode = 'k'|'kv'|'v'|'s'|'vs'|'kvs'
 type client = {}|self
 export type ancestors = self
 export type self = typeof(public)

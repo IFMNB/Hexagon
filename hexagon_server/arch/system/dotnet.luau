@@ -5,7 +5,6 @@ local dataservice = game:GetService('DataStoreService')
 local main = require('../')
 local enum = main.GetEnums()
 local plugin = main.GetPluginProvider()
-local app = main.GetAppProvider()
 local arch = main.GetArchProvider()
 
 local oop = plugin.GetOOP()
@@ -14,7 +13,7 @@ local mt = plugin.GetMeta()
 local lnk = plugin.GetLinker()
 local shd = plugin.GetShadow()
 
-local ent = app.GetEntity()
+local ent = arch.GetSystem().GetEntity()
 local obj = arch.GetObject()
 
 local private = {}

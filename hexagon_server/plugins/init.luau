@@ -18,6 +18,10 @@ function public.GetNetwork ()
 	return require(path.invoke.network)
 end
 
+function public.GetReplicator ()
+	return require(path.Replicator)
+end
+
 
 @deprecated
 function public.GetPart ()

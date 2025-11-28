@@ -1,9 +1,10 @@
 --!strict
 
 local global = require(game.ReplicatedStorage.global)
-local plugin = global.GetPluginProvider()
+local hexagon = global.GetHexagon()
+local plugin = hexagon.GetPluginProvider()
 local camera = plugin.GetRobloxProvider().GetCamera()
-local enum = global.GetEnums()
+local enum = hexagon.GetEnums()
 
 local network = require('./')
 local path = network.PathToRemote

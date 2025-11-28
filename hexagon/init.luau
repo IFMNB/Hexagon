@@ -1,28 +1,34 @@
 --!strict
 
-local app = script.app
+local app = script.config.app
 local arch = script.arch
 
 local public = {}
 
--- Основной узел маршрутизации по низшим деталям проекта.
+-- 
 function public.GetPluginProvider ()
 	return require(script.enum.plugins).GetPluginProvider()
 end
--- Основной узел маршрутизации по низшим классам проекта.
+-- Arch provides the simplest objects in the Hexagon hierarchy, used in various parts of the library. Because these are structural components, they are accessible to everyone.
 function public.GetArchProvider ()
 	return require(arch.provider)
 end
--- Основной узел маршрутизации по высшим классам проекта.
+--[[
+App modules implement a variety of non-architectural logic. This logic depends on the Hexagon configuration and is controlled through the configurator.
+
+It may contain its own local parameters and settings, in some cases accessible externally. However, these are usually provided as immutable hardcoded code.
+]]
 function public.GetAppProvider ()
 	return require(app.provider)
 end
--- Энумераторы проекта.
+-- Hexagon enumerators serve as a single, authoritative source of content supplied by all Hexagon modules. They also provide tools for creating custom enum values.
 function public.GetEnums ()
 	return require(script.enum)
 end
-
-
+-- The Hexagon configurator provides internal parameters to control various parts of the library code.
+function public.GetConfig ()
+	return require(script.config)
+end
 
 export type ancestors = project_replica
 export type project_replica = typeof(public)

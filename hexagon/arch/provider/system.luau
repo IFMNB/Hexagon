@@ -5,23 +5,41 @@
 local path = script.Parent.Parent.object.system
 
 local public = {}
--- Класс для создания оберток с кастом-поведением.
+
+
+---- Класс для создания оберток с кастом-поведением.
+--@deprecated
+--function public.GetHooks ()
+--	return require(path.hooks)
+--end
+---- Класс для создания реактивных наблюдателей за изменениями объектов.
+--@deprecated
+--function public.GetWatcher ()
+--	return require(path.hooks.watch)
+--end
+---- Абстрактный класс эмулятор RBXScriptSignal.
+--@deprecated
+--function public.GetSignal ()
+--	return require(path.hooks.signal)
+--end
+---- Класс для реактивного реагирования
+--@deprecated
+--function public.GetChanged ()
+--	return require(path.hooks.signal.changed)
+--end
+
+
+
+
+
 function public.GetHook ()
-	return require(path.hooks)
+	return require(path.hook)
 end
--- Класс для создания реактивных наблюдателей за изменениями объектов.
-@deprecated
-function public.GetWatcher ()
-	return require(path.hooks.watch)
+
+function public.GetEntity ()
+	return require(path.hook.entity)
 end
--- Абстрактный класс эмулятор RBXScriptSignal.
-function public.GetSignal ()
-	return require(path.hooks.signal)
-end
--- Класс для реактивного реагирования
-function public.GetChanged ()
-	return require(path.hooks.signal.changed)
-end
+
 -- Класс для хранения данных по принципу LIFO
 function public.GetStack ()
 	return require(path.stack)

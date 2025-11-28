@@ -4,11 +4,12 @@ local parent = require('./')
 local ancestors = parent :: parent.ancestors
 
 local plugin = ancestors.GetPluginProvider()
-local arch = ancestors.GetArchProvider()
 
+local enum = ancestors.Enum()
 local oop = plugin.GetOOP()
 local ent = parent.GetClass()
-local link = plugin.GetLinker()
+local lnk = plugin.GetLinker()
+local shd = plugin.GetShadow()
 
 local private = {}
 local public = {}
@@ -16,50 +17,52 @@ local class = {}
 local root = {}
 
 
-function private.DoCreateCoroutine (self: _tc)
-	return coroutine.create(function() 
+function private.DoCreateCoroutine ()
+	return coroutine.create(function(self: _tc) 
+		local shadow : _shadow = shd.Get(self)
 		while task.wait(1) do
-			if self._state == 'paused' then coroutine.yield() end
-			local this = self._time.time + 1
-			if this >= self._time._max then
+			if shadow._state == enum.State.Pause then coroutine.yield() end
+			local this = self.time + 1
+			self.time = this
+			if this >= shadow._max then
 				self:Pause()
-			else
-				self._time.time = this
 			end
 		end
 	end)
 end
 
 function private.DoCreateNewTimecast (time: number)
-	local tc = {} :: _tc
-	local tm = {}
-	link.LinkTo(tm, tc)
+	local tc = oop.Expanding({time = 0}, public) :: _tc
+	local entity = ent.New(tc)
 	
-	tc._state = 'paused'
-	tc._time = tm :: any
-	tc._time._max = time
-	tc._time.time = 0
-	tc._coroutine = private.DoCreateCoroutine(tc)
+	local shadow : _shadow = shd.New(entity)
+	shadow._state = enum.State.Pause
+	shadow._coroutine = private.DoCreateCoroutine()
+	shadow._max = time
 	
-	local entity = ent.NewEmulate(tc, '_time')
+	--lnk.LinkTo(tc, entity)
 	
 	return entity
 end
 
 
 function private.DoResumeCoroutine (self: _tc)
-	self._state = 'run'
-	coroutine.resume(self._coroutine)
+	local shadow : _shadow = shd.Get(self)
+	shadow._state = enum.State.Run
+	warn('play', coroutine.status(shadow._coroutine))
+	coroutine.resume(shadow._coroutine, self)
+	warn('play', coroutine.status(shadow._coroutine))
 	return self
 end
 
 function private.DoPauseCoroutine (self: _tc)
-	self._state = 'paused'
+	local shadow : _shadow = shd.Get(self)
+	shadow._state = enum.State.Pause
 	return self
 end
 
 function private.DoResetTimer (self: _tc)
-	self._time.time = 0
+	self.time = 0
 	return self
 end
 
@@ -69,15 +72,15 @@ end
 
 
 
-function public.Reset (self: Timecast) : Timecast
+function public:Reset () : Timecast
 	return private.DoResetTimer(self :: _tc)
 end
 
-function public.Pause (self: Timecast) : Timecast
+function public:Pause () : Timecast
 	return private.DoPauseCoroutine(self :: _tc)
 end
 
-function public.Resume (self: Timecast) : Timecast
+function public:Play () : Timecast
 	return private.DoResumeCoroutine(self :: _tc)
 end
 
@@ -89,15 +92,13 @@ function class.New (time: number) : Timecast
 end
 
 
-type _time = {
-	time: number,
+type _states = typeof(enum.State.Run) | typeof(enum.State.Pause)
+type _shadow = {
 	_max: number,
-}
-type _tc = Timecast & {
-	_time: _time,
-	_state: 'paused'|'run',
+	_state: _states,
 	_coroutine: thread
 }
+type _tc = Timecast & {time: number}
 export type Timecast = typeof(ent.New({} :: public))
 
 export type public = typeof(public)

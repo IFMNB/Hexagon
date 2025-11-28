@@ -11,15 +11,20 @@ local public = {}
 
 
 
-
+-- Provides access to basic serverside modules, used in gameplay scripts.
 function public.GetGame ()
 	return require(provider_game)
 end
+
+-- Provides access to basic serverside modules.
 function public.GetSystem ()
 	return require(provider_system)
 end
+
+-- Reloading api content. Returns nothing.
+@deprecated
 function public.GetWorld ()
-	return require(provider_world)
+--	return require(provider_world)
 end
 
 

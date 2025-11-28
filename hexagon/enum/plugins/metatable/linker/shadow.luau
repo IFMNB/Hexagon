@@ -3,6 +3,8 @@
 local parent = require('./')
 local ancestor = require('../')
 
+local enum = require('../../..')
+
 local private = {}
 local plugin = {}
 
@@ -11,14 +13,13 @@ private.shadows = ancestor.SetMode({} :: {[any]: shadow}, 'kv')
 function private.DoCreateNewShadow (to: any, inject: shadow?)
 	local shadow : shadow = inject or {}
 	private.shadows[to]=shadow
-	parent.LinkTo(shadow, to)
+	parent.Link(to, shadow)
 	return shadow
 end
 
 function private.DoGetShadow (from: any)
-	return assert(private.shadows[from], string.format('Shadow is not exists for request %q', tostring(from)))
+	return assert(private.shadows[from], tostring(enum.Error.Never))
 end
-
 
 
 

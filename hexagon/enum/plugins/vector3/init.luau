@@ -5,12 +5,13 @@ local public = {}
 
 function private.DoVector3GetCircle (self: Vector3, radius: number, at: number, to: number?)
 	local to : number = to or at
+	local new = self
 	
 	local angle = at * ( math.pi*2 / to)
 	local x = math.cos(angle) * radius
 	local z = math.sin(angle) * radius
 
-	return private.DoClone(self) + Vector3.new(x, 0, z)
+	return new + Vector3.new(x, 0, z)
 end
 
 function private.DoSnappedToGrid (self: Vector3, size: number)
@@ -47,10 +48,6 @@ function private.DoRadianDirection (self: Vector3, radian: number)
 	return Vector3.new(this.X+x,this.Y,this.Z+y)
 end
 
-function private.DoClone (self: Vector3)
-	return Vector3.new(self.X,self.Y,self.Z)
-end
-
 
 
 
@@ -77,11 +74,6 @@ end
 function public.GetRadianDirection (self: Vector3, radian: number)
 	return private.DoRadianDirection(self, radian)
 end
--- Вернет копию вектора.
-function public.Clone (self: Vector3) : Vector3
-	return private.DoClone(self)
-end
-
 -- Возвращает поворот между двумя позициями, который должна совершить первая позиция для достижения того же направления, что и вторая.
 function public.GetRotationTo (self: Vector3, point: Vector3)
 	return private.DoRotated(self, point)
