@@ -1,7 +1,7 @@
 # Hexagon
 An open-source simple library that provides some ways to create and emulate java-like objects or roblox instances.
 
-## This library has classes:
+## Classes:
 - Object
 > Default class that used to incapsulate all data.
 - Instance
@@ -13,7 +13,7 @@ An open-source simple library that provides some ways to create and emulate java
 - SecurityLocker
 > Class-interlayer that locks any changes in data after him.
 
-## Also, library provides access to simple plugins:
+## Plugins:
 - Linker
 > Special plugin to protect data from _GC. Links this data to some other link-like data. You can use it to link table to other table in lazyTables structures.
 - Shadow
@@ -24,3 +24,5 @@ An open-source simple library that provides some ways to create and emulate java
 > Special plugin to links table lifecycle to real roblox instance.
 - Import
 > Plugin that provides tools from other programming languages
+
+Also this library has simple enum-constructor and precreated enums pack .
