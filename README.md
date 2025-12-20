@@ -22,3 +22,5 @@ An open-source simple library that provides some ways to create and emulate java
 > Special plugin to simplify some things with metatables and proxyes.
 - Reference
 > Special plugin to links table lifecycle to real roblox instance.
+- Import
+> Plugin that provides tools from other programming languages
