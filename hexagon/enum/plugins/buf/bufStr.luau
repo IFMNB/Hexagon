@@ -14,7 +14,7 @@ function private.fillstring (self: buffer, offtop: number, value: string)
 	assert(str.isascii(value))
 
 	local sp = value:split('')
-	local ascii = str.getallstr()
+	local ascii = str.CloneAll()
 	local load = {}
 	
 	for i=1, #sp do
@@ -33,7 +33,7 @@ end
 
 
 
--- Включительно от указанной позиции, заполнит n-позиции числом, которое соответствует string.char(число).
+-- Fills in the n positions from the specified position with a number that corresponds to string.char(number). Includes the n position
 function public.fillStringu8 (self: buffer, offtop: number, value: string)
 	return private.fillstring(self,offtop, value)
 end

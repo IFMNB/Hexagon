@@ -1,8 +1,11 @@
 --!strict
+--!nolint DeprecatedApi
 
 local private = {}
 local plugin = {}
 
+-- Cancels the coroutine after the specified time, if function is not finished by defined time.
+@deprecated
 function private.DoCreateTimeoutCoroutine (time: number, func: func, ...: any)
 	local start = tick()
 	local is, result : any
@@ -17,16 +20,19 @@ function private.DoCreateTimeoutCoroutine (time: number, func: func, ...: any)
 	return result :: any?
 end
 
-
-
--- Досрочно завершит выделенную функцию, если она не вернет результат в течении заданного времени.
-function plugin.Timeout (time: number, func: func, ...: any) : any?
-	return private.DoCreateTimeoutCoroutine(time, func, ...)
+function private.printerror(...)
+	warn(...)
+end
+-- Creates a async coroutine and executes it. Used xpcall.
+function private.CreateAsync (func: func, handler: (errmsg: string)->()?, ...: any)
+	return xpcall(coroutine.wrap(func),handler or private.printerror,...)
 end
 
+
+
+
+plugin.Timeout = private.DoCreateTimeoutCoroutine
+plugin.Async = private.CreateAsync
+
 type func = (...any)->any
-
-export type ancestors = self
-export type self = typeof(plugin)
-
 return plugin

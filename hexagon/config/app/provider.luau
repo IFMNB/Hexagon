@@ -11,6 +11,10 @@ local public = {}
 function public.GetPlayerCharacterNetworkSide ()
 	return require(app.PlayerCharacterNetworkSide)
 end
+-- This application allows you to count the number of frames per second.
+function public.GetFramePerSecondCounter ()
+	return require(app.FramePerSecondCounter)
+end
 
 public.AppPath = app
 public.AppProviderPath = provider

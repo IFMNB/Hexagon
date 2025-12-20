@@ -23,23 +23,23 @@ end
 
 
 
--- Заполняет буффер, включительно от указанной позиции, значениями формата u8 столько, сколько было получено значений. Соответственно не проверяет тип битовки значений.
+-- Fills the buffer, inclusive of the specified position, with values ​​of this format as many as the values ​​were received. Accordingly, it does not check the type of bits of values.
 function public.includeu8 (self: buffer, offtop: number, ...: number)
 	return private.includebyte(self, offtop, buffer.writeu8, ...)
 end
--- Заполняет буффер, включительно от указанной позиции, значениями формата u16 столько, сколько было получено значений. Соответственно не проверяет тип битовки значений.
+-- Fills the buffer, inclusive of the specified position, with values ​​of this format as many as the values ​​were received. Accordingly, it does not check the type of bits of values.
 function public.includeu16 (self: buffer, offtop: number, ...: number)
 	return private.includebyte(self, offtop, buffer.writeu16, ...)
 end
--- Заполняет буффер, включительно от указанной позиции, значениями формата u32 столько, сколько было получено значений. Соответственно не проверяет тип битовки значений.
+-- Fills the buffer, inclusive of the specified position, with values ​​of this format as many as the values ​​were received. Accordingly, it does not check the type of bits of values.
 function public.includeu32 (self: buffer, offtop: number, ...: number)
 	return private.includebyte(self, offtop, buffer.writeu32, ...)
 end
--- Заполняет буффер, включительно от указанной позиции, значениями формата f32 столько, сколько было получено значений. Соответственно не проверяет тип битовки значений.
+-- Fills the buffer, inclusive of the specified position, with values ​​of this format as many as the values ​​were received. Accordingly, it does not check the type of bits of values.
 function public.includef32 (self: buffer, offtop: number, ...: number)
 	return private.includebyte(self, offtop, buffer.writef32, ...)
 end
--- Заполняет буффер, включительно от указанной позиции, значениями формата f64 столько, сколько было получено значений. Соответственно не проверяет тип битовки значений.
+-- Fills the buffer, inclusive of the specified position, with values ​​of this format as many as the values ​​were received. Accordingly, it does not check the type of bits of values.
 function public.includef64 (self: buffer, offtop: number, ...: number)
 	return private.includebyte(self, offtop, buffer.writef64, ...)
 end

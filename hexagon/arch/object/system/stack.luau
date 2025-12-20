@@ -1,11 +1,10 @@
 --!strict
 
-local parent = require('../')
-local ancestors = parent :: parent.ancestors
+local main = require('../')
 
-local plugin = ancestors.GetPluginProvider()
-local oop = plugin.GetOOP()
-local obj = ancestors.GetObject()
+local plugin = main.GetPluginProvider()
+local shd = plugin.GetShadow()
+local obj = main.GetObject()
 
 local private = {}
 local public = {}
@@ -17,29 +16,32 @@ private.StackClassName = 'Stack' :: 'Stack'
 
 
 
-function private.Count (self: _stack)
-	return #self._lifo
+function private.Count (self: Stack)
+	return #self:Get()
 end
 
-function private.DoCreateNewStack () : Stack
-	local stack = {} :: _stack
-	
-	stack._lifo = {}
-	oop.Expanding(stack, public)
-	local mt = getmetatable(stack)
+function private.DoCreateNewStack ()
+	local stack = {}
+
+	local mt = {}
+	mt.__index = public
 	mt.__len = private.Count
+	setmetatable(stack,mt)
 	
-	local object = obj.New(stack, private.StackClassName)
+	local object = obj.New(stack :: public, private.StackClassName)
+	local shade = shd.New(object)
+	shade._lifo = {}
+	
 	return object
 end
 
 
 
-function private.GetStack (self: _stack)
-	return self._lifo
+function private.GetStack (self: Stack)
+	return shd.Get(self)._lifo
 end
 
-function private.DoPullFromStack (self: _stack)
+function private.DoPullFromStack (self: Stack)
 	local st = private.GetStack(self)
 	local i = #st
 	local v = st[i]
@@ -47,13 +49,13 @@ function private.DoPullFromStack (self: _stack)
 	return v
 end
 
-function private.DoPushInStack (self: _stack, value: stacked)
+function private.DoPushInStack (self: Stack, value: stacked)
 	local st = private.GetStack(self)
 	table.insert(st, value)
 	return self
 end
 
-function private.GetTop (self: _stack) : stacked
+function private.GetTop (self: Stack) : stacked
 	return private.GetStack(self)[#self]
 end
 
@@ -71,16 +73,20 @@ end
 
 
 -- Вытащить из стека.
-function public.Pull (self: Stack)
-	return private.DoPullFromStack(self :: _stack)
+function public:Pull ()
+	return private.DoPullFromStack(self)
 end
 -- Поместить в стек.
-function public.Push (self: Stack, value: stacked) : Stack
-	return private.DoPushInStack(self :: _stack, value)
+function public:Push (value: stacked) : Stack
+	return private.DoPushInStack(self, value)
 end
 -- Прочитать топ.
-function public.Top (self: Stack)
-	return private.GetTop(self :: _stack)
+function public:Top ()
+	return private.GetTop(self)
+end
+-- Получить все значения.
+function public:Get() : {stacked}
+	return private.GetStack(self)
 end
 
 
@@ -94,18 +100,13 @@ function class.New ()
 end
 
 type stacked = any
-
-type _stack = Stack & {
-	_lifo: {stacked}
-}
-export type Stack = typeof(obj.New({} :: public, private.StackClassName))
+export type Stack = typeof(private.DoCreateNewStack())
 
 export type public = typeof(public)
-export type ancestors = root & parent.ancestors
 export type root = typeof(root)
 export type self = typeof(class)
 
 -- Используется для стека. LIFO структура.
-function root.GetClass () return class end
-oop.Expanding(root, ancestors)
+function root.GetStack () return class end
+setmetatable(root,{__index = main})
 return root

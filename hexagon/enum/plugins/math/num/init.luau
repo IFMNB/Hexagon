@@ -27,25 +27,25 @@ function private.isfract (self: number)
 	return math.floor(self)~=self
 end
 function private.isNegative (self: number)
-	return self < 0
+	return math.abs(self)==self and self<0
 end
 
 
 
--- Проверит число на NaN, inf, -inf
+-- Returns number type from: num, NaN, inf, -inf
 function public.getNumberType (self: number)
 	return private.getspec(self) :: 'nan' | 'inf' | '-inf' | 'num'
 end
--- Это число NaN, inf, -inf?
+-- Checks is it value NaN, inf, -inf?
 function public.isSpecialNumber (self: number) 
 	--print(debug.traceback('t'))
 	return private.isspec(self)
 end
--- Это число с плавающей точкой?
+-- Checks is it value float?
 function public.isFractional (self: number)
 	return private.isfract(self)
 end
--- Это отрицательное число?
+-- Checks is it value negative?
 function public.isNegative (self: number)
 	return private.isNegative(self)
 end

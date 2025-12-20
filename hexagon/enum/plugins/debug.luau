@@ -153,27 +153,27 @@ function private.DoTaskReturnTest (func: (...any)->any, ...: any)
 end
 
 
--- Вернет корутину-наблюдателя за жизненным циклом таблицы. Сборщик мусора уничтожает объект не сразу, поэтому возможны серьезные неточности.
+-- Returns coroutine-watcher at table lifecycle.
 function plugin.Translate (data: {}|{[any]:any}) : thread
 	return private.DoRoot(data)
 end
--- Вернет таск-наблюдателя за жизненным циклом коррутины.
+-- Returns task-wathcher at coroutine lifecycle.
 function plugin.Spectate (coroutine: thread) : thread
 	return private.DoSpectateAtCoroutine(coroutine)
 end
--- Визуализатор Vector3 значения.
+-- Visualise vector3.
 function plugin.Visualize3 (self: Vector3)
 	return private.DoVisualVector3(self)
 end
--- Визуализатор рейкаста.
+-- Visualise raycast.
 function plugin.VisualizeRaycast (self: Vector3, to: Vector3)
 	return private.DoVisualRaycast(self,to)
 end
--- Замеряет время выполнения функции.
+-- Returns time for function called.
 function plugin.DoMeasureTime (func: (...any)->()|any, ...: any)
 	return private.DoMeasureTimeForCalledFunction(func, ...)
 end
--- Замеряет время выполнения функции, не влияя на работу кода.
+-- Returns time for function called, but also return it's result.
 function plugin.TaskReturn (func: (...any)->any, ...: any)
 	return private.DoTaskReturnTest(func, ...)
 end

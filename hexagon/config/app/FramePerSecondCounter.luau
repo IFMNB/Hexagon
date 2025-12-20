@@ -1,7 +1,7 @@
 --!strict
 
 local app = require('./')
-local ent = app.Arch().GetSystem().GetEntity().GetClass()
+local ent = app.Arch().GetSystem().GetEntity()
 local cfg = app.Config()
 local shd = app.GetPluginProvider().GetShadow()
 

@@ -1,10 +1,11 @@
 --!strict
+--!nolint DeprecatedApi
 
 local enum = require('../')
 
 local private = {}
-local public = {}
 
+--- Flips the table keys and values.
 function private.flipper <k,v> (self: tbl<k,v>, clone: boolean, iter: iter)
 	local r = clone and {} or self
 	for i,v in private.getiter(iter)(self) do
@@ -13,7 +14,7 @@ function private.flipper <k,v> (self: tbl<k,v>, clone: boolean, iter: iter)
 	end
 	return r
 end
-
+-- Recursive table iterator.
 function private.recursive (self: {}, iter: recursiveIter, callback: (this: anytbl, gate: any) -> any, name: string?)
 	local r
 	if iter == enum.Lua.Iterator.Enter.Before then
@@ -32,7 +33,7 @@ function private.recursive (self: {}, iter: recursiveIter, callback: (this: anyt
 	
 	return nil
 end
-
+-- Recursive table copy.
 function private.copy <type> (self: type)
 	if type(self) ~= 'table' then return self end
 	
@@ -54,20 +55,33 @@ function private.iter_rpairs (state: {any}, control: number) : (number?,any)
 		return nil
 	end
 end
+--[[Alternative copy of ipairs. Iterates from last to first element.
+You should use this construction as an alternative:
 
+for lastIndex, toIndex, -1 do
+	-- body
+end
+
+]]
+@deprecated
 function private.rpairs (array: {any})
 	return private.iter_rpairs, array, #array + 1
 end
 
 
 function private.getiter (iterator: iter) : any
-	return iterator == 'ipairs' and ipairs or iterator == 'pairs' and pairs or iterator == 'rpairs' and public.rpairs
+	return iterator == enum.Lua.Iterator.Ipairs and ipairs
+		or iterator == enum.Lua.Iterator.Pairs and pairs
+		or iterator == enum.Lua.Iterator.Rpairs and private.rpairs -- silenced
 end
 
 
-
+-- Merges two tables.
 function private.merge <key1,val1,key2,val2> (self: tbl<key1,val1>, with: tbl<key2,val2>, iter: iter, clone: boolean)
-	local r = clone and {} or self
+	assert(self, tostring(enum.Error.Never))
+	assert(with, tostring(enum.Error.Never))
+	
+	local r = clone and table.clone(self) or self
 	for i,v in private.getiter(iter)(with) do
 		local typeI, typeV = type(i), type(v)
 		
@@ -80,15 +94,16 @@ function private.merge <key1,val1,key2,val2> (self: tbl<key1,val1>, with: tbl<ke
 	
 	return r :: typeof(self)&typeof(with)
 end
-
+-- Freeze the table and all nested tables.
 function private.freezer (self: empt)
-	public.Recursive(self, enum.Lua.Iterator.Enter.After, function(self: anytbl, gate) 
+	private.recursive(self, enum.Lua.Iterator.Enter.After, function(self: anytbl, gate) 
 		table.freeze(self)
+		return
 	end)
 end
 
 
-
+-- Searches for a value and returns it's key.
 function private.doSearchKeyForTable (self: anytbl, value: any)
 	for i,v in pairs(self) do
 		if value == v then
@@ -98,7 +113,7 @@ function private.doSearchKeyForTable (self: anytbl, value: any)
 	return nil
 end
 
-
+-- Recursive search for value and return it's parent.
 function private.DoGetKeyParent (self: {[any]: anytbl }, value: any) : any?
 	for i,v in pairs(self) do
 		if private.doSearchKeyForTable(v, value) then
@@ -108,8 +123,8 @@ function private.DoGetKeyParent (self: {[any]: anytbl }, value: any) : any?
 	return nil
 end
 
-
-function private.DoSearchAndEnter (self: {anytbl}, tbl2: anytbl) : anytbl?
+-- If tbl2 in tbl1, return tbl2.
+function private.DoSearchAndEnterArray (self: {anytbl}, tbl2: anytbl) : anytbl?
 	for i=1, #self do
 		if self[i]==tbl2 then
 			return tbl2
@@ -117,14 +132,15 @@ function private.DoSearchAndEnter (self: {anytbl}, tbl2: anytbl) : anytbl?
 	end
 	return nil
 end
-
+-- Recursive search for key and return it's value.
 function private.DoRecursiveSearchKey (self: anytbl, key: any)
-	return public.Recursive(self, enum.Lua.Iterator.Enter.After, function(cur_tbl, cur_tbl_name): any
+	return private.recursive(self, enum.Lua.Iterator.Enter.After, function(cur_tbl, cur_tbl_name): any
 		return cur_tbl == key and cur_tbl or cur_tbl_name ==key and cur_tbl or cur_tbl[key] or nil
 	end)
 end
+-- Recursive search for value and return it's index.
 function private.DoRecursiveSearchValue (self: anytbl, value: any)
-	return public.Recursive(self, enum.Lua.Iterator.Enter.After, function(cur_tbl, cur_tbl_name): any 
+	return private.recursive(self, enum.Lua.Iterator.Enter.After, function(cur_tbl, cur_tbl_name): any 
 		for i,v in pairs(cur_tbl) do
 			if v == value then
 				return i
@@ -135,73 +151,25 @@ function private.DoRecursiveSearchValue (self: anytbl, value: any)
 end
 
 
-
--- Повторяет поведение ipairs, однако выполняемая итерация идет сверху-вниз.
-function public.rpairs (array: {any})
-	return private.rpairs(array)
-end
--- По принципу table.find ищет значение, но не возвращает индекс, а сразу входит в таблицу если есть.
-function public.enter <tbl1, tbl2> (self: tbl1, at: tbl2) : tbl2?
-	return private.DoSearchAndEnter(self, at)
-end
-
-
-
-
--- Рекурсивно выполняет для каждого элемента функцию callback. Момент выполнения зависит от точки входа.
-function public.Recursive (self: empt, iter: recursiveIter, callback: (cur_tbl: anytbl, cur_tbl_name: any)->any)
-	return private.recursive(self, iter, callback)
-end
--- Изменяет оригинальную таблицу, переворачивая ее значения.
-function public.Flip <key, val> (self: tbl<key,val>, iter: iter)
-	return private.flipper(self, false, iter) :: {[val]: key}
-end
--- Соединяет уже существующую таблицу с другой таблицей. 
-function public.Merge <key1,val1,key2,val2> (self: tbl<key1,val1>, with: tbl<key2,val2>, iter: iter)
-	return private.merge(self, with, iter, false)
-end
--- Рекурсивно заморозит таблицу.
-function public.Freeze <class> (self: class&empt) : class
-	return private.freezer(self) :: class
-end
--- Рекурсивно ищет по таблице указанный индекс-ключ. Вернет значение ключа.
-function public.SearchKey <tbl> (self: tbl, index: any) : any
-	return private.DoRecursiveSearchKey(self, index)
-end
--- Рекурсивно ищет по таблице указанное индекс-значение. Вернет ключ значения.
-function public.SearchValue <tbl> (self: tbl, index: any) : any
-	return private.DoRecursiveSearchValue(self, index)
-end
-
-
--- Возвращает родителя для пары ключ-значения, если это значение было найдено.
-function public.ParentOfKey (self: empt, value: any)
-	return private.DoGetKeyParent(self :: any, value)
-end
--- Возвращает ключ, под которым было найдено целевое значение.
-function public.ExpectedKey (self: empt, value: any) : any
-	return private.doSearchKeyForTable(self :: any, value)
-end
--- Возвращает самостоятельную поверхностную версию таблицы, соединенную с другой таблицей.
-function public.CloneMerge <tp1, tp2> (self: tp1, with: tp2, iter: iter) : tp1 & tp2
-	return private.merge(self, with, iter, true)
-end
--- Возвращает самостоятельную полную копию таблицы. Метатаблица не копируется, а переиспользуется. 
-function public.Clone <table> (self: table) : table
-	return private.copy(self)
-end
--- Создает копию таблицы с перевернутыми значениями.
-function public.CloneFlip <key,val> (self: tbl<key,val>, iter: iter) : tbl<val,key>
-	return private.flipper(self, true, iter) :: {[val]: key}
-end
+local public = {}
+public.GetRPairsIterator = private.rpairs
+public.GetEnterPoint = private.DoSearchAndEnterArray
+public.Recursive = private.recursive
+public.Flip = private.flipper
+public.Merge = private.merge
+public.DeepFreeze = private.freezer
+public.GetKey = private.DoRecursiveSearchKey
+public.GetValue = private.DoRecursiveSearchValue
+public.GetParentOfKey = private.DoGetKeyParent
+public.GetIndexForValue = private.doSearchKeyForTable
+public.GetDeepClone = private.copy
+table.freeze(public)
+table.freeze(private)
 
 type empt = {}
 type tbl<k,v> = {[k]:v}
 type anytbl = {[any]:any}
 type recursiveIter = index<typeof(enum.Lua.Iterator.Enter), keyof<typeof(enum.Lua.Iterator.Enter)>>
-type iter = 'ipairs'|'pairs'|'rpairs'
-
-export type ancestors = self
-export type self = typeof(public)
+type iter = typeof(enum.Lua.Iterator.Pairs)|typeof(enum.Lua.Iterator.Ipairs)|typeof(enum.Lua.Iterator.Rpairs)
 
 return public

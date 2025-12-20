@@ -1,52 +1,27 @@
 --!strict
 
--- Независимый провайдер, который предоставляет доступ к основным системным модулям в реплицируемой для клиента части игры.
+-- This module is used to get classes for system objects.
 
 local path = script.Parent.Parent.object.system
 
 local public = {}
 
 
----- Класс для создания оберток с кастом-поведением.
---@deprecated
---function public.GetHooks ()
---	return require(path.hooks)
---end
----- Класс для создания реактивных наблюдателей за изменениями объектов.
---@deprecated
---function public.GetWatcher ()
---	return require(path.hooks.watch)
---end
----- Абстрактный класс эмулятор RBXScriptSignal.
---@deprecated
---function public.GetSignal ()
---	return require(path.hooks.signal)
---end
----- Класс для реактивного реагирования
---@deprecated
---function public.GetChanged ()
---	return require(path.hooks.signal.changed)
---end
-
-
-
-
-
+-- Class for creating hooks with custom behavior.
 function public.GetHook ()
-	return require(path.hook)
+	return require(path.hook).GetHook()
 end
-
+-- Reactive class-instance, used to store some data and fire it on changes
 function public.GetEntity ()
-	return require(path.hook.entity)
+	return require(path.hook.entity).GetEntity()
 end
-
--- Класс для хранения данных по принципу LIFO
+-- Class-data, used to store some data by using LIFO
 function public.GetStack ()
-	return require(path.stack)
+	return require(path.stack).GetStack()
 end
--- Класс для хранения данных по принципу FIFO
+-- Class-data, used to store some data by using FIFO
 function public.GetQueue ()
-	return require(path.queue)
+	return require(path.queue).GetQueue()
 end
 
 public.SystemPath = path

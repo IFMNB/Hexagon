@@ -1,78 +1,79 @@
 --!strict
 
--- Независимый провайдер, который предоставляет доступ к независимым плагинам для примитивов языка или объектов роблокса в реплицируемой для клиента части игры.
 
-local plugin 					= script 
+
+local plugin = script 
 
 local public = {}
 local root = {}
 
 
--- Возвращает плагин для расширенной работы с таблицами.
+-- Used in big table manipulations.
 function public.GetTable ()
 	return require(plugin.tbl)
 end
--- Возвращает плагин для расширенной работы с буфферами, предоставляю на основе их API обертки с готовыми реализациями.
+-- Plugin destributes advanced buffer tools.
 function public.GetBuffer ()
 	return require(plugin.buf)
 end
--- Возвращает плагин для работы со специальными числовыми значениями.
+-- Used to work with special numbers.
 function public.GetNumber ()
 	return require(plugin.math.num)
 end
--- Возвращает плагин для работы со строками и ASCII.
+-- Related to all ASCII strings.
 function public.GetString ()
 	return require(plugin.str)
 end
--- Возвращает плагин, реализующий псевдо-строгую языковую проверку на тип данных.
+-- Pseudo-C syntax.
 function public.GetInt ()
 	return require(plugin.math.num.int)
 end
--- Возвращает плагин для расширенной работы с буфферами-строками.
+-- Extra buffer tools, used to work with strings.
 function public.GetBufferString ()
 	return require(plugin.buf.bufStr)
 end
--- Возвращает плагин, который реализует функционал из других языков программирования.
+-- Provides extra functionality.
 function public.GetImported ()
 	return require(plugin.import)
 end
--- Возвращает плагин, который работает с метатаблицами на базовом уровне.
+-- Retunrs extra tools to work with metatables.
 function public.GetMeta ()
 	return require(plugin.metatable)
 end
--- Возвращает плагин, который реализует прототипное наследование.
+-- Another __index way to prototype something like in POP (OOP)
 function public.GetOOP ()
 	return require(plugin.metatable.oop)
 end
--- Возвращает плагин, который реализует обертки над математическими функциями.
+-- Returns extra tools with math lib.
+@deprecated
 function public.GetMath ()
 	return require(plugin.math)
 end
--- Возвращает плагин, который реализует обертки над векторными операциями.
+-- Shortcuts to work with Vector3 value types
 function public.GetVector3 ()
 	return require(plugin.vector3)
 end
--- Возвращает плагин, который реализует механизм защиты от удаления объектов через __GarbageCollector
+-- Special plugin to protect data from _GC
 function public.GetLinker ()
 	return require(plugin.metatable.linker)
 end
--- Возвращает плагин, который реализует приватное почти несвязанное пространство с другими данными.
+-- Can private linked private data.
 function public.GetShadow ()
 	return require(plugin.metatable.linker.shadow)
 end
--- Возвращает плагин, который реализует операции сетевого взаимодействия от лица клиента к серверу.
+-- Some useful functions. Used by applications.
 function public.GetNetwork ()
 	return require(plugin.network)
 end
--- Возвращает провайдер-плагин, содержащий в себе плагины для работы с объектами и иерархией роблокса.
+-- Provider to roblox pre-created functions.
 function public.GetRobloxProvider ()
 	return require(plugin.roblox)
 end
--- Возвращает плагин с полезным функционалом для отладки.
+-- Special debug plugin. Unavailable in production.
 function public.GetDebug ()
 	return require(plugin.debug)
 end
--- Возвращает плагин, который заставляет данные существовать все время, пока существует объект роблокса.
+-- Special construction on LinkerPlugin, used to save data by roblox instance.
 function public.GetReference ()
 	return require(plugin.metatable.linker.reference)
 end

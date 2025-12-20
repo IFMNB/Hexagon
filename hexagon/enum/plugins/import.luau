@@ -5,28 +5,47 @@ local enum = require('../')
 local private = {}
 local public = {}
 
-function private.DoTry (func: (...any)->any, T: number, try: number, ...: any) : any
-	local count = T
+function private.DoProtectedGetCycle (func: (...any)->any, tryattempts: number, timewait: number, ...: any) : any
+	local count = tryattempts
+	local st, r
 	
 	repeat
-		local st, r = pcall(func, function(a0) warn(a0) end,...)
-		if st then return r end
+		st, r = xpcall(func, function(a0) warn(a0) end,...)
+		
+		if st then
+			return r
+		else
+			warn(tostring(enum.Error.Unstable))
+		end
 
 		count-=1
-		task.wait(try)
+		task.wait(timewait)
 	until count > 0
 	
-	return nil
+	return private.UnhandledDefaultException(r, debug.traceback('t'), count, tryattempts);
 end
 
 
-function private.DoTryCatch (catch: any, ...: any)
-	local res = private.DoTry(...)
-	if res == catch then
+function private.VerifyReceivedDataFromTrySection (catch: any, ...: any)
+	local res = private.DoProtectedGetCycle(...)
+	if typeof(res) == catch then
 		return res
 	else
-		error('Unable to catch value.')
+		warn(tostring(enum.Error.Forbidden))
+		task.wait(1)
+		return private.VerifyReceivedDataFromTrySection(catch, ...)
 	end 
+end
+-- Execute function and return result. If failed, tryes again before get result.
+function private.DoProtectedForeverCycle (func: func, ...: any) : unknown
+	local st,r = xpcall(func, function(a0) warn(a0) end, ...)
+	if st then
+		return r
+	else
+		warn(tostring(enum.Error.Unstable))
+		task.wait(1)
+		return private.DoProtectedForeverCycle(func, ...)
+	end
 end
 
 function private.UnhandledDefaultException (...)
@@ -35,30 +54,43 @@ function private.UnhandledDefaultException (...)
 end
 
 
-type cases =  {default: ((...any)->any?)?, [any]:  ((...any)->any?)|any}
+type cases =  {
+	default: ((...any)->any?)|any?,
+	[any]: ((...any)->any?)|any
+}
 
--- Автозаполнение типов не может подсказывать функцию, если ее тип может быть any помимо функции. Хотя технически switch вполне поддерживает такую реализацию.
-function private.DoGetSwitchedValue (value: any, case: cases) : any
-	return case[value] or case.default or private.UnhandledDefaultException
+function private.ReturnValueFromSwitchCases (value: any, case: cases) : any
+	return case[value]
+		or case.default
+		or case.Default
+		or private.UnhandledDefaultException(value, case, debug.traceback())
 end
 
+type func = (...any)->unknown
 
-
-
--- Реализация блока TryCatch -> делай, пока не получишь нужный результат
+-- Execute function and return result. If failed, tryes again before get result.
+function public.safe (func: func, ...: any) : unknown
+	return private.DoProtectedForeverCycle(func, ...)	
+end
+-- Executes function from try and verify received data type. If verify failed, tryes to execute it again. Return result of function with this type. 
 function public.catch <type> (catch: type, func: (...any)->any, try: number, timewait: number, ...: any) : any
-	return private.DoTryCatch(catch, func, try, timewait, ...)
+	return private.VerifyReceivedDataFromTrySection(catch, func, try, timewait, ...)
 end
--- Реализация try, отделенного от try-catch -> делай, пока не успешно.
+-- Tryes to execute function, if it fails, repeats it until it succeeds or timeout is over. Return result of function or error.
 function public.try (func: (...any)->any, try: number, timewait: number, ...: any) : any
-	return private.DoTry(func, try, timewait, ...)
+	return private.DoProtectedGetCycle(func, try, timewait, ...)
 end
--- Реализация блока switch из разных языков.
+-- Switch returns value from cases or default case.
 function public.switch (value: any, case: cases) : any
-	return private.DoGetSwitchedValue(value, case)
+	return private.ReturnValueFromSwitchCases(value, case)
 end
 
 export type self = typeof(public)
 export type ancestors = self
+type inject = {
+	_TypeCheck: {
+		switchCases: cases
+	}
+}
 
-return public
+return public :: typeof(public)&inject

@@ -1,11 +1,13 @@
 --!strict
 
+-- Hexagon is a architecture roblox-emitter, that can used to emulate roblox development.
+
 local app = script.config.app
 local arch = script.arch
 
 local public = {}
 
--- 
+-- Returns the main plugin provider. This is main library dependency for all higher-classes, like, objects or entitites.
 function public.GetPluginProvider ()
 	return require(script.enum.plugins).GetPluginProvider()
 end
@@ -30,39 +32,9 @@ function public.GetConfig ()
 	return require(script.config)
 end
 
+public.Path = script
+
 export type ancestors = project_replica
 export type project_replica = typeof(public)
-
-
--- Провайдеры
---[[
-
-	plugin
-		Провайдит доступ к нижним деталям проекта.
-	Arch.provider
-		Провайдит доступ ко всем классам Arch.
-	App.provider
-		Провайдит доступ ко всем классам App.
-
-]]
-
--- Классы
---[[
-
-	- Все классы зависят от провайдера plugins
-
-	Arch
-		Классы этой иерархии реализуют базовое поведение.
-	App
-		Классы этой иерархии реализуют целевое поведение.
-		Они используются как основные релизные компоненты.
-		Зависимы от Arch.
-		
-		
-	- Сами по себе каждый из классов не содержит целевой игровой логики.
-	- Все что имеет в себе библиотека - не более чем конструктор лего,
-	который содержит готовые решения для игровой логики.
-
-]]
 
 return public

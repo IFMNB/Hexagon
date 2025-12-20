@@ -8,19 +8,16 @@ local arch = script.Parent.Parent.arch
 local public = {}
 local _G = {}
 
--- Контейнер _G для app части.
-function public.Global ()
-	return _G
-end
--- Возвращает главный провайдер архитектуры.
+
+-- Main arch provider
 function public.Arch ()
 	return require(arch.provider)
 end
--- Конфиг Hexagon
+-- Hexagon cfg
 function public.Config ()
 	return require('../config')
 end
--- Энумераторы Hexagon
+-- HexagonEnum
 function public.Enum ()
 	return require('../enum')
 end

@@ -1,7 +1,5 @@
 --!strict
 
--- Плагин реализует наследование.
-
 local parent = require('./')
 local enum = require('../..')
 
@@ -72,13 +70,13 @@ end
 
 
 @native
-function private.multipleExpandsIterator (self: {[any]:any}, i: any) : any?
+function private.multipleExpandsIterator <t0, t1> (self: {[any]:any} & t0, i: any & t1) : index<t0,t1>?
 	local list : any = private.getMEList(self)
 	assert(list :: {}, tostring(enum.Error.Reset))
 	
 	local cache = private.IsCached(self) and private.ReturnCache(self, i)
 	if cache then
-		print(tostring(enum.State.Live), i, cache, self)
+		--print(tostring(enum.State.Live), i, cache, self)
 		return cache
 		
 		--[[
@@ -110,7 +108,7 @@ function private.multipleExpandsIterator (self: {[any]:any}, i: any) : any?
 				private.CacheData(self, i, v)
 			end
 			
-			warn(tostring(enum.State.Run), i)
+			--warn(tostring(enum.State.Run), i)
 			return v
 		end
 		
@@ -118,9 +116,15 @@ function private.multipleExpandsIterator (self: {[any]:any}, i: any) : any?
 	end
 	
 	private.destroyChecked(self)
-	warn(tostring(enum.Error.Never), i, self, list)
+	--warn(tostring(enum.Error.Never), i, self, list)
 	return nil
 end
+
+-- DONT MOVE THIS TABLE UPSIDE private.multipleExpandsIterator, IT WILL BREAK!
+private.meta = {
+	__index = private.multipleExpandsIterator,
+	__metatable = tostring(enum.Error.Forbidden)
+}
 
 function private.createDataMulti (self: class, data: {class})
 	private.metastore[self]=parent.SetMode(data, 'v')
@@ -134,8 +138,8 @@ function private.insertDataToMulti (self: class, data: {class})
 	return self
 end
 
-
-function private.expandsRootPoint <data> (self: data, ...: class)
+-- Multipolar inheritance. The first class will inherit the fields of the other classes in turn. The first result found is used.
+function private.expandsRootPoint <data> (self: data, ...: class) : data
 	debug.profilebegin(script.Name..'.ExpandRootPoint')
 	assert(type(self)=='table', tostring(enum.Error.Forbidden))
 
@@ -150,27 +154,12 @@ function private.expandsRootPoint <data> (self: data, ...: class)
 end
 
 
-function private.DoSelfEmbedWithClass <data> (self: data, class: class)
-	private.expandsRootPoint(self, class)
-	private.expandsRootPoint(class, self)
-	return self
-end
 
 
--- Multipolar inheritance. The first class will inherit the fields of the other classes in turn. The first result found is used.
-function public.Expanding <data> (self: data | self, ...: class) : data
-	return private.expandsRootPoint(self, ...)
-end
--- Embed classes within each other, making each class's functionality available to both. This is marked as unsupported because it is a mutagen, leading to a circular dependency.
-@deprecated
-function public.Embed <data> (self: data | self, class: class) : data
-	return private.DoSelfEmbedWithClass(self, class)
-end
 
-private.meta = {__index = private.multipleExpandsIterator}
+
+public.Expanding = private.expandsRootPoint
 
 type class = {}
-export type ancestors = self
-export type self = typeof(public)
 
 return public

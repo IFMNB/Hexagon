@@ -39,15 +39,17 @@ end
 
 
 
--- Возвращает результат сетевого запроса между клиентом и сервером.
-function plugin.GetPing ()
+-- Returns ping between server and client
+function private.GetPing ()
 	return private.DoOnlyInClient(private.DoRequestPing)
 end
--- Возвращает время между сетевыми запросами от клиента до сервера, а затем к цели и обратно.
-function plugin.GetPlayerPing (to: Player) 
+-- Returns ping between two players
+function private.GetPlayerPing (to: Player) 
 	return private.DoOnlyInClient(private.DoRequestPingToPlayer,to)
 end
 
+plugin.GetPing = private.GetPing
+plugin.GetPlayerPing = private.GetPlayerPing
 
 export type ancestors = self
 export type self = typeof(plugin)

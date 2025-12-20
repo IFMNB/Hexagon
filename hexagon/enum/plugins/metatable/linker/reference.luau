@@ -30,8 +30,8 @@ function private.Root(to:Link)
 end
 
 
-
-function private.DoLinkInstance (this: canLink, to: Link)
+-- Referenced element links to lifetime of the referencing instance. While this intance is not destroyed, the referenced element will not be destroyed ANYWAY, even if the referenced element is not accesible.
+function private.DoLinkInstance <t0> (this: t0|canLink, to: Link) : t0
 	local t0 = typeof(this)
 	assert(t0 == 'userdata' or t0 == 'table' or t0 == 'function', tostring(enum.Error.Forbidden))
 	assert(not private.GetRef(this), tostring(enum.Error.Forbidden))
@@ -42,54 +42,35 @@ function private.DoLinkInstance (this: canLink, to: Link)
 	linker.Link(ref, this)
 	return this
 end
-function private.DoUnlinkInstance (this: canLink)
+-- Unlinks this element from their instance.
+function private.DoUnlinkInstance <t0> (this: t0|canLink) : t0
 	linker.Unlink(private.GetRef(this), this)
 	return this
 end
 
 
-
 function private.SetGet (this: canLink, to: Reference)
 	private.CanGet[this]=to
 end
+-- Returns the reference of the specified element. While this element exists, all elements, referenced to this object thats is a reference to instance, will be protected from destruction.
 function private.GetRef (this: canLink) : Reference
 	return private.CanGet[this]
 end
 function private.GetLink (this: Reference) : Link
 	return private.References[this]
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- 
-function plugin.Link <t0> (this: canLink|t0, to: Link) : t0
-	return private.DoLinkInstance(this, to)
-end
---
-function plugin.Unlink <t0> (this: canLink|t0) : t0
-	return private.DoUnlinkInstance(this)
-end
--- 
-function plugin.Get (this: canLink) : Link
+-- Returns the instance of the specified element.
+function private.Get (this: canLink) : Link
 	return private.GetLink(private.GetRef(this))
 end
--- 
-function plugin.GetReference (this: canLink) : Reference
-	return private.GetRef(this)
-end
+
+
+
+plugin.Get = private.Get
+plugin.Link = private.DoLinkInstance
+plugin.Unlink = private.DoUnlinkInstance
+plugin.GetReference = private.GetRef
+
 
 type Reference = {}
 type Link = Instance

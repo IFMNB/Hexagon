@@ -111,39 +111,39 @@ end
 
 
 
--- Конвертирует число из "signed" схемы в "unsigned".
+-- Converts a number from "signed" scheme to "unsigned".
 function public.convertToUnsigned (self: number)
 	return private.convertuns(self)
 end
--- Получить только положительную разбитовку для указанной степени.
+-- Returns only positive bit size of number for target scheme.
 function public.getUnsignedBit (self: number) : number
 	return private.getunsignedbit(self)
 end
--- Получить разбитовку для указанной степени в signed (i) виде и в указанном формате.
+-- Returns a table of bits in the "signed" (i) scheme and awaited format.
 function public.getSignedBit (self: number, result: 'i+'|'i-')
 	return private.getsignedbit(self, result)
 end
--- Получить карту битовых unsigned значений для 8, 16, 32, 64.
+-- Returns bit-map for 8,16,32,64 unsigned values
 function public.getUnsignedBitMap ()
 	return private.getUnsignedBitMap()
 end
--- Вернет 2 функции для чтения и записи, учитывая оптималный битовый размер для числа.
+-- Returns 2 functions for read and write, considering the optimal bit size for the number.
 function public.getWriteReadFor (self: number)
 	return private.getbuffersized(self)
 end
--- Узнать условный тип для указанного значения.
+-- Returns type for this value from: 'float', 'char', 'short int', 'int', 'long int'
 function public.getIntType (self: number)
 	return private.getinttype(self)
 end
--- Узнать оптимальный битовый размер для числа.
+-- Returns optimal bit region for this value.
 function public.getDefaultBitRegion (self: number)
 	return private.bitsize(self)
 end
--- Карта битовых unsigned значений от 1 до 64 включительно.
+-- Returns map from 1 to 64 for unsigned values
 function public.getSpecialUnsignedBitMap ()
 	return private.generateSpecialUnsMap()
 end
--- Узнать битовый размер unsigned числа.
+-- Returns bit size for unsigned value.
 function public.getBitSize (self: number)
 	return private.calculatebitsize(self)
 end

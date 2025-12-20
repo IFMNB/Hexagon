@@ -1,7 +1,9 @@
 --!strict
 
+-- This configuration object contains all the settings of the hexagon apps.
+
 local arch = require('./arch/provider')
-local ent = arch.GetSystem().GetEntity().GetClass()
+local ent = arch.GetSystem().GetEntity()
 local enum = require('./enum')
 local plugin = require('./enum/plugins').GetPluginProvider()
 local oop = plugin.GetOOP()
@@ -26,10 +28,9 @@ local entity = ent.New(oop.Expanding(private.config, public)::config&public)
 lnk.Link(entity,public)
 
 if game["Run Service"]:IsClient() then
-	script.Replicator.OnClientEvent:Connect(function (key, to, isHex: boolean)
-		local value = isHex and enum.GetValue(to) or to
+	script:WaitForChild('Replicator').OnClientEvent:Connect(function (key, to, isHex: boolean)
+		local value = isHex and enum:GetValue(to) or to
 		entity[key] = value
-		print(enum.Network.Messages.Request, key, value)
 	end)
 end
 
