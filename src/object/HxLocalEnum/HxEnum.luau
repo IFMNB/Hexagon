@@ -7,32 +7,25 @@ setmetatable(class,class);
 local interface = {};
 interface.class=class;
 
-type HxEnum = typeof(interface.new())
+type HxEnum = typeof(interface.new(''))
+local Event : RemoteEvent
 
-if game:GetService('RunService'):IsClient() then
-	script.AutoReplicator.OnClientEvent:Connect(function(data: string) 
-		private.all[data]=main.LocalEnum.new(data)
-	end)
-else
-	script.AutoReplicator.OnServerEvent:Connect(function(player: Player) 
-		for i,v in private.all do
-			script.AutoReplicator:FireClient(player, v.EnumName)
-		end
-	end)
-end
-
+private.c = -1
 private.all = {} :: {[string]: HxEnum}
-if game:GetService('RunService'):IsClient() then script.AutoReplicator:FireServer() end
 
 -- This object automatically replicates from server to client.
-function private.new <t0> (identity: t0?)
-	assert(game:GetService('RunService'):IsServer(), 'HxEnum cannot be created on the client')
-	if identity then assert(not main.LocalEnum.get(identity), `enum "{identity}" already exists`) end
+function private.new <t0> (identity: t0)
+	assert(game:GetService('RunService'):IsServer(), 'cannot create new enum on client')
+	assert(not main.LocalEnum.get(identity), `enum "{identity}" already exists`)
 	
-	local this = main.LocalEnum.new(identity)
-	this.ClassName = main.ClassNames.HxEnum
+	private.c+=1
+	
+	local this = main.new({}, class)
+	this.EnumName = identity
+	this.RegValue = private.c
+	
 	private.all[this.EnumName]=this
-	script.AutoReplicator:FireAllClients(this)
+	Event:FireAllClients(this)
 	return this
 end
 
@@ -43,9 +36,27 @@ end
 class.ClassName=main.ClassNames.HxEnum
 class.Source = script
 class.Replicatable=true::true
-interface.new = private.new 
+
+interface.new = ( game:GetService('RunService'):IsServer() and private.new or error ) :: typeof(private.new)
 interface.get = private.get
 table.freeze(class)
 table.freeze(interface)
 table.freeze(private)
+
+if game:GetService('RunService'):IsClient() then
+	Event = assert(script:FindFirstChildOfClass('RemoteEvent'), 'no remote event')
+	Event.OnClientEvent:Connect(function(data: typeof(class))
+		private.all[data.EnumName]= (main.new(data,class)::any)::HxEnum
+	end)
+	Event:FireServer()
+else
+	Event = Instance.new 'RemoteEvent'
+	Event.Parent = script
+	Event.OnServerEvent:Connect(function(player: Player) 
+		for i,v in private.all do
+			Event:FireClient(player, v)
+		end
+	end)
+end
+
 return main:expand({Enum=interface})

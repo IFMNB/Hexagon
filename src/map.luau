@@ -1,7 +1,7 @@
 local ClassNames_Hexagon_Map = {	
 	HxObject = 'HxObject'::'HxObject',
 		HxLocalEnum = 'HxLocalEnum'::'HxLocalEnum',
-			HxEnum = 'HxEnum'::'HxEnum',
+			HxEnum = 'HxEnum'::'HxEnum', -- Auto-Replicatable
 	
 		
 		HxAbstractBase = 'HxAbstractBase'::'HxAbstractBase',
@@ -46,7 +46,9 @@ local ClassNames_Hexagon_Map = {
 
 		HxAbstractECS = 'HxAbstractECS' :: 'HxAbstractECS',
 			HxAbstractComponent = 'HxAbstractComponent'::'HxAbstractComponent',
-				HxComponent = 'HxComponent'::'HxComponent', 
+				-- You should create your own components.
+	
+			HxEntity = 'HxEntity'::'HxEntity',
 	
 			HxAbstractSystem = 'HxAbstractSystem'::'HxAbstractSystem', 
 				HxSystem = 'HxSystem'::'HxSystem', 

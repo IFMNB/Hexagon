@@ -4,8 +4,8 @@ root.Classes = setmetatable({},{__index=src_b.Classes})
 root.Abstract = setmetatable({},{__index=src_b.Abstract})
 
 
-function root.Classes.HxComponent ()
-	return require('..//object/__HxAbstractECS/__HxAbstractComponent/HxComponent').HxComponent
+function root.Classes.HxEntity ()
+	return require('..//object/__HxAbstractECS/HxEntity').HxEntity
 end
 
 

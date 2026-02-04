@@ -10,7 +10,8 @@ function src.Classes.HxLocalEnum ()
 	return require('..//object/HxLocalEnum').LocalEnum
 end
 
-
---function src.Classes.HxEnum () return require('../HxLocalEnum/HxEnum').Enum end -- on build
+function src.Classes.HxEnum ()
+	return require('..//object/HxLocalEnum/HxEnum').Enum
+end
 
 return src
