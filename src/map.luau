@@ -44,16 +44,16 @@ local ClassNames_Hexagon_Map = {
 					HxParallelWorker = 'HxParallelWorker'::'HxParallelWorker',
 					HxParallelConstantWorker = 'HxParallelConstantWorker'::'HxParallelConstantWorker',
 
-		HxAbstractECS = 'HxAbstractECS' :: 'HxAbstractECS',
-			HxComponent = 'HxAbstractComponent'::'HxAbstractComponent',
-				-- You should create your own components.
+		EcsBase = 'EcsBase' :: 'EcsBase',
+			EcsComponent = 'EcsComponent'::'EcsComponent',
 	
-			HxEntity = 'HxEntity'::'HxEntity',
+			EcsEntity = 'EcsEntity'::'EcsEntity',
 	
-			HxSystem = 'HxAbstractSystem'::'HxAbstractSystem', 
-				HxSystemIO = 'HxSystemIO'::'HxSystemIO',
+			EcsBaseSystem = 'EcsBaseSystem'::'EcsBaseSystem',
+				EcsSystem = 'EcsSystem'::'EcsSystem', 
+				EcsSystemIO = 'EcsSystemIO'::'EcsSystemIO',
 	
-			HxWorld = 'HxWorld'::'HxWorld',
+			EcsWorld = 'EcsWorld'::'EcsWorld',
 				
 }
 return table.freeze(ClassNames_Hexagon_Map)

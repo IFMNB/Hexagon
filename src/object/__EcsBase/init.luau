@@ -9,7 +9,7 @@ local interface = {};
 interface.class = class;
 
 
-class.ClassName = main.ClassNames.HxAbstractECS;
+class.ClassName = main.ClassNames.EcsBase;
 class.Source = script;
 
-return main:expand({__HxAbstractECS = interface, I_Base=require('../interface/src_base')})
+return main:expand({__EcsBase = interface, I_Base=require('../interface/src_base')})

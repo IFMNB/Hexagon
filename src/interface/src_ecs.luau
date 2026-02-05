@@ -4,20 +4,32 @@ root.Classes = setmetatable({},{__index=src_b.Classes})
 root.Abstract = setmetatable({},{__index=src_b.Abstract})
 
 
-function root.Classes.HxEntity ()
-	return require('..//object/__HxAbstractECS/HxEntity').HxEntity
+function root.Classes.EcsEntity ()
+	return require('..//object/__EcsBase/EcsEntity').EcsEntity
 end
 
-
-
-function root.Abstract.HxAbstractECS ()
-	return require('..//object/__HxAbstractECS').__HxAbstractECS
+function root.Classes.EcsComponent ()
+	return require('..//object/__EcsBase/EcsComponent').EcsComponent
 end
-function root.Abstract.HxAbstractComponent ()
-	return require('..//object/__HxAbstractECS/__HxAbstractComponent').__HxAbstractComponent
+
+function root.Classes.EcsSystem ()
+	return require('..//object/__EcsBase/__EcsBaseSystem/IEcsSystem/EcsSystem').EcsSystem
 end
-function root.Abstract.HxAbstractSystem ()
-	return require('..//object/__HxAbstractECS/__HxAbstractSystem').__HxAbstractSystem
+
+function root.Classes.EcsSystemIO ()
+	return require('..//object/__EcsBase/__EcsBaseSystem/IEcsSystem/EcsSystemIO').EcsSystemIO
+end
+
+function root.Classes.EcsWorld ()
+	return require('..//object/__EcsBase/EcsWorld').EcsWorld
+end
+
+function root.Abstract.EcsAbstractECS ()
+	return require('..//object/__EcsBase').__EcsBase
+end
+
+function root.Abstract.EcsAbstractSystem ()
+	return require('..//object/__EcsBase/__EcsBaseSystem').__EcsBaseSystem
 end
 
 return root

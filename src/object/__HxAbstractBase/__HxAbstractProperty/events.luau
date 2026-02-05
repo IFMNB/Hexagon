@@ -67,6 +67,7 @@ end
 
 type event = typeof(private.new_event(nil))
 -- Creates an event and his property object.
+@native
 function private.new_event <t0, t1> (EventName: t0?)
 	debug.profilebegin(script.Name..'.new_event')	
 	
