@@ -76,31 +76,32 @@ function private.new_event <t0, t1> (EventName: t0?)
 	
 	local signal = main.new({Name=EventName :: t0 },class)
 	local shade = private.new_shade_event(signal)
-	
+	local raw = {}
+	raw.Name = EventName :: t0
 
-	local call = function (...: any)
+	function raw.Call (...: any)
 		private.call(signal,...)
 	end
 	
-	local remove = function ()
+	function raw:Remove ()
 		for i,v in shade._c do
 			v:Disconnect()
 		end
 	end
 	
 
-	local destroy = function ()
-		remove()
+	function raw:Destroy ()
+		raw:Remove()
 		table.freeze(shade._c)
 	end
 
 
-	local count = function ()
+	function raw:GetCount ()
 		return #shade._c
 	end
 	
 
-	local clear_target = function (target: cons)
+	function raw:Clear (target: cons)
 		for i,v in shade._c do
 			local shade_con : shade_c = shadow:Get(v)
 			if shade_con._t == target then
@@ -110,14 +111,7 @@ function private.new_event <t0, t1> (EventName: t0?)
 	end
 	
 	-- By this object you can control event
-	local property = main.new({
-		Call = call,
-		Clear = remove,
-		Remove = clear_target,
-		Destroy = destroy,
-		GetCount = count,
-		Name = EventName :: t0
-	},subclass2)
+	local property = main.new(raw,subclass2)
 	
 	debug.profileend()
 	return signal, property

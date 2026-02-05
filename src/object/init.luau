@@ -26,6 +26,10 @@ function private:IsA (ClassName: keyof<typeof(MAP)>|string) : boolean
 	end
 	return iterate(self::any)
 end
+-- Returns true if an object's class-constructor matches a given class.
+function private:ItAs (ClassName: keyof<typeof(MAP)>|string) : boolean
+	return rawget(getmetatable(self::any).__index,'ClassName') == ClassName
+end
 
 -- Returns true if object data is equal to another object's data.
 function private:Equal (with: any)
@@ -61,7 +65,7 @@ function private.new <data> (data: data)
 	return main.new(data, class)
 end
 
-
+class.ItAs = private.ItAs;
 class.IsA = private.IsA;
 class.Equals = private.Equal;
 class.Similar = private.From;
