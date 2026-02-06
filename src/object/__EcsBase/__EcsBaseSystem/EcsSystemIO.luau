@@ -1,4 +1,4 @@
-local main = require('../')
+local main = require('./')
 local event = main.I_Base.Classes.Event()
 
 local private = {};

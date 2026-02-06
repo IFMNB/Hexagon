@@ -19,9 +19,9 @@ table.freeze(class)
 table.freeze(interface)
 return main:expand({
 	__HxAbstractPrimetive=interface,
-	Events = require('./__HxBaseProperty/events').Events,
-	Hooks = require('./__HxBaseProperty/hook').Hooks,
-	Shade = require('./__HxBaseProperty/shade').Shade,
-	Snapshot = require('./__HxBaseProperty/snapshot').Snapshot,
+	Events = require('./__HxBaseProperty/HxEvent').Events,
+	Hooks = require('./__HxBaseProperty/HxHooker').Hooks,
+	Shade = require('./__HxBaseProperty/HxShade').Shade,
+	Snapshot = require('./__HxBaseProperty/HxSnapshot').Snapshot,
 	MetalinkCreator = require('./__HxBaseProperty/__HxAbstractMetalink/HxMetalinkCreator').HxMetalinkCreator
 })

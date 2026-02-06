@@ -8,16 +8,21 @@ local ClassNames_Hexagon_Map = {
 	
 			HxBaseProperty = 'HxBaseProperty'::'HxBaseProperty', 
 				HxSnapshot = 'HxSnapshot'::'HxSnapshot',
-	
 				HxShade = 'HxShade'::'HxShade',
 	
 				HxAbstractMetalink = 'HxAbstractMetalink'::'HxAbstractMetalink',
 					HxMetalinkCreator = 'HxMetalinkNew'::'HxMetalinkNew',
 	
 				HxHooker = 'HxHooker'::'HxHooker',
+				HxActionEmmiter = 'HxActionEmmiter',
 	
 				HxAbstractConnection = 'HxAbstractConnection' :: 'HxAbstractConnection',
-					--n/a
+					IHxSelfConnection = 'HxSelfConnection' :: 'HxSelfConnection',
+						HxReferencedConnection = 'HxReferencedConnection' :: 'HxReferencedConnection',
+					IHxClassConnection = 'HxBaseDisconnectableConnection',
+						HxConnection = 'HxConnection' :: 'HxConnection',
+							HxConnectionController = 'HxConnectionController' :: 'HxConnectionController',
+	
 				HxEvent = 'HxEvent'::'HxEvent',
 					HxEventConnection = 'HxEventConnection'::'HxEventConnection',
 					HxEventProperties = 'HxEventProperties'::'HxEventProperties',

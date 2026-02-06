@@ -1,4 +1,4 @@
-local main = require('../')
+local main = require('./')
 
 local private = {};
 local class = {};

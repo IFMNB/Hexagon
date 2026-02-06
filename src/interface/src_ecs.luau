@@ -13,11 +13,11 @@ function root.Classes.EcsComponent ()
 end
 
 function root.Classes.EcsSystem ()
-	return require('..//object/__EcsBase/__EcsBaseSystem/IEcsSystem/EcsSystem').EcsSystem
+	return require('..//object/__EcsBase/__EcsBaseSystem/EcsSystem').EcsSystem
 end
 
 function root.Classes.EcsSystemIO ()
-	return require('..//object/__EcsBase/__EcsBaseSystem/IEcsSystem/EcsSystemIO').EcsSystemIO
+	return require('..//object/__EcsBase/__EcsBaseSystem/EcsSystemIO').EcsSystemIO
 end
 
 function root.Classes.EcsWorld ()

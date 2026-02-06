@@ -9,8 +9,6 @@ local interface = {}; interface.class = class;
 class.Source = script
 class.ClassName = main.ClassNames.HxAbstractConnection
 class.Connected = false
-class.Disconnect = main.Abstract.SelfOverride
-
-export type HxAbstractConnection = typeof(class)
+class.Owner = nil :: unknown
 
 return main:expand({__HxAbstractConnection=interface})
