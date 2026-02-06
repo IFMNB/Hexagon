@@ -4,7 +4,7 @@ local run = game:GetService('RunService')
 
 local private = {};
 local class = {};
-class.__index=main.__HxAbstractParallel.class;
+class.__index=main.__HxBaseParallel.class;
 setmetatable(class,class);
 local interface = {};
 interface.class=class;
@@ -30,7 +30,7 @@ function private.new ()
 	Worker.Enabled=true
 	Event.Event:Wait()
 	
-	local this = main.__HxAbstractInstance.new({
+	local this = main.HxInstance.new({
 		Worker = Actor,
 		Active = false,
 	},class)

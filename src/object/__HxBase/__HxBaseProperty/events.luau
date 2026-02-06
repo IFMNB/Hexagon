@@ -1,12 +1,11 @@
 local main = require('./')
-local object = main.Objects
 
 local shadow = require('./shade').Shade.new() 
 
 local private = {}
-local class = {}; class.__index=object.class; setmetatable(class,class); class.ClassName=main.ClassNames.HxEvent
-local subclass = {}; subclass.__index=object.class; setmetatable(subclass, subclass);subclass.ClassName=main.ClassNames.HxEventConnection
-local subclass2 = {}; subclass2.__index=object.class; setmetatable(subclass2, subclass2);subclass2.ClassName=main.ClassNames.HxEventProperties
+local class = {}; class.__index=main.__HxBaseProperty.class; setmetatable(class,class); class.ClassName=main.ClassNames.HxEvent
+local subclass = {}; subclass.__index=main.__HxBaseProperty.class; setmetatable(subclass, subclass);subclass.ClassName=main.ClassNames.HxEventConnection
+local subclass2 = {}; subclass2.__index=main.__HxBaseProperty.class; setmetatable(subclass2, subclass2);subclass2.ClassName=main.ClassNames.HxEventProperties
 local interface = {}; interface.class = class; interface.subclass = subclass; interface.subclass2 = subclass2
 
 @native
@@ -43,7 +42,7 @@ end
 
 type p0 = typeof(class)
 type p1 = typeof(subclass)
-type obj_t = typeof(main.new({},object.class))
+type obj_t = typeof(main.new({},main.__HxBaseProperty.class))
 
 type function ev_name_v3 (a0: type, r0tempname: type)
 	local types = types

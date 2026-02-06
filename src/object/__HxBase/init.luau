@@ -6,6 +6,6 @@ local interface = {}; interface.class=class
 
 
 class.Source=script
-class.ClassName=main.ClassNames.HxAbstractBase
+class.ClassName=main.ClassNames.HxBase
 
-return main:expand({__AbstractBase=interface})
+return main:expand({__HxBase=interface})

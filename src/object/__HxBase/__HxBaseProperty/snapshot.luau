@@ -1,7 +1,7 @@
 local main = require('./')
 
 local private = {};
-local class = {}; class.__index=main.__AbstractBase.class;setmetatable(class,class)
+local class = {}; class.__index=main.__HxBaseProperty.class;setmetatable(class,class)
 local interface = {}; interface.class=class
 
 private._snapshots = setmetatable({}::{[Snapshot]:any},{__mode='vs'})

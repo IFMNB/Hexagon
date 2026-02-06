@@ -4,13 +4,9 @@ local ClassNames_Hexagon_Map = {
 			HxEnum = 'HxEnum'::'HxEnum', -- Auto-Replicatable
 	
 		
-		HxAbstractBase = 'HxAbstractBase'::'HxAbstractBase',
+		HxBase = 'HxBase'::'HxBase',
 	
-			HxAbstractProperty = 'HxAbstractProperty'::'HxAbstractProperty', 
-				--[[
-				Abstract class for all classes that should be used as a property of another class.
-				Classes in this class cannot use their neighbours due to their specifys.
-				]]
+			HxBaseProperty = 'HxBaseProperty'::'HxBaseProperty', 
 				HxSnapshot = 'HxSnapshot'::'HxSnapshot',
 	
 				HxShade = 'HxShade'::'HxShade',
@@ -40,7 +36,7 @@ local ClassNames_Hexagon_Map = {
 				HxAbstractDataTree = 'HxAbstractDataTree'::'HxAbstractDataTree', -- Auto-Replicatable.
 					HxWorldStorage = 'HxWorldStorage'::'HxWorldStorage',
 	
-				HxAbstractParallel = 'HxAbstractParallel'::'HxAbstractParallel', 
+				HxBaseParallel = 'HxBaseParallel'::'HxBaseParallel', 
 					HxParallelWorker = 'HxParallelWorker'::'HxParallelWorker',
 					HxParallelConstantWorker = 'HxParallelConstantWorker'::'HxParallelConstantWorker',
 

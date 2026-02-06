@@ -1,9 +1,7 @@
 local main = require('./')
 
-local ob = main.Objects
-
 local private = {}
-local class = {}; class.__index=ob.class; setmetatable(class,class)
+local class = {}; class.__index=main.__HxBaseProperty.class; setmetatable(class,class)
 local interface = {}; interface.class=class
 
 private.mt={__index=class}

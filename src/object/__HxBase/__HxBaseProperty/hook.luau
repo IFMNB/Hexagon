@@ -3,11 +3,10 @@
 
 local main = require('./')
 
-local obj = main.Objects
 local shadow = require('./shade').Shade.new()
 
 local private = {}
-local class = {}; class.__index=obj.class; setmetatable(class,class)
+local class = {}; class.__index=main.__HxBaseProperty.class; setmetatable(class,class)
 local interface = {}; interface.class=class
 
 private.mtv={__mode='v'::'v'}

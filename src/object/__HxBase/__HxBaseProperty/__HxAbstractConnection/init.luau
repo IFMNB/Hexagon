@@ -3,7 +3,7 @@ local main = require('./')
 -- local class for events.
 
 local private = {};
-local class = {}; class.__index = main.__HxAbstractProperty.class; setmetatable(class, class);
+local class = {}; class.__index = main.__HxBaseProperty.class; setmetatable(class, class);
 local interface = {}; interface.class = class;
 
 class.Source = script

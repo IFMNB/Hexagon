@@ -2,7 +2,7 @@ local main = require('./')
 
 local private = {};
 local class = {};
-class.__index = main.__HxAbstractProperty.class;
+class.__index = main.__HxBaseProperty.class;
 setmetatable(class,class);
 local interface = {};
 interface.class = class;

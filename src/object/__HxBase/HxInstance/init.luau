@@ -2,8 +2,8 @@ local main = require('./__HxAbstractPrimetive')
 
 
 local private = {};
-local class = {}; class.__index=main.__AbstractBase.class; setmetatable(class,class);
-local subclass = {}; subclass.__index=main.__AbstractBase.class; setmetatable(subclass,subclass);
+local class = {}; class.__index=main.__HxBase.class; setmetatable(class,class);
+local subclass = {}; subclass.__index=main.__HxBase.class; setmetatable(subclass,subclass);
 local interface = {}; 
 
 local shade = main.Shade.new()
