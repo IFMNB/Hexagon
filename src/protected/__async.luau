@@ -1,8 +1,8 @@
 local private = {}
 local interface = {}
 
-type F = (...any)->()|any
-type Fc = (ResumeThread: F, ...any)->()|any
+type F = (...any)->any
+type Fc = (ResumeThread: F, ...any)->any
 
 function private.coroutine_async_F_controllable (F: Fc, ...: any)
 	local thread = coroutine.running()
@@ -17,6 +17,7 @@ function private.coroutine_async_F_controllable (F: Fc, ...: any)
 		F(function (...: any)
 			coroutine.resume(thread, ...)
 			coroutine.close(cor)
+			return
 		end)
 	end)
 	coroutine.resume(cor,...)
@@ -37,4 +38,4 @@ end
 interface.AsyncControll = private.coroutine_async_F_controllable;
 interface.Async = private.coroutine_async_F;
 
-return interface
+return interface 
