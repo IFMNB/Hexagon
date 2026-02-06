@@ -2,6 +2,17 @@ local root = {}
 
 root.ClassNames = require('@self/map')
 root.Abstract = require('@self/protected/__abstract')
+root.Async = require('@self/protected/__async')
+
+--[[
+	Regarding the alignment of class names and values in the hierarchy.
+		The base class does not guarantee anything except that its signature is respected by descendants.
+		The abstract class ensures that all its descendants implement all the methods and properties that it implements.
+		The interface class ensures that all of its descendants fit the context and contract of the role.
+		Class - specific implementation
+
+	The prefixes Hx, Ecs, etc. indicate the semantic role and belonging of a class to a group of goals.
+]]
 
 --[[
 	Used for creating new objects.
