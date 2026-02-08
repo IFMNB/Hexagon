@@ -83,7 +83,7 @@ end
 function src.Interface.IHxMap ()
 	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection/IHxMap')._IHxMap
 end
-function src.Interface.IHxArray ()
+function src.Interface.IHxList ()
 	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection/IHxList')._IHxList
 end
 
