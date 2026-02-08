@@ -37,10 +37,11 @@ local ClassNames_Hexagon_Map = {
 				HxAbstractTable = 'HxAbstractTable'::'HxAbstractTable',
 					IHxArray = 'IHxArray'::'IHxArray',
 						HxArray = 'HxArray'::'HxArray',
+						HxWeakArray = 'HxWeakArray'::'HxWeakArray',
 	
 					IHxCollection = 'IHxCollection'::'IHxCollection',
 						HxCollection = 'HxCollection'::'HxCollection',
-	
+						HxWeakCollection = 'HxWeakCollection'::'HxWeakCollection',
 	
 	
 			HxInstance = 'HxInstance'::'HxInstance',
