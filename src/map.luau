@@ -35,6 +35,9 @@ local ClassNames_Hexagon_Map = {
 					HxNumberModifier = 'HxNumberModifier'::'HxNumberModifier',
 	
 				HxAbstractTable = 'HxAbstractTable'::'HxAbstractTable',
+					HxNode = 'HxNode'::'HxNode',
+	
+	
 					IHxArray = 'IHxArray'::'IHxArray',
 						HxArray = 'HxArray'::'HxArray',
 						HxWeakArray = 'HxWeakArray'::'HxWeakArray',
