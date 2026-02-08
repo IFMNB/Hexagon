@@ -108,7 +108,7 @@ function private:collect_index (index: any)
 end
 
 class.__index = main.__HxAbstractPrimetive.class;
-class.ClassName = main.ClassNames.HxAbstractTable;
+class.ClassName = main.ClassNames.HxBaseCollection;
 class.Source = script;
 class.Value = nil :: {[any]:any}?;
 
@@ -131,4 +131,4 @@ interface.class = class;
 table.freeze(private)
 table.freeze(class)
 table.freeze(interface)
-return main:expand({__HxAbstractTable=interface})
+return main:expand({__HxBaseCollection=interface})

@@ -6,9 +6,10 @@ local interface = {};
 
 type IHxArray = typeof(class)
 
-function private:get (index: number) : any?
+function private:get (index: number) : any
 	local self = self :: IHxArray;
 	assert(self.Value, 'doesnt have value')
+	assert(self.Value[index]~=nil, 'not have this value')
 	return self.Value[index]
 end
 
@@ -116,8 +117,8 @@ function private:sort_selective ()
 	end
 end
 
-class.__index=main.__HxAbstractTable.class;
-class.ClassName = main.ClassNames.IHxArray;
+class.__index=main.__HxBaseCollection.class;
+class.ClassName = main.ClassNames.IHxList;
 class.Source = script;
 class.Value = nil :: {any}?;
 class.Get = private.get;
@@ -131,4 +132,4 @@ class.SortSelective = private.sort_selective;
 
 interface.class = class;
 
-return main:expand({_IHxArray=interface})
+return main:expand({_IHxList=interface})
