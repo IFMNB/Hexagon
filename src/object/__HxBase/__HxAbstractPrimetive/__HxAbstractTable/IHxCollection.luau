@@ -8,14 +8,14 @@ type IHxCollection = typeof(class)
 
 function private:set (index: string, value: any)
 	local self = self :: IHxCollection;
-	assert(self.Value, '')
-	assert(self.Value[index]==nil, '')
+	assert(self.Value, 'doesnt have value')
+	assert(self.Value[index]==nil, 'override is not allowed')
 	self.Value[index] = value
 end
 
-function private:get (index: string)
+function private:get (index: string) : any?
 	local self = self :: IHxCollection;
-	assert(self.Value, '')
+	assert(self.Value, 'doesnt have value')
 	return self.Value[index]
 end
 

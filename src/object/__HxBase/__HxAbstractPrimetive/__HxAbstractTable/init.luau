@@ -27,7 +27,7 @@ function private:clear ()
 	end
 end
 
-function private:contains (value: any)
+function private:contains_value (value: any)
 	local self = self :: HxAbstractTable;
 	assert(self.Value, 'Value is nil')
 	
@@ -38,6 +38,17 @@ function private:contains (value: any)
 	end
 	
 	return false
+end
+
+function private:contains_index (index: any)
+	local self = self :: HxAbstractTable;
+	assert(self.Value, 'Value is nil')
+	
+	if self.Value[index] then
+		return true
+	else
+		return false
+	end
 end
 
 function private:has_type (typename: string)
@@ -66,15 +77,51 @@ function private:has_key_type (typename: string)
 	return false
 end
 
+function private:collect_value (value: any)
+	local self = self :: HxAbstractTable;
+	assert(self.Value, 'Value is nil')
+	
+	local new = {}
+	
+	for i,v in self.Value do
+		if v == value then
+			new[i] = v
+		end
+	end
+	
+	return new
+end
+
+function private:collect_index (index: any)
+	local self = self :: HxAbstractTable;
+	assert(self.Value, 'Value is nil')
+	
+	local new = {}
+	
+	for i,v in self.Value do
+		if i == index then
+			new[i] = v
+		end
+	end
+	
+	return new
+end
+
 class.__index = main.__HxAbstractPrimetive.class;
 class.ClassName = main.ClassNames.HxAbstractTable;
 class.Source = script;
 class.Value = nil :: {[any]:any}?;
+
 class.Count = private.get_count;
 class.Clear = private.clear;
-class.Contains = private.contains;
+
+class.ContainsValue = private.contains_value;
+class.ContainsIndex = private.contains_index;
 class.HasVType = private.has_type;
 class.HasIType = private.has_key_type;
+class.CollectValue = private.collect_value;
+class.CollectIndex = private.collect_index;
+
 class.Set = main.Abstract.SelfOverride;
 class.Get = main.Abstract.SelfOverride;
 
