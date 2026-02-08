@@ -75,6 +75,8 @@ class.Clear = private.clear;
 class.Contains = private.contains;
 class.HasVType = private.has_type;
 class.HasIType = private.has_key_type;
+class.Set = main.Abstract.SelfOverride;
+class.Get = main.Abstract.SelfOverride;
 
 interface.class = class;
 
