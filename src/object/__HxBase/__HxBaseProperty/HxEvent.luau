@@ -1,6 +1,6 @@
 local main = require('./')
 
-local shadow = require('./shade').Shade.new() 
+local shadow = require('./HxShade').Shade.new() 
 
 local private = {}
 local class = {}; class.__index=main.__HxBaseProperty.class; setmetatable(class,class); class.ClassName=main.ClassNames.HxEvent

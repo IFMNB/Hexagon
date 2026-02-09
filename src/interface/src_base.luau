@@ -13,32 +13,37 @@ end
 function src.Classes.HxParallelWorker ()
 	return require('..//object/__HxBase/HxInstance/__HxBaseParallel/HxParallelWorker').ParallelWorker
 end
---function src.Classes.HxParallelConstantWorker ()
+@deprecated
+function src.Classes.HxParallelConstantWorker ()
+	error('indev')
 	--return require('..//object/__HxBase/HxInstance/__HxAbstractParallel/HxParallelConstantWorker').ParallelConstantWorker
---end
-function src.Classes.NumberObject ()
+end
+function src.Classes.HxNumber ()
 	return require('..//object/__HxBase/__HxAbstractPrimetive/number').Number
 end
-function src.Classes.ModifiedNumberObject ()
+function src.Classes.HxNumberModifier ()
 	return require('..//object/__HxBase/__HxAbstractPrimetive/number/mnumber').ModifiedNumber
 end
-function src.Classes.StringObject ()
+function src.Classes.HxString ()
 	return require('..//object/__HxBase/__HxAbstractPrimetive/string').String
 end
-function src.Classes.TranslationStringObject ()
+function src.Classes.HxTranslationString ()
 	return require('..//object/__HxBase/__HxAbstractPrimetive/string/tstring').TString
 end
-function src.Classes.Event ()
+function src.Classes.HxEvent ()
 	return require('..//object/__HxBase/__HxBaseProperty/HxEvent').Events
 end
-function src.Classes.Hook ()
+function src.Classes.HxHooker ()
 	return require('..//object/__HxBase/__HxBaseProperty/HxHooker').Hooks
 end
-function src.Classes.Shade ()
+function src.Classes.HxShade ()
 	return require('..//object/__HxBase/__HxBaseProperty/HxShade').Shade
 end
-function src.Classes.Snapshot ()
+function src.Classes.HxSnapshot ()
 	return require('..//object/__HxBase/__HxBaseProperty/HxSnapshot').Snapshot
+end
+function src.Classes.HxActionEmitter ()
+	return require('..//object/__HxBase/__HxBaseProperty/HxActionEmitter').HxActionEmitter
 end
 function src.Classes.HxMap ()
 	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection/IHxMap/HxMap').HxMap
