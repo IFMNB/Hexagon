@@ -19,7 +19,7 @@ function private.coroutine_async_F_controllable (F: Fc, ...: any)
 		end)
 	end)
 	task.defer(cor)
-	return coroutine.yield(thread,coroutine.resume(cor,...))
+	return coroutine.yield()
 end
 
 -- Yields until the function is finished. Return value that goes from the function.
@@ -30,7 +30,7 @@ function private.coroutine_async_F <T> (F: F&T, ...: any)
 		coroutine.resume(thread,result)
 	end)
 	task.defer(cor)
-	return coroutine.yield(coroutine.resume(cor, ...))
+	return coroutine.yield()
 end
 
 interface.AsyncControll = private.coroutine_async_F_controllable;
