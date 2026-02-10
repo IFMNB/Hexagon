@@ -26,7 +26,17 @@ function private:throw ()
 	local self = self :: HxRuntimeException;
 	self.Counter+=1
 	class.GlobalCounter+=1
-	error(self.Code)
+	warn(self.Code, self.Description)
+	error(self)
+end
+-- Equalent to assert. Throws self if assertion is failed.
+function private:assert <T> (assertion: T)
+	local self = self :: HxRuntimeException;
+	if not assertion then
+		return self:Throw()
+	else
+		return assertion
+	end
 end
 
 function private.Get_throwed ()
@@ -41,6 +51,7 @@ class.Code = 'RuntimeException'::'RuntimeException';
 class.Description = 'An unknown error occurred while executing the program.' :: 'An unknown error occurred while executing the program.';
 class.Counter = 0;
 class.GlobalCounter = 0;
+class.Assert = private.assert;
 
 interface.class=class;
 interface.new=private.new;
