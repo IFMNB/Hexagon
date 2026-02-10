@@ -1,11 +1,11 @@
 local private = {}
 local interface = {}
 
-type F = (...any)->any
-type Fc = (ResumeThread: F, ...any)->any
+type F <T, U...> = (...T)->U...
+type Fc <Y, I...> = (ResumeThread: (...any)->(), ...any)->() -- broken
 
 -- Yields until the ResumeThread is called. Return value that goes from the ResumeThread.
-function private.coroutine_async_F_controllable (F: Fc, ...: any)
+function private.coroutine_async_F_controllable <U,T,I...> (F: Fc<T,I...>, ...: U) : any
 	local thread = coroutine.running()
 	local context = debug.traceback('Backtrace: ')
 	local cor = coroutine.create(function(...) 
@@ -15,12 +15,7 @@ function private.coroutine_async_F_controllable (F: Fc, ...: any)
 		local state, result = pcall(F, function (...)
 			open = true
 			task.cancel(watch);
-			task.spawn(function (thread: thread, ...)
-				local state, e0 = coroutine.resume(thread, ...);
-				if not state then
-					error(string.format('Coroutine, that runned from asynchronous context, got exception: %q with %s',tostring(e0), context))
-				end
-			end, thread, ...)
+			task.spawn(thread, ...);
 			return;
 		end, ...)
 		
@@ -37,7 +32,7 @@ function private.coroutine_async_F_controllable (F: Fc, ...: any)
 end
 
 -- Returns task that watches the coroutine for the given time. If the coroutine is still running after the given time, it will call the function or warn.
-function private.coroutine_watch_end (wait: number?, F: F?)
+function private.coroutine_watch_end <T, U...> (wait: number?, F: F<T,U...>?)
 	local thread = coroutine.running()
 	local context = debug.traceback('Backtrace: ')
 	return task.spawn(function ()
@@ -53,12 +48,12 @@ function private.coroutine_watch_end (wait: number?, F: F?)
 end
 
 -- Yields until the function is finished. Return value that goes from the function. Throws exception if function or main coroutine got error.
-function private.coroutine_async_F <T> (F: F&T, ...: any)
+function private.coroutine_async_F <T, U...> (F: F<T,U...>, ...: any) : U...
 	local thread = coroutine.running()
 	local context = debug.traceback('Backtrace: ')
 	local cor = coroutine.create(function(...) 
 		interface.SyncWatchEnd(5)
-		local state, result = pcall(F, ...)
+		local state, result = pcall(F :: any, ...)
 		
 		if not state then
 			coroutine.close(thread)
