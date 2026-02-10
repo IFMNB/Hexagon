@@ -13,7 +13,7 @@ interface.class=class;
 type HxEnum = typeof(interface.new(''))
 local Event : RemoteEvent
 
-private.c = -1
+local counter = -1
 private.all = {} :: {[string]: HxEnum}
 
 -- This object automatically replicates from server to client.
@@ -21,11 +21,11 @@ function private.new <t0> (identity: t0)
 	assert(game:GetService('RunService'):IsServer(), 'cannot create new enum on client')
 	assert(not main.LocalEnum.get(identity), `enum "{identity}" already exists`)
 	
-	private.c+=1
+	counter+=1
 	
 	local this = main.new({}, class)
 	this.EnumName = identity
-	this.RegValue = private.c
+	this.RegValue = counter
 	
 	private.all[this.EnumName]=this
 	Event:FireAllClients(this)
