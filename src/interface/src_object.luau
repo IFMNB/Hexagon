@@ -11,7 +11,8 @@ function src.Classes.HxLocalEnum ()
 end
 
 function src.Classes.HxEnum ()
-	return require('..//object/HxLocalEnum/HxEnum').Enum
+	error('refactor')
+	--return require('..//object/HxLocalEnum/HxEnum').Enum
 end
 
 return src

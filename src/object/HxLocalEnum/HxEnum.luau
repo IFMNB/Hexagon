@@ -1,5 +1,8 @@
 local main = require('./')
 
+-- why this is not equal to HxLocalEnum?
+
+
 local private = {};
 local class = {};
 class.__index = main.LocalEnum.class;
