@@ -10,6 +10,11 @@ function src.Classes.HxLocalEnum ()
 	return require('..//object/HxLocalEnum').LocalEnum
 end
 
+function src.Classes.HxRuntimeException ()
+	return require('..//object/HxRuntimeException').HxRuntimeException
+end
+
+
 function src.Classes.HxEnum ()
 	error('refactor')
 	--return require('..//object/HxLocalEnum/HxEnum').Enum

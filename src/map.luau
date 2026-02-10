@@ -1,5 +1,6 @@
 local ClassNames_Hexagon_Map = {	
 	HxObject = 'HxObject'::'HxObject',
+		HxRuntimeException = 'HxRuntimeException'::'HxRuntimeException',
 		HxLocalEnum = 'HxLocalEnum'::'HxLocalEnum',
 			HxEnum = 'HxEnum'::'HxEnum', -- Auto-Replicatable
 	
