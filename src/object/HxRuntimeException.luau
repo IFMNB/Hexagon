@@ -22,7 +22,7 @@ function private.new <T,U> (Name : T?, Description: U?)
 end
 
 -- Causes a error if it throws.
-function private:throw ()
+function private:throw () : never
 	local self = self :: HxRuntimeException;
 	self.Counter+=1
 	class.GlobalCounter+=1
@@ -30,7 +30,7 @@ function private:throw ()
 	error(self)
 end
 -- Equalent to assert. Throws self if assertion is failed.
-function private:assert <T> (assertion: T)
+function private:assert <T> (assertion: T) : typeof(assert(nil::T))
 	local self = self :: HxRuntimeException;
 	if not assertion then
 		return self:Throw()
