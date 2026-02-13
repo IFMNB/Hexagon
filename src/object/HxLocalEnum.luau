@@ -10,16 +10,16 @@ type function reg (name: type)
 end
 
 private.registry = {}
-local counter = 0
+
 function private.new <t0> (Name: t0?)
 	local registryname = Name :: unknown
 	assert(not private.registry[registryname], `enum "{registryname}" already exists`)
+	
+	
 	local this = table.freeze(main.new({
 		EnumName = (registryname or tostring(newproxy())) :: reg<t0>,
-		RegValue = counter
 	},class))
 	
-	counter+=1
 	private.registry[registryname] = this::any
 	return this 
 end
@@ -40,7 +40,6 @@ end
 
 class.Source = script
 class.EnumName = '';
-class.RegValue = -1;
 
 interface.get=private.get
 interface.IsEnum=private.isEn
