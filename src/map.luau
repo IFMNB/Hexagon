@@ -16,12 +16,7 @@ local ClassNames_Hexagon_Map = {
 				HxHooker = 'HxHooker'::'HxHooker',
 				HxActionEmmiter = 'HxActionEmmiter',
 	
-				HxAbstractConnection = 'HxAbstractConnection' :: 'HxAbstractConnection',
-					IHxSelfConnection = 'HxSelfConnection' :: 'HxSelfConnection',
-						HxReferencedConnection = 'HxReferencedConnection' :: 'HxReferencedConnection',
-					IHxClassConnection = 'HxBaseDisconnectableConnection',
-						HxConnection = 'HxConnection' :: 'HxConnection',
-							HxConnectionController = 'HxConnectionController' :: 'HxConnectionController',
+
 	
 				HxEvent = 'HxEvent'::'HxEvent',
 					HxEventConnection = 'HxEventConnection'::'HxEventConnection',
