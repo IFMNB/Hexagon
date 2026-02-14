@@ -75,9 +75,6 @@ end
 function src.Abstract.HxBase ()
 	return require('..//object/__HxBase').__HxBase
 end
-function src.Abstract.HxAbstractConnection ()
-	return require('..//object/__HxBase/__HxBaseProperty/__HxAbstractConnection').__HxAbstractConnection
-end
 function src.Abstract.HxBaseCollection ()
 	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection').__HxBaseCollection
 end
