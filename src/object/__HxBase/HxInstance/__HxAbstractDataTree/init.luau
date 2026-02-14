@@ -5,7 +5,7 @@ local interface = {}; interface.class=class
 
 class.ClassName=main.ClassNames.HxAbstractDataTree;
 class.Source=script;
-class.Replicatable = true :: true; -- you should never manually replicate descendants of this class
+class.IsReplicatable = true :: true; -- you should never manually replicate descendants of this class
 
 
 return main:expand({

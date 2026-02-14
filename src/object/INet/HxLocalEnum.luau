@@ -1,13 +1,10 @@
 local main = require('./')
 
 local private = {}
-local class = {}; class.__index=main.Objects.class; setmetatable(class,class);class.ClassName=main.ClassNames.HxLocalEnum
+local class = {}; setmetatable(class,class);
 local interface = {}; interface.class=class
 
-type function reg (name: type)
-	local types = types
-	return name:is('singleton') and name or types.string
-end
+type function reg (name: type) local types = types return name:is('singleton') and name or types.string end
 
 private.registry = {}
 
@@ -37,13 +34,19 @@ function private:isEn (this: any) : boolean
 	return false
 end
 
+function private.getreg ()
+	return table.freeze(table.clone(private.registry))
+end
 
+class.__index=main._INet.class;
+class.ClassName=main.ClassNames.HxLocalEnum
 class.Source = script
 class.EnumName = '';
 
-interface.get=private.get
-interface.IsEnum=private.isEn
-interface.new=private.new
+interface.get=private.get;
+interface.registry = private.getreg;
+interface.IsEnum=private.isEn;
+interface.new=private.new;
 
 table.freeze(class)
 table.freeze(private)

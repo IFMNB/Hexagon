@@ -12,6 +12,8 @@ end
 class.ClassName=main.ClassNames.HxAbstractPrimetive
 class.Source=script
 class.Value = nil :: unknown
+class.IsReplicatable = true :: true;
+
 interface.new = private.new
 
 table.freeze(private)
@@ -22,6 +24,5 @@ return main:expand({
 	Events = require('./__HxBaseProperty/HxEvent').Events,
 	Hooks = require('./__HxBaseProperty/HxHooker').Hooks,
 	Shade = require('./__HxBaseProperty/HxShade').Shade,
-	Snapshot = require('./__HxBaseProperty/HxSnapshot').Snapshot,
 	MetalinkCreator = require('./__HxBaseProperty/__HxAbstractMetalink/HxMetalinkCreator').HxMetalinkCreator
 })

@@ -1,5 +1,5 @@
 local main = require('./')
-local event = main.I_Base.Classes.Event()
+local event = main.I_Base.Classes.HxEvent()
 
 local private = {};
 local class = {};

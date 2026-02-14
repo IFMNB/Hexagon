@@ -5,6 +5,8 @@ local private = {}
 local class = {};
 local interface = {}; 
 
+type HxObject = typeof(class)
+
 -- Returns true if an object's class matches or inherits from a given class.
 function private:IsA (ClassName: keyof<typeof(MAP)>|string) : boolean
 	local visited = {}
@@ -37,7 +39,7 @@ end
 
 -- Returns true if object data is equal to another object's data.
 function private:Equal (with: any)
-	return private.Match(self,with) == private.Match(with,self)
+	return private.Match(self,with) == private.Match(with,self) and class.IsSimilar(self,with)
 end
 -- Returns true if object data is similar to another object's data, but not necessarily full equality from target object.
 function private:Match  (with: any)
@@ -55,29 +57,22 @@ end
 
 -- Returns true if both objects have the same class as a constructor.
 function private:From (this: any)
-	local self = assert(type(self::any)=='table' and self, 'cannot check class construction')
-	if typeof(this)~='table' then return false end
-	
-	local meta = assert(getmetatable(self::any), 'MetatableLosed')
-	local meta2 = getmetatable(this);
-	
-	if typeof(meta2)~='table'then return false end
-	return meta.__index == meta2.__index
+	return class.GetClass(self::HxObject) == class.GetClass(this::HxObject?)
 end
 
 function private.new <data> (data: data)
 	return main.new(data, class)
 end
 
-class.It = private.Class;
-class.ItAs = private.ItAs;
+class.GetClass = private.Class;
+class.IsClass = private.ItAs;
 class.IsA = private.IsA;
-class.Equals = private.Equal;
-class.Similar = private.From;
-class.Match = private.Match;
+class.IsEquals = private.Equal;
+class.IsSimilar = private.From;
+class.IsMatch = private.Match;
 class.ClassName = MAP.HxObject;
 class.Source=script;
-class.Replicatable = false :: false;
+class.IsReplicatable = false :: false;
 
 interface.class=class
 interface.new = private.new

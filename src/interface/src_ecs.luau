@@ -2,7 +2,7 @@ local src_b=require('./src_base')
 local root = {}
 root.Classes = setmetatable({},{__index=src_b.Classes})
 root.Abstract = setmetatable({},{__index=src_b.Abstract})
-
+root.Interface = setmetatable({}, {__index=src_b.Interface});
 
 function root.Classes.EcsEntity ()
 	return require('..//object/__EcsBase/EcsEntity').EcsEntity

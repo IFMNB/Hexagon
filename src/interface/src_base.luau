@@ -2,7 +2,7 @@ local src_object = require('./src_object')
 local src = {};
 src.Classes = setmetatable({},{__index=src_object.Classes});
 src.Abstract = setmetatable({},{__index=src_object.Abstract});
-src.Interface = {};
+src.Interface = setmetatable({}, {__index=src_object.Interface});
 
 function src.Classes.HxInstance ()
 	return require('..//object/__HxBase/HxInstance').HxInstance
@@ -39,9 +39,7 @@ end
 function src.Classes.HxShade ()
 	return require('..//object/__HxBase/__HxBaseProperty/HxShade').Shade
 end
-function src.Classes.HxSnapshot ()
-	return require('..//object/__HxBase/__HxBaseProperty/HxSnapshot').Snapshot
-end
+
 function src.Classes.HxActionEmitter ()
 	return require('..//object/__HxBase/__HxBaseProperty/HxActionEmitter').HxActionEmitter
 end

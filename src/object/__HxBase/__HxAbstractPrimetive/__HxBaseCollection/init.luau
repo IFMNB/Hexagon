@@ -110,6 +110,8 @@ end
 class.__index = main.__HxAbstractPrimetive.class;
 class.ClassName = main.ClassNames.HxBaseCollection;
 class.Source = script;
+
+
 class.Value = nil :: {[any]:any}?;
 
 class.Count = private.get_count;

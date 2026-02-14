@@ -1,3 +1,2 @@
-local module = {}
-
-return module
+return require('./')
+-- TODO

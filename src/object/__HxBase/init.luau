@@ -8,4 +8,7 @@ local interface = {}; interface.class=class
 class.Source=script
 class.ClassName=main.ClassNames.HxBase
 
-return main:expand({__HxBase=interface, I_Object = require('../interface/src_object')})
+return main:expand({
+	__HxBase=interface,
+	I_Object = require('../interface/src_object')
+})
