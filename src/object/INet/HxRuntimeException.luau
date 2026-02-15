@@ -26,7 +26,6 @@ end
 function private:throw ()
 	local self = self :: HxRuntimeException;
 	self.Counter+=1
-	warn(self.Code, self.Description)
 	return error(private.https:JSONEncode(self))
 end
 -- Equalent to assert. Throws self if assertion is failed.

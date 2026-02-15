@@ -20,6 +20,7 @@ function private.call (event:event, ...: any)
 		
 		local thread : thread
 		
+		
 		if parallel then
 			thread = coroutine.create(function(...) 
 				task.desynchronize()
@@ -35,7 +36,7 @@ function private.call (event:event, ...: any)
 			v:Disconnect()
 		end
 		
-		coroutine.resume(thread)
+		coroutine.resume(thread, ...)
 	end
 	debug.profileend()
 end
