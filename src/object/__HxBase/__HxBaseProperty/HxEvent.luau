@@ -20,23 +20,20 @@ function private.call (event:event, ...: any)
 		
 		local thread : thread
 		
-		
-		if parallel then
-			thread = coroutine.create(function(...) 
-				task.desynchronize()
-				xpcall(shade_c._f, warn, ...)
-			end)
-		else
-			thread = coroutine.create(function(...) 
-				xpcall(shade_c._f, warn, ...)
-			end)
-		end
-		
 		if once then
 			v:Disconnect()
 		end
 		
-		coroutine.resume(thread, ...)
+		if parallel then
+			task.spawn(function(...) 
+				task.desynchronize()
+				shade_c._f(...)
+			end, ...)
+		else
+			task.spawn(function(...) 
+				shade_c._f(...)
+			end, ...)
+		end
 	end
 	debug.profileend()
 end

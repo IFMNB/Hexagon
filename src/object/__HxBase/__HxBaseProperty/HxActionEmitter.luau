@@ -30,8 +30,7 @@ end
 function private:process (...: any)
 	local self = self :: HxActionEmitter
 	for i,v in self.Listeners do
-		local cor = coroutine.create(v)
-		coroutine.resume(cor, ...)
+		task.spawn(v, ...)
 	end
 	if self.Behavior == 'OnceEmit' then
 		table.clear(self.Listeners)

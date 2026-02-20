@@ -23,10 +23,15 @@ function private.new <T,U> (Name : T?, Description: U?)
 end
 
 -- Causes a error if it throws.
-function private:throw ()
+function private:throw (withStackTrace: boolean?)
 	local self = self :: HxRuntimeException;
 	self.Counter+=1
-	return error(private.https:JSONEncode(self))
+	
+	local text = private.https:JSONEncode(self)
+	if withStackTrace then
+		text = string.format('%s\n%s', text, debug.traceback())
+	end
+	return error(text)
 end
 -- Equalent to assert. Throws self if assertion is failed.
 function private:assert <T> (assertion: T) : typeof(assert(nil::T))
@@ -38,10 +43,16 @@ function private:assert <T> (assertion: T) : typeof(assert(nil::T))
 	end
 end
 
-function private:warn (text: any)
+function private:warn (text: any, withStackTrace: boolean?)
 	local self = self :: HxRuntimeException;
 	self.WarnCounter +=1
-	warn(string.format('Exception %s : %q \n Additional info: %q', self.Code, self.Description, tostring(text)))
+	
+	local text = string.format('Exception %s : %q \n Additional info: %q', self.Code, self.Description, tostring(text))
+	if withStackTrace then
+		text = string.format('%s\n%s', text, debug.traceback())
+	end
+	
+	warn(text)
 end
 
 
