@@ -9,11 +9,11 @@ end
 function private:class_self_abstract (...: any)
 	error('Descendant didnt override this abstract property for himself')
 end
-
+-- This function cannot be called specifically in this context. However, it is available for calling in another case.
 function private.class_not_implemented (...: any)
 	error('This function cannot called in this context')
 end
-
+-- This function cannot be called specifically in this context. However, it is available for calling in another case.
 function private:class_not_implemented_for_self (...: any)
 	return private.class_not_implemented(...)
 end

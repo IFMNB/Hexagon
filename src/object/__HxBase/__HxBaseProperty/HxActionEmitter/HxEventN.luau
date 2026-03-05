@@ -25,7 +25,8 @@ type ListenerConnection = {
 	Func: F
 }
 type Listener = ()->ListenerConnection
-type Connect = (Function: F)->HxEventConnection
+type Connect = (self: HxEvent, Function: F)->HxEventConnection
+type SelfDefF <T=()->...any> = {DefaultFunction: T} | any
 
 function private.call_properties (Properties: HxEventProperties, ...)
 	for i,v in Properties.Listeners do
@@ -47,14 +48,37 @@ function private.call_properties (Properties: HxEventProperties, ...)
 	end
 end
 
-function private.new_event (Properties: HxEventProperties, Name: Name)
-	return main.new({
-		
-	}, subclass_event)
+function private.new_event <T, Signa> (Properties: SelfDefF<Signa>, Name: T)
+	local this = {}
+
+	function this:Connect (Function: Signa?)
+		return private.connect(Properties, Function or Properties.DefaultFunction, 'Connection', 'Serial')
+	end
+	
+	function this:Once (Function: Signa?)
+		return private.connect(Properties, Function or Properties.DefaultFunction, 'Once', 'Serial')
+	end
+	
+	function this:ConnectParallel (Function: Signa?)
+		return private.connect(Properties, Function or Properties.DefaultFunction, 'Connection', 'Parallel')
+	end
+	
+	function this:OnceParallel (Function: Signa?)
+		return private.connect(Properties, Function or Properties.DefaultFunction, 'Once', 'Parallel')
+	end
+	
+	function this:Wait () : ...unknown
+		local thread = coroutine.running()
+		this:Once(function ()
+			return coroutine.resume(thread)
+		end)
+		return coroutine.yield()
+	end
+	
+	return main.new(this, subclass_event)
 end
 
-function private:connect (Properties: HxEventProperties, Function: F, ConType: ConType, RunType: RunType)
-	local self = self :: HxEvent;
+function private.connect <Signa> (Properties: SelfDefF<Signa>, Function: F, ConType: ConType, RunType: RunType)
 	local this : ListenerConnection = {} :: any
 	
 	local function Listener ()
@@ -76,22 +100,45 @@ end
 
 
 
-
-
-function private.new_event_properties (Name: Name?, DefaultFunction: DefaultFunction?)
+function private.new_event_properties <U, T> (Name: U|Name?, DefaultFunction: T|DefaultFunction?)
 	local raw = {}
 	raw.EventsWatchers = setmetatable({}, private.mk);
-
+	raw.Name = Name :: U;
+	raw.Alive = true;
+	raw.DefaultFunction = DefaultFunction :: T;
 	
 	local this = main.new(raw, class_properties)
 	return this
 end
 
-function private:create_event ()
+local a = private.new_event_properties('a', function(a: string) return 23 end)
+local b = private.new_event(a, '')
+local c = a:CreateEvent()
+
+c:Connect()
+
+function private.create_event <T> (self: SelfDefF<T>)
+	local Event = private.new_event(self, '');
 	local self = self :: HxEventProperties;
-	local Event = private.new_event(self, self.Name);
-	self.EventsWatchers[Event] = main.HxActionEmitter.new();
+	
+	local HxActionEmitter = main.HxActionEmitter.new();
+	
+	HxActionEmitter.OnceAction = true;
+	self.EventsWatchers[Event] = HxActionEmitter;
 	return Event
+end
+
+function private:kill_event (HxEvent: HxEvent)
+	local self = self :: HxEventProperties;
+	local Event = self.EventsWatchers[HxEvent];
+	if Event then
+		Event:Process()
+		self.EventsWatchers[HxEvent] = nil;
+	end
+	
+	if game["Run Service"]:IsStudio() then
+		warn('HxEventProperties does not have received HxEvent', debug.traceback())
+	end
 end
 
 
@@ -107,16 +154,17 @@ class_properties.Name = '' :: Name;
 class_properties.Alive = false;
 class_properties.CreateEvent = private.create_event;
 class_properties.DoCall = private.call_properties;
+class_properties.DoDestroy = nil; 
 
 subclass_event.__index = main.__HxBaseProperty.class;
 subclass_event.ClassName = main.ClassNames.HxEvent;
 subclass_event.Source = script;
 
-subclass_event.Connect = main.Abstract.NotImplemented :: Connect;
-subclass_event.Once = main.Abstract.NotImplemented :: Connect;
-subclass_event.ConnectParallel = main.Abstract.NotImplemented :: Connect;
-subclass_event.OnceParallel = main.Abstract.NotImplemented :: Connect;
-subclass_event.Wait = main.Abstract.NotImplemented :: Connect;
+subclass_event.Connect = main.Abstract.SelfNotImplemented;
+subclass_event.Once = main.Abstract.SelfNotImplemented;
+subclass_event.ConnectParallel = main.Abstract.SelfNotImplemented;
+subclass_event.OnceParallel = main.Abstract.SelfNotImplemented;
+subclass_event.Wait = main.Abstract.SelfNotImplemented;
 
 subclass_event.IsAlive = nil;
 subclass_event.DoAfterEventDie = nil;
