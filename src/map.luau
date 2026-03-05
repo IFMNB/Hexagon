@@ -5,6 +5,8 @@ local ClassNames_Hexagon_Map = {
 	
 		
 		HxBase = 'HxBase'::'HxBase',
+			HxConnection = 'HxConnection' :: 'HxConnection',
+	
 	
 			HxBaseProperty = 'HxBaseProperty'::'HxBaseProperty', 
 				HxSnapshot = 'HxSnapshot'::'HxSnapshot',

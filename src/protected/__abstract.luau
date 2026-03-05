@@ -10,6 +10,13 @@ function private:class_self_abstract (...: any)
 	error('Descendant didnt override this abstract property for himself')
 end
 
+function private.class_not_implemented (...: any)
+	error('This function cannot called in this context')
+end
+
+function private:class_not_implemented_for_self (...: any)
+	return private.class_not_implemented(...)
+end
 
 -- You should never call this function, because class does not involve its use
 function private.class_overrided_error (...)
@@ -27,5 +34,7 @@ abstract.ShouldOverrided = private.class_abstract_field
 abstract.SelfOverride = private.class_self_abstract
 abstract.ToNeverUse = private.class_overrided_error
 abstract.SelfNeverUse = private.class_self_overrided_error
+abstract.NotImplemented = private.class_not_implemented
+abstract.SelfNotImplemented = private.class_not_implemented_for_self
 
 return abstract

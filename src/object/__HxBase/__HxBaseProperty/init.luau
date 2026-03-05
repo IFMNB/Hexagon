@@ -7,4 +7,4 @@ local interface = {}; interface.class = class;
 class.ClassName=main.ClassNames.HxBaseProperty;
 class.Source=script;
 
-return main:expand({__HxBaseProperty=interface})
+return main:expand({__HxBaseProperty=interface, HxConnection = require('./HxConnection').HxConnection})

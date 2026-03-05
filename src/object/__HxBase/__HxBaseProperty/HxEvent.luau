@@ -90,6 +90,7 @@ function private.new_event <t0, t1> (EventName: t0?)
 
 	function raw:Destroy ()
 		raw:Remove()
+		raw.Alive = false
 		table.freeze(shade._c)
 	end
 
@@ -107,6 +108,8 @@ function private.new_event <t0, t1> (EventName: t0?)
 			end
 		end
 	end
+	
+	raw.Alive = true
 	
 	-- By this object you can control event
 	local property = main.new(raw,subclass2)
@@ -213,17 +216,21 @@ class.Connect = private.connect
 class.Wait = private.yield
 class.Once = private.once
 class.Source=script
+class.Alive = false;
 
 subclass.Disconnect = private.disconnect
 subclass.Source=script
+subclass.Connected = false;
+subclass.EventAlive = false;
 
-subclass2.Source=script
-subclass2.Call = (nil::any) :: (...any) -> ()
-subclass2.Destroy = (nil::any) :: () -> ()
-subclass2.Remove = (nil::any) :: (target: cons) -> ()
-subclass2.GetCount = (nil::any) :: () -> number
-subclass2.Clear = (nil::any) :: () -> ()
-subclass2.Name = class.Name
+subclass2.Source=script;
+subclass2.Call = (nil::any) :: (...any) -> ();
+subclass2.Destroy = (nil::any) :: () -> ();
+subclass2.Remove = (nil::any) :: (target: cons) -> ();
+subclass2.GetCount = (nil::any) :: () -> number;
+subclass2.Clear = (nil::any) :: () -> ();
+subclass2.Name = class.Name;
+subclass2.Alive = false;
 
 interface.new = private.new_event
 

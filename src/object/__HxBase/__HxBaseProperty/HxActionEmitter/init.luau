@@ -10,7 +10,7 @@ type HxActionEmitter = typeof(interface.new())
 function private.new ()
 	return main.new({
 		Listeners = {} :: typeof(class.Listeners);
-		Behavior = 'Emit' :: typeof(class.Behavior);
+		OnceAction = false;
 	},class)
 end
 -- Add listener.
@@ -26,13 +26,19 @@ function private:rem_listener (Listener: F)
 	if index then table.remove(self.Listeners,index) end
 	return self
 end
+-- Clear all listeners.
+function private:clear_listeners ()
+	local self = self :: HxActionEmitter;
+	table.clear(self.Listeners)
+end
+
 -- Emit event to all listeners.
 function private:process (...: any)
 	local self = self :: HxActionEmitter
 	for i,v in self.Listeners do
 		task.spawn(v, ...)
 	end
-	if self.Behavior == 'OnceEmit' then
+	if self.OnceAction then
 		table.clear(self.Listeners)
 	end
 	return self
@@ -42,10 +48,13 @@ class.__index = main.__HxBaseProperty.class;
 class.ClassName = main.ClassNames.HxActionEmmiter;
 class.Source=script;
 class.Listeners = {} :: {F};
+
 class.AddListener = private.add_listener;
 class.RemListener = private.rem_listener;
+class.ClearListeners = private.clear_listeners;
+
 class.Process = private.process;
-class.Behavior = '' :: 'OnceEmit'|'Emit' 
+class.OnceAction = false;
 
 interface.class = class;
 interface.new = private.new;
