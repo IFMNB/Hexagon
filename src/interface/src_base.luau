@@ -19,16 +19,16 @@ function src.Classes.HxParallelConstantWorker ()
 	--return require('..//object/__HxBase/HxInstance/__HxAbstractParallel/HxParallelConstantWorker').ParallelConstantWorker
 end
 function src.Classes.HxNumber ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/number').Number
+	return require('..//object/__HxBase/_IHxPrimetive/HxNumber').Number
 end
 function src.Classes.HxNumberModifier ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/number/mnumber').ModifiedNumber
+	return require('..//object/__HxBase/_IHxPrimetive/HxNumber/HxNumberModifier').ModifiedNumber
 end
 function src.Classes.HxString ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/string').String
+	return require('..//object/__HxBase/_IHxPrimetive/HxString').String
 end
 function src.Classes.HxTranslationString ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/string/tstring').TString
+	return require('..//object/__HxBase/_IHxPrimetive/HxString/HxTranslationString').TString
 end
 
 function src.Classes.HxEvent ()
@@ -53,19 +53,19 @@ function src.Classes.HxActionEmitter ()
 	return require('..//object/__HxBase/__HxBaseProperty/HxActionEmitter').HxActionEmitter
 end
 function src.Classes.HxMap ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection/IHxMap/HxMap').HxMap
+	return require('..//object/__HxBase/_IHxPrimetive/__HxBaseCollection/IHxMap/HxMap').HxMap
 end
 function src.Classes.HxWeakMap ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection/IHxMap/HxWeakMap').HxWeakMap
+	return require('..//object/__HxBase/_IHxPrimetive/__HxBaseCollection/IHxMap/HxWeakMap').HxWeakMap
 end
 function src.Classes.HxNode ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection/HxNode').HxNode
+	return require('..//object/__HxBase/_IHxPrimetive/__HxBaseCollection/HxNode').HxNode
 end
 function src.Classes.HxList ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection/IHxList/HxList').HxList
+	return require('..//object/__HxBase/_IHxPrimetive/__HxBaseCollection/IHxList/HxList').HxList
 end
 function src.Classes.HxWeakList ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection/IHxList/HxWeakList').HxWeakList
+	return require('..//object/__HxBase/_IHxPrimetive/__HxBaseCollection/IHxList/HxWeakList').HxWeakList
 end
 
 
@@ -78,22 +78,22 @@ end
 function src.Abstract.HxBaseProperty ()
 	return require('..//object/__HxBase/__HxBaseProperty').__HxBaseProperty
 end
-function src.Abstract.HxAbstractPrimetive ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive').__HxAbstractPrimetive
-end
+
 function src.Abstract.HxBase ()
 	return require('..//object/__HxBase').__HxBase
 end
 function src.Abstract.HxBaseCollection ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection').__HxBaseCollection
+	return require('..//object/__HxBase/_IHxPrimetive/__HxBaseCollection').__HxBaseCollection
 end
 
-
+function src.Interface.IHxPrimetive ()
+	return require('..//object/__HxBase/_IHxPrimetive')._IHxPrimetive
+end
 function src.Interface.IHxMap ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection/IHxMap')._IHxMap
+	return require('..//object/__HxBase/_IHxPrimetive/__HxBaseCollection/IHxMap')._IHxMap
 end
 function src.Interface.IHxList ()
-	return require('..//object/__HxBase/__HxAbstractPrimetive/__HxBaseCollection/IHxList')._IHxList
+	return require('..//object/__HxBase/_IHxPrimetive/__HxBaseCollection/IHxList')._IHxList
 end
 
 

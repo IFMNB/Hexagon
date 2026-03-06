@@ -1,12 +1,10 @@
 local main = require('./')
-local primetive = main.__HxAbstractPrimetive
+local primetive = main._IHxPrimetive
 
 local private = {}
 local class = {}; class.__index=primetive.class;setmetatable(class,class)
 local interface = {};
 
-class.Value = '' :: string
-class.ClassName=main.ClassNames.HxString
 
 type HxString = typeof(interface.new())
 
@@ -16,8 +14,8 @@ type HxString = typeof(interface.new())
 	@class HxString
 	@return Instance (@P HxString)
 ]]
-function private.new <t0> (value: (string&t0)?)
-	return primetive.new(value or class.Value, class)
+function private.new <t0> (value: string?)
+	return main.new({Value=value::string}, class)
 end
 
 --[[
@@ -42,6 +40,8 @@ function private:typeString (gui: TextBox|TextLabel|TextButton, time: number?)
 	end
 end
 
+class.Value = ''
+class.ClassName=main.ClassNames.HxString
 class.Source = script
 class.WriteGui = private.typeString
 interface.class=class

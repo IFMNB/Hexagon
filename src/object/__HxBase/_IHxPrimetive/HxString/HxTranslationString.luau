@@ -18,8 +18,8 @@ private.translators = setmetatable({}::{[TransString]: Translator}, {__mode='kvs
 	@class HxTranslationString
 	@return Instance (@P TransString)
 ]]
-function private.new <data> (player: Player, value: (data & string)?)
-	local tstring = main.__HxAbstractPrimetive.new(value or class.Value, class)
+function private.new <data> (player: Player, value: string?)
+	local tstring = main.new({Value=value::string},class)
 	local translator = LOC_SV:GetTranslatorForPlayerAsync(player)
 	private.translators[tstring]=translator
 	return tstring

@@ -3,12 +3,12 @@
 local main = require('./')
 
 local private = {}
-local class = {};class.__index=main.__HxAbstractPrimetive.class;setmetatable(class,class);class.ClassName=main.ClassNames.HxNumber;
+local class = {};setmetatable(class,class);
 local interface = {};
 
 private.default = 0
 
-type NumberObject = typeof(private.new())
+type HxNumber = typeof(private.new())
 
 --[[
 	Creates new HxNumber object.
@@ -17,44 +17,44 @@ type NumberObject = typeof(private.new())
 	@return Instance (@P HxNumber)
 ]]
 function private.new (value: number?)
-	return main.__HxAbstractPrimetive.new(value or private.default, class)
+	return main.new({Value = value :: number}, class)
 end
 
 
 --[[
-	Post-increment (aka i++) is a function that returns the value of the NumberObject and then increments it.
+	Post-increment (aka i++) is a function that returns the value of the HxNumber and then increments it.
 
 	@class HxNumber
 	@return number
 ]]
 function private:ipp ()
-	local self = self :: NumberObject
+	local self = self :: HxNumber
 	local value = self.Value
 	self.Value+=1
 	return value
 end
 
 --[[
-	Post-decrement (aka i--) is a function that returns the value of the NumberObject and then decrements it.
+	Post-decrement (aka i--) is a function that returns the value of the HxNumber and then decrements it.
 
 	@class HxNumber
 	@return number
 ]]
 function private:imm ()
-	local self = self :: NumberObject
+	local self = self :: HxNumber
 	local value = self.Value
 	self.Value-=1
 	return value
 end
 
 --[[
-	Smoothly lerping that NumberObject to target value.
+	Smoothly lerping that HxNumber to target value.
 
 	@class HxNumber
 	@return ()
 ]]
 function private:smoothLerp (to: number)
-	local self = self :: NumberObject 
+	local self = self :: HxNumber 
 	local c0 : RBXScriptConnection
 	local runservice = game:GetService('RunService')
 	c0 = runservice.Heartbeat:Connect(function(deltaTime: number) 
@@ -64,12 +64,25 @@ function private:smoothLerp (to: number)
 		end
 	end)
 end
+--[[
+	Pushes HxNumber value to target value.	
 
+	@class HxNumber
+	@return ()
+]]
+function private:push (ToValue: number)
+	local self = self :: HxNumber
+	self.Value = ToValue
+end
 
+class.__index=main._IHxPrimetive.class
+class.ClassName=main.ClassNames.HxNumber
 class.Source=script
 class['i++']=private.ipp
 class['i--']=private.imm
 class.Glide = private.smoothLerp
+class.Push = private.push;
+
 interface.class=class;
 interface.new = private.new
 

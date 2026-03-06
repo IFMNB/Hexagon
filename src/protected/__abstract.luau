@@ -28,9 +28,11 @@ function private:class_self_overrided_error (...)
 end
 
 --[[Wraps a function and returns a new function wrapping the original function.]]
-function private.Wrap <T,F, R, U...> (Callback: (...any)->(), Call: F&((T, ...R)->U...), CallAfter: (...any)->()?)
+function private.Wrap <T,F, R, U...> (Callback: (...any)->()?, Call: F&((T, ...R)->U...), CallAfter: (...any)->()?)
 	return (function (...: R)
-		Callback(...)
+		if Callback then
+			Callback(...)
+		end
 		local r0 = {Call(...)}
 		if CallAfter then
 			CallAfter(...)
@@ -46,5 +48,6 @@ abstract.ToNeverUse = private.class_overrided_error
 abstract.SelfNeverUse = private.class_self_overrided_error
 abstract.NotImplemented = private.class_not_implemented
 abstract.SelfNotImplemented = private.class_not_implemented_for_self
+abstract.Wrap = private.Wrap
 
 return abstract
