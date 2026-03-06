@@ -46,6 +46,7 @@ class.__index = main.__HxBase.class;
 class.ClassName = main.ClassNames.HxConnection;
 class.Source = script;
 class.Connected = false;
+class.Output = nil :: unknown;
 class.Disconnect = private.disconnect;
 
 interface.class = class;

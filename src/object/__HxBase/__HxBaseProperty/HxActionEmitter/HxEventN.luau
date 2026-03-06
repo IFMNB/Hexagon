@@ -14,7 +14,7 @@ type HxEventConnection = typeof(HxConnection.new())
 type HxActionEmitter = typeof(main.HxActionEmitter.new())
 
 type Name <T=string> = T
-type DefaultFunction <SF=(...any)->()> = SF
+type DefaultFunction = (...any)->()
 type F = (...any)->()
 type ConType = 'Connection'|'Once'
 type RunType = 'Parallel'|'Serial'
@@ -28,28 +28,31 @@ type Listener = ()->ListenerConnection
 type Connect = (self: HxEvent, Function: F)->HxEventConnection
 type SelfDefF <T=()->...any> = {DefaultFunction: T} | any
 
-function private.call_properties (Properties: HxEventProperties, ...)
-	for i,v in Properties.Listeners do
+function private:call_properties (...)
+	local self = self :: HxEventProperties
+	for i,v in self.Listeners do
 		local this = v();
 		
 		if this.Run == 'Serial' then
-			task.spawn(this.Func, ...)
+			--coroutine.resume(coroutine.create(this.Func),...)
+			task.spawn(function (...) this.Connection.Output = this.Func(...) end, ...)
 		elseif this.Run == 'Parallel' then
-			task.spawn(function (...) task.desynchronize() this.Func(...) end,...)
+			task.spawn(function (...) task.desynchronize() this.Connection.Output = this.Func(...) end,...)
 		else
 			warn('Invalid Connection RunType', this.Run)
-			Properties:RemListener(v)
+			self:RemListener(v)
 			continue
 		end
 		
 		if this.Type == 'Once' then
-			Properties:RemListener(v)
+			self:RemListener(v)
 		end
 	end
 end
 
 function private.new_event <T, Signa> (Properties: SelfDefF<Signa>, Name: T)
 	local this = {}
+	local labmda : HxEvent
 
 	function this:Connect (Function: Signa?)
 		return private.connect(Properties, Function or Properties.DefaultFunction, 'Connection', 'Serial')
@@ -67,6 +70,19 @@ function private.new_event <T, Signa> (Properties: SelfDefF<Signa>, Name: T)
 		return private.connect(Properties, Function or Properties.DefaultFunction, 'Once', 'Parallel')
 	end
 	
+	function this:WatchDeath (Function: (HxEvent: HxEvent)->())
+		local nolint_Properties = Properties :: HxEventProperties
+		local emitter = nolint_Properties.EventsWatchers[labmda]
+		emitter:AddListener(Function)
+		-- Removes the function from the event.
+		return function ()
+			emitter:RemListener(Function)
+		end
+	end
+	
+	this.Alive = true;
+	this.Name = Name;
+	
 	function this:Wait () : ...unknown
 		local thread = coroutine.running()
 		this:Once(function ()
@@ -75,7 +91,9 @@ function private.new_event <T, Signa> (Properties: SelfDefF<Signa>, Name: T)
 		return coroutine.yield()
 	end
 	
-	return main.new(this, subclass_event)
+	local result = main.new(this, subclass_event)
+	labmda = result
+	return result
 end
 
 function private.connect <Signa> (Properties: SelfDefF<Signa>, Function: F, ConType: ConType, RunType: RunType)
@@ -95,12 +113,14 @@ function private.connect <Signa> (Properties: SelfDefF<Signa>, Function: F, ConT
 	this.Run = RunType;
 	this.Func = Function;
 	
+	table.freeze(this)
+	
 	return Connection;
 end
 
 
 
-function private.new_event_properties <U, T> (Name: U|Name?, DefaultFunction: T|DefaultFunction?)
+function private.new_event_properties <U, T> (DefaultFunction: T|DefaultFunction?, Name: U|Name?)
 	local raw = {}
 	raw.EventsWatchers = setmetatable({}, private.mk);
 	raw.Name = Name :: U;
@@ -111,37 +131,60 @@ function private.new_event_properties <U, T> (Name: U|Name?, DefaultFunction: T|
 	return this
 end
 
-local a = private.new_event_properties('a', function(a: string) return 23 end)
-local b = private.new_event(a, '')
-local c = a:CreateEvent()
-
-c:Connect()
 
 function private.create_event <T> (self: SelfDefF<T>)
-	local Event = private.new_event(self, '');
+	local Event = private.new_event(self, self.Name);
 	local self = self :: HxEventProperties;
 	
 	local HxActionEmitter = main.HxActionEmitter.new();
-	
 	HxActionEmitter.OnceAction = true;
+	
 	self.EventsWatchers[Event] = HxActionEmitter;
 	return Event
 end
 
-function private:kill_event (HxEvent: HxEvent)
+
+function private:destroy_event (HxEvent)
 	local self = self :: HxEventProperties;
+	local HxEvent = assert(self.IsA(HxEvent, 'HxEvent'), 'Invalid HxEvent') and HxEvent :: HxEvent;
 	local Event = self.EventsWatchers[HxEvent];
 	if Event then
-		Event:Process()
+		HxEvent.Alive = false;
+		table.freeze(HxEvent)
+		Event:Process(HxEvent)
 		self.EventsWatchers[HxEvent] = nil;
-	end
-	
-	if game["Run Service"]:IsStudio() then
-		warn('HxEventProperties does not have received HxEvent', debug.traceback())
+	else
+		if game["Run Service"]:IsStudio() then
+			warn('HxEventProperties does not have received HxEvent \n', debug.traceback())
+		end
 	end
 end
 
+function private:clear_listeners ()
+	local self = self :: HxEventProperties;
+	for i,v in self.Listeners do
+		local this = v();
+		this.Connection:Disconnect()
+	end
+	class_properties.__index.ClearListeners(self)
+end
 
+function private:destroy_properties ()
+	local self = self :: HxEventProperties;
+	for i,v in self.EventsWatchers do
+		self:RemEvent(i);
+	end
+	
+	print(self.EventsWatchers)
+	table.clear(self.EventsWatchers)
+	
+	self.Alive = false
+	self:ClearListeners()
+	
+	table.freeze(self)
+	table.freeze(self.Listeners)
+	table.freeze(self.EventsWatchers)
+end
 
 
 class_properties.__index = main.HxActionEmitter.class;
@@ -152,9 +195,11 @@ class_properties.EventsWatchers = setmetatable({} :: {[HxEvent]: HxActionEmitter
 class_properties.DefaultFunction = warn :: DefaultFunction;
 class_properties.Name = '' :: Name;
 class_properties.Alive = false;
-class_properties.CreateEvent = private.create_event;
+class_properties.AddEvent = private.create_event;
+class_properties.RemEvent = private.destroy_event;
 class_properties.DoCall = private.call_properties;
-class_properties.DoDestroy = nil; 
+class_properties.Destroy = private.destroy_properties; 
+class_properties.ClearListeners = private.clear_listeners;
 
 subclass_event.__index = main.__HxBaseProperty.class;
 subclass_event.ClassName = main.ClassNames.HxEvent;
@@ -166,11 +211,17 @@ subclass_event.ConnectParallel = main.Abstract.SelfNotImplemented;
 subclass_event.OnceParallel = main.Abstract.SelfNotImplemented;
 subclass_event.Wait = main.Abstract.SelfNotImplemented;
 
-subclass_event.IsAlive = nil;
-subclass_event.DoAfterEventDie = nil;
+subclass_event.Alive = false;
+subclass_event.WatchDeath = main.Abstract.SelfNotImplemented;
 
 interface.class = class_properties;
 interface.subclass = subclass_event;
 interface.new = private.new_event_properties;
+
+
+table.freeze(class_properties)
+table.freeze(subclass_event)
+table.freeze(interface)
+table.freeze(private)
 
 return main:expand({HxEvent = interface})

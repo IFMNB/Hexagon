@@ -36,7 +36,20 @@ root.Async = require('@self/protected/__async')
 function root.new <data, class> (data: data, class: class)
 	local meta = getmetatable(data)
 	if meta then assert(type(meta)=='table','data have locked metatable') end
-	return setmetatable(table.clone(data),{__index=class})
+	local this 
+	
+	local data = table.clone(data)
+	local metatable = {}
+	metatable.__index = class
+	
+	-- Returns a copy of the object
+	--function metatable.__call (self, ...)
+	--	return (root.new(data, class)::any) :: typeof(assert(this))
+	--end
+	
+	
+	this = setmetatable(data, metatable)
+	return this
 end
 --[[
 	Used for self-class expansion, based on the class
