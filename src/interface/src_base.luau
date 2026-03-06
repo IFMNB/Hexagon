@@ -4,20 +4,6 @@ src.Classes = setmetatable({},{__index=src_object.Classes});
 src.Abstract = setmetatable({},{__index=src_object.Abstract});
 src.Interface = setmetatable({}, {__index=src_object.Interface});
 
-function src.Classes.HxInstance ()
-	return require('..//object/__HxBase/HxInstance').HxInstance
-end
-function src.Classes.HxWorldStorage ()
-	return require('..//object/__HxBase/HxInstance/__HxAbstractDataTree/HxWorldStorage').HxWorldStorage
-end
-function src.Classes.HxParallelWorker ()
-	return require('..//object/__HxBase/HxInstance/__HxBaseParallel/HxParallelWorker').ParallelWorker
-end
-@deprecated
-function src.Classes.HxParallelConstantWorker ()
-	error('indev')
-	--return require('..//object/__HxBase/HxInstance/__HxAbstractParallel/HxParallelConstantWorker').ParallelConstantWorker
-end
 function src.Classes.HxNumber ()
 	return require('..//object/__HxBase/_IHxPrimetive/HxNumber').Number
 end
@@ -69,12 +55,6 @@ function src.Classes.HxWeakList ()
 end
 
 
-function src.Abstract.HxAbstractDataTree ()
-	return require('..//object/__HxBase/HxInstance/__HxAbstractDataTree').__HxAbstractDataTree
-end
-function src.Abstract.HxBaseParallel ()
-	return require('..//object/__HxBase/HxInstance/__HxBaseParallel').__HxBaseParallel
-end
 function src.Abstract.HxBaseProperty ()
 	return require('..//object/__HxBase/__HxBaseProperty').__HxBaseProperty
 end

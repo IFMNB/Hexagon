@@ -21,7 +21,6 @@ root.Comparator = setmetatable({} :: {[any]: any}, {__mode='kvs'})
 	@p1 - data for the new object.
 	@p2 - class of the new object.
 
-
 	About .new() and where it can exists:
 		Every time you access the constructor of a class, you pass in a certain state or data inside a specific function without a class argument.
 		This is the constructor of the class.
@@ -31,8 +30,6 @@ root.Comparator = setmetatable({} :: {[any]: any}, {__mode='kvs'})
 		Inside every class you should implement a __index metatable, that will be used for getting values from a table.
 		This __index should refers to the class that you want to use for getting values.
 		If you want to create an object of a class, you should use class constructor or this function wtih target class as second argument.
-		
-	
 ]]
 function root.new <data, class> (data: data, class: class)
 	local meta = getmetatable(data)

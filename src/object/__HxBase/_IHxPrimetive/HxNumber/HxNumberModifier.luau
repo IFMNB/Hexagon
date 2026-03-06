@@ -36,10 +36,20 @@ function private.new (value: number?)
 	this.PushMod = main.Abstract.Wrap(nil,class.PushMod,function(...) 
 		EventCore_Push:DoCall(this)
 	end)
+	this.Push = main.Abstract.Wrap(nil,class.Push,function(...) 
+		EventCore_Push:DoCall(this)
+	end)
 	
 	return this
 end
--- Apply all modificators to this NumberObject. Sets this NumberObject value to result of modification.
+--[[
+	Apply all modificators to this NumberObject. 
+
+	Fires OnModifiedEvent.
+
+	@class HxNumberModifier
+	@return ()
+]]
 function private:ApplyMod ()
 	local self = self :: HxNumberModifier
 	local mods = self.Modificators
@@ -47,7 +57,7 @@ function private:ApplyMod ()
 	local prev = val
 	for _, mod in mods do
 		for _, m in mod do
-			val = m(val, prev)
+			val += m(val, prev)
 			assert(type(val)=='number', 'Modificator must return number')
 			prev = val
 		end
@@ -55,19 +65,39 @@ function private:ApplyMod ()
 	
 	self:Push(val)
 end
--- Add new modificator to this NumberObject. 
-function private:AddMod (priority: number, mod: F)
+--[[
+	Add new modificator to this HxNumberModifier.
+	
+	Notice the value that you get in modificator function is a result from formula:
+		Origin += Modificator(Origin, Previous_Modificated)
+	
+	@class HxNumberModifier
+	@return ()
+	
+	@usage
+		HxNumberModifier:AddMod(1, function (Origin, Previous_Modificated) return origin * 32 + Previous_Modificated end)
+		HxNumberModifier:ApplyMod()
+		
+		-- Now HxNumberModifier.Value =
+]] 
+function private:AddMod (InsertToPriority: number, mod: F)
 	local self = self :: HxNumberModifier
-	local pos = self.Modificators[priority]
+	local pos = self.Modificators[InsertToPriority]
 	if not pos then
-		self.Modificators[priority] = {};
-		pos = self.Modificators[priority]
+		self.Modificators[InsertToPriority] = {};
+		pos = self.Modificators[InsertToPriority]
 	end
 	
 	table.insert(pos, mod);
 end
 	
--- Remove modificator from this NumberObject. This methode removes first found modificator with given priority and function.
+--[[
+	Find and remove modificator from this HxNumberModifier.
+	
+	@class HxNumberModifier
+	@exception Modificator not found
+	@return ()
+]]
 function private:RemoveMod (priority: number, mod: F)
 	local self = self :: HxNumberModifier
 	local pos = self.Modificators[priority]

@@ -37,19 +37,6 @@ local ClassNames_Hexagon_Map = {
 					IHxMap = 'IHxMap'::'IHxMap',
 						HxMap = 'HxMap'::'HxMap',
 						HxWeakMap = 'HxWeakMap'::'HxWeakMap',
-	
-	
-	
-			HxInstance = 'HxInstance'::'HxInstance',
-				HxInstanceProperties = 'HxInstanceProperties'::'HxInstanceProperties',
-				
-	
-				HxAbstractDataTree = 'HxAbstractDataTree'::'HxAbstractDataTree', -- Auto-Replicatable.
-					HxWorldStorage = 'HxWorldStorage'::'HxWorldStorage',
-	
-				HxBaseParallel = 'HxBaseParallel'::'HxBaseParallel', 
-					HxParallelWorker = 'HxParallelWorker'::'HxParallelWorker',
-					HxParallelConstantWorker = 'HxParallelConstantWorker'::'HxParallelConstantWorker',
 
 		EcsBase = 'EcsBase' :: 'EcsBase',
 			EcsComponent = 'EcsComponent'::'EcsComponent',

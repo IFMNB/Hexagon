@@ -6,10 +6,11 @@ local private = {}
 local class = {};setmetatable(class,class);
 local interface = {};
 
-private.default = 0
+local HxEventCore = main.HxEventCore
+local HxEvent = main.HxEvent
 
 type HxNumber = typeof(private.new())
-
+type DefaultFunc = (HxNumber: HxNumber) -> ()
 --[[
 	Creates new HxNumber object.
 
@@ -17,7 +18,18 @@ type HxNumber = typeof(private.new())
 	@return Instance (@P HxNumber)
 ]]
 function private.new (value: number?)
-	return main.new({Value = value :: number}, class)
+	local EventCore = HxEventCore.new(warn :: DefaultFunc, class.ClassName)
+	local Event = EventCore:AddEvent()
+	local lambda : HxNumber
+	local this = main.new({
+		Value = value :: number;
+		OnPushEvent = Event;
+		Push = main.Abstract.Wrap(nil,class.Push,function(...) 
+			EventCore:DoCall(lambda)
+		end)
+	}, class)
+	lambda = this
+	return this
 end
 
 
@@ -67,6 +79,8 @@ end
 --[[
 	Pushes HxNumber value to target value.	
 
+	Calls OnPushEvent when HxNumber value is changed.
+
 	@class HxNumber
 	@return ()
 ]]
@@ -82,6 +96,8 @@ class['i++']=private.ipp
 class['i--']=private.imm
 class.Glide = private.smoothLerp
 class.Push = private.push;
+class.OnPushEvent = HxEvent.class;
+class.Value = 0
 
 interface.class=class;
 interface.new = private.new
