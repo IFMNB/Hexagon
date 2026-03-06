@@ -6,33 +6,56 @@ local interface = {};
 
 type F = (...any)->()|any
 type HxActionEmitter = typeof(interface.new())
--- Create new HxActionEmitter object.
+--[[
+	Create new HxActionEmitter object.
+	
+	@class HxActionEmitter
+	@return Instance (@P HxActionEmitter)
+]]
 function private.new ()
 	return main.new({
 		Listeners = {} :: typeof(class.Listeners);
 		OnceAction = false;
 	},class)
 end
--- Add listener.
+--[[
+	Add listener to HxActionEmitter object.
+
+	@class HxActionEmitter
+	@return ()
+]]
 function private:add_listener (Listener: F)
 	local self = self :: HxActionEmitter
 	table.insert(self.Listeners,Listener)
-	return self
 end
--- Remove listener.
+--[[
+	Remove listener from HxActionEmitter object.
+
+	@class HxActionEmitter
+	@return ()
+]]
 function private:rem_listener (Listener: F)
 	local self = self :: HxActionEmitter
 	local index = table.find(self.Listeners,Listener)
 	if index then table.remove(self.Listeners,index) end
-	return self
 end
--- Clear all listeners.
+--[[
+	Clear all listeners from HxActionEmitter object.
+
+	@class HxActionEmitter
+	@return ()
+]]
 function private:clear_listeners ()
 	local self = self :: HxActionEmitter;
 	table.clear(self.Listeners)
 end
 
--- Emit event to all listeners.
+--[[
+	Process HxActionEmitter object and call all listeners. 
+
+	@class HxActionEmitter
+	@return ()
+]]
 function private:process (...: any)
 	local self = self :: HxActionEmitter
 	for i,v in self.Listeners do
@@ -41,7 +64,7 @@ function private:process (...: any)
 	if self.OnceAction then
 		table.clear(self.Listeners)
 	end
-	return self
+	return
 end
 
 class.__index = main.__HxBaseProperty.class;

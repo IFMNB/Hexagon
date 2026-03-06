@@ -24,7 +24,7 @@ function private:clear ()
 	
 	for i,v in self.Value do
 		self.Value[i] = nil
-	end
+	end 
 end
 
 function private:contains_value (value: any)

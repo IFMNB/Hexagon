@@ -30,7 +30,7 @@ function private.new ()
 	Worker.Enabled=true
 	Event.Event:Wait()
 	
-	local this = main.HxInstance.new({
+	local this = main.HxInstance.new({ 
 		Worker = Actor,
 		Active = false,
 	},class)

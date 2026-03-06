@@ -27,7 +27,17 @@ function private:class_self_overrided_error (...)
 	return private.class_overrided_error(...)
 end
 
-
+--[[Wraps a function and returns a new function wrapping the original function.]]
+function private.Wrap <T,F, R, U...> (Callback: (...any)->(), Call: F&((T, ...R)->U...), CallAfter: (...any)->()?)
+	return (function (...: R)
+		Callback(...)
+		local r0 = {Call(...)}
+		if CallAfter then
+			CallAfter(...)
+		end
+		return unpack(r0)
+	end) :: F
+end
 
 
 abstract.ShouldOverrided = private.class_abstract_field

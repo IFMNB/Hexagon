@@ -21,7 +21,7 @@ function private.parentSet (self, key, value)
 		end
 	end
 end
-
+ 
 private.holder = setmetatable({},{__mode='v'});
 
 -- Creates a new instance. Do not use in other class constructors with generic types.

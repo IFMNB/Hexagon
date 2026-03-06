@@ -30,9 +30,18 @@ end
 function src.Classes.HxTranslationString ()
 	return require('..//object/__HxBase/__HxAbstractPrimetive/string/tstring').TString
 end
+
 function src.Classes.HxEvent ()
-	return require('..//object/__HxBase/__HxBaseProperty/HxEvent').Events
+	return require('..//object/__HxBase/HxEvent').HxEvent
 end
+function src.Classes.HxConnection ()
+	return require('..//object/__HxBase/HxConnection').HxConnection
+end
+
+function src.Classes.HxEventCore ()
+	return require('..//object/__HxBase/__HxBaseProperty/HxActionEmitter/HxEventCore').HxEventCore
+end
+
 function src.Classes.HxHooker ()
 	return require('..//object/__HxBase/__HxBaseProperty/HxHooker').Hooks
 end

@@ -3,6 +3,7 @@ local root = {}
 root.ClassNames = require('@self/map')
 root.Abstract = require('@self/protected/__abstract')
 root.Async = require('@self/protected/__async')
+root.Comparator = setmetatable({} :: {[any]: any}, {__mode='kvs'})
 
 --[[
 	Regarding the alignment of class names and values in the hierarchy.
@@ -36,11 +37,14 @@ root.Async = require('@self/protected/__async')
 function root.new <data, class> (data: data, class: class)
 	local meta = getmetatable(data)
 	if meta then assert(type(meta)=='table','data have locked metatable') end
-	local this 
+	local this
+	local metatable = root.Comparator[class]
+	if not metatable then
+		metatable = table.freeze({__index=class}::any)
+		root.Comparator[class] = metatable
+	end
 	
 	local data = table.clone(data)
-	local metatable = {}
-	metatable.__index = class
 	
 	-- Returns a copy of the object
 	--function metatable.__call (self, ...)
@@ -48,7 +52,7 @@ function root.new <data, class> (data: data, class: class)
 	--end
 	
 	
-	this = setmetatable(data, metatable)
+	this = setmetatable(data, metatable :: typeof(table.freeze({__index=class})))
 	return this
 end
 --[[

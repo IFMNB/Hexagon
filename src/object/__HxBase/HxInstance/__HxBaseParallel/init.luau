@@ -19,4 +19,4 @@ class.Result = nil :: unknown|'*error*'
 class.Worker = nil :: Actor?
 class.Active = false
 
-return main:expand({__HxBaseParallel = interface})
+return main:expand({__HxBaseParallel = interface}) 

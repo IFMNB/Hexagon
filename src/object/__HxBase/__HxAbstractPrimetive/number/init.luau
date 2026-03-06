@@ -10,28 +10,51 @@ private.default = 0
 
 type NumberObject = typeof(private.new())
 
--- 
+--[[
+	Creates new HxNumber object.
+
+	@class HxNumber
+	@return Instance (@P HxNumber)
+]]
 function private.new (value: number?)
 	return main.__HxAbstractPrimetive.new(value or private.default, class)
 end
 
--- Post-increment (aka i++)
+
+--[[
+	Post-increment (aka i++) is a function that returns the value of the NumberObject and then increments it.
+
+	@class HxNumber
+	@return number
+]]
 function private:ipp ()
 	local self = self :: NumberObject
 	local value = self.Value
 	self.Value+=1
 	return value
 end
--- 	Post-decrement (aka i--)
+
+--[[
+	Post-decrement (aka i--) is a function that returns the value of the NumberObject and then decrements it.
+
+	@class HxNumber
+	@return number
+]]
 function private:imm ()
 	local self = self :: NumberObject
 	local value = self.Value
 	self.Value-=1
 	return value
 end
--- Smootly lerping that NumberObject to target value.
+
+--[[
+	Smoothly lerping that NumberObject to target value.
+
+	@class HxNumber
+	@return ()
+]]
 function private:smoothLerp (to: number)
-	local self = self :: NumberObject
+	local self = self :: NumberObject 
 	local c0 : RBXScriptConnection
 	local runservice = game:GetService('RunService')
 	c0 = runservice.Heartbeat:Connect(function(deltaTime: number) 

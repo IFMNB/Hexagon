@@ -10,11 +10,22 @@ class.ClassName=main.ClassNames.HxString
 
 type HxString = typeof(interface.new())
 
+--[[
+	Creates new HxString object.
+
+	@class HxString
+	@return Instance (@P HxString)
+]]
 function private.new <t0> (value: (string&t0)?)
 	return primetive.new(value or class.Value, class)
 end
 
+--[[
+	Write text in gui letter by letter. 
 
+	@class HxString
+	@return ()
+]]
 function private:typeString (gui: TextBox|TextLabel|TextButton, time: number?)
 	local this = self:: HxString
 	local txt = if typeof(this.Value) == 'string' then this.Value else error('')
@@ -38,7 +49,7 @@ interface.new = private.new
 
 table.freeze(class)
 table.freeze(private)
-table.freeze(interface)
+table.freeze(interface) 
 return main:expand({
 	String = interface
 })

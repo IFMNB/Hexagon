@@ -10,9 +10,13 @@ type TransString = typeof(private.new(Instance.new('Player')))
 
 private.translators = setmetatable({}::{[TransString]: Translator}, {__mode='kvs'})
 
---[[ Returns TransString object with translator for player. This constructor should be wrapped in pcall
+--[[
+	Returns TransString object with translator for player.
+	
+	This constructor should be wrapped in pcall
 
-@error if translator cannot be getted for this player by some reason.
+	@class HxTranslationString
+	@return Instance (@P TransString)
 ]]
 function private.new <data> (player: Player, value: (data & string)?)
 	local tstring = main.__HxAbstractPrimetive.new(value or class.Value, class)
@@ -21,6 +25,12 @@ function private.new <data> (player: Player, value: (data & string)?)
 	return tstring
 end
 
+--[[
+	Translates string to player language.
+
+	@class HxTranslationString
+	@return string
+]]
 function private:Translate ()
 	local self = self :: TransString
 	local translator = private.translators[self]
@@ -34,7 +44,7 @@ end
 
 class.Source = script
 class.ClassName = main.ClassNames.HxTranslationString
-class.Translate = private.Translate
+class.Translate = private.Translate 
 interface.new = private.new
 
 table.freeze(class)

@@ -4,14 +4,18 @@ local private = {};
 local class = {}; class.__index=main.Number.class; setmetatable(class,class);
 local interface = {}; 
 
-local shade = main.Shade.new()
-
 private.evname = 'ModNumberEvent'::'ModNumberEvent'
 
 
 
 type NumberModifierObject = typeof(private.new())
 
+--[[
+	Creates new HxNumberModifier object.
+
+	@class HxNumberModifier
+	@return Instance (@P HxNumberModifier)
+]]
 function private.new (value: number?)
 	local ev0, c0 = main.Events.new(private.evname)
 	
