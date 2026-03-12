@@ -1,4 +1,4 @@
-local main = require('./HxHooker')
+local main = require('./')
 
 local private = {};
 local class = {}; setmetatable(class,class);

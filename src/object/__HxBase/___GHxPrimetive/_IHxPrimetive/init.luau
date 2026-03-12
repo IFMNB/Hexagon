@@ -1,4 +1,4 @@
-local main = require('../')
+local main = require('../HxEvent')
 
 local private = {}
 local class = {}; class.__index=main.__HxBase.class;setmetatable(class,class);

@@ -1,7 +1,7 @@
 --!strict
 --!optimize 0
 
-local main =require('./__HxAbstractMetalink/HxMetalinkCreator')
+local main =require('./HxShade')
 
 local shadow = main.HxShade.new()
 

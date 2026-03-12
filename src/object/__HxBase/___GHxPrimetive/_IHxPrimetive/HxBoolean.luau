@@ -20,7 +20,7 @@ end
 
 
 class.Value = false
-class.ClassName=main.ClassNames.HxString
+class.ClassName=main.ClassNames.HxBoolean
 class.Source = script
 interface.class=class
 interface.new = private.new

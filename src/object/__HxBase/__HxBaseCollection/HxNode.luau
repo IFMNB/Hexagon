@@ -4,13 +4,13 @@ local private = {};
 local class = {}; setmetatable(class,class);
 local interface = {};
 
-type HxNode = typeof(class);
+type HxNode = typeof(private.new());
 
-function private.new <Y,T,U> (value: Y?, BackNode: T?, NextNode: U?)
+function private.new <Y,T,U> (value: Y?, BackNode: HxNode?, NextNode: HxNode?)
 	return main.new({
 		Value = value :: Y,
-		BackNode = BackNode :: T,
-		NextNode = NextNode :: U,
+		BackNode = BackNode,
+		NextNode = NextNode,
 	}, class)
 end
 

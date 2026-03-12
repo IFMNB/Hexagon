@@ -1,4 +1,4 @@
-local main = require('./');
+local main = require('./HxObjectManager');
 
 local private = {};
 local class = {}; setmetatable(class,class);
@@ -8,6 +8,7 @@ private.mk = {__mode='k'}
 
 local HxConnection = main.HxConnection
 local HxEvent = main.HxEvent
+local HxObjectManager = main.HxObjectManager
 
 type HxSignal = typeof(class)
 type HxEvent <Reactor=any> = typeof(HxEvent.new(nil::Reactor).Snapshot.Event)
@@ -40,20 +41,15 @@ function private.new_event_properties <U, T> (DefaultFunction: T|DefaultFunction
 	local raw = {}
 	local lambda : HxSignal
 	
-	raw.Listeners = {};
 	raw.OnEventDestroyedWatchers = setmetatable({}, private.mk);
 	raw.Name = Name :: U;
 	raw.DefinedCallOut = DefaultFunction :: T;
 	raw.EventDestroyersMap = setmetatable({}, private.mk)
 	
+	local my_manager = HxObjectManager.new()
 	local is_transfer = false
-	local is_alive = true
 	local my_reactor = private.default_reactor :: typeof(private.default_operator)
 	local my_operator = private.default_operator :: (Signal: HxSignal, ...any)->()|any
-	
-	function raw:IsAlive ()
-		return is_alive
-	end
 	
 	function raw:IsTransferConnection ()
 		return is_transfer
@@ -75,6 +71,10 @@ function private.new_event_properties <U, T> (DefaultFunction: T|DefaultFunction
 		return my_operator or private.default_operator
 	end
 	
+	function raw:DoForListeners (F: (i: number, v: ListenerConnection)->())
+		return my_manager:DoForAll(F)
+	end
+	
 	function raw:SetOperator (Operator: (Signal: HxSignal, ...any)->()|any)
 		my_operator = Operator or private.default_operator
 	end
@@ -84,7 +84,7 @@ function private.new_event_properties <U, T> (DefaultFunction: T|DefaultFunction
 		@class HxSignal
 	]]	
 	function raw:Destroy ()
-		is_alive = false
+		my_manager:Destroy()
 		return class.Destroy(self)
 	end
 	
@@ -118,22 +118,33 @@ function private.default_operator (signal: HxSignal, ...: any)
 		local this = v;
 		
 		if this.Run == 'Serial' then
-			--coroutine.resume(coroutine.create(this.Func),...)
-			--task.spawn(function (...) this.Connection.Output = this.Func(...) end, ...)
-			if signal:IsTransferConnection() then
-				this.Connection.Output = this.Func(this.Connection, ...)
-			else
-				this.Connection.Output = this.Func(...);
-			end
-			
-		elseif this.Run == 'Parallel' then
 			task.spawn(function (...)
-				task.desynchronize()
+				if main.Abstract.IsParallel() then
+					task.synchronize()
+				end
+				
 				if signal:IsTransferConnection() then
 					this.Connection.Output = this.Func(this.Connection, ...)
 				else
 					this.Connection.Output = this.Func(...);
 				end
+				
+			end,...)
+		elseif this.Run == 'Parallel' then
+			task.spawn(function (...)
+				task.desynchronize()
+				
+				if not main.Abstract.IsParallel() then
+					signal:RemListener(v)
+					error('Parallel is not supported in this context')
+				end
+				
+				if signal:IsTransferConnection() then
+					this.Connection.Output = this.Func(this.Connection, ...)
+				else
+					this.Connection.Output = this.Func(...);
+				end
+				
 			end,...)
 		else
 			warn('Ignored and removed Invalid Connection RunType', this.Run)

@@ -1,4 +1,4 @@
-local main = require('./');
+local main = require('./HxActionEmitter');
 
 local private = {};
 local class = {}; setmetatable(class,class);
@@ -10,6 +10,7 @@ private.mv=table.freeze({__mode='kv'})
 	Creates a new object manager.
 
 	ObjectManager is a class that used to safely control collections of link-type objects.
+	Also can handle the lifecycle of RbxScriptConnections and HxConnections
 
 	@class HxObjectManager
 ]]
@@ -79,9 +80,12 @@ function private.new ()
 		local CanIterate = next(my_objects_array)
 		if CanIterate then
 			for i,v in table.clone(my_objects_array) do
-				if typeof(v) == 'RBXScriptConnection' then
-					if not v.Connected then
-						this:RemoveObject(v)
+				local TypeV = typeof(v)
+				if TypeV == 'RBXScriptConnection' then
+					(v::any):Disconnect()
+				elseif TypeV == 'table' then
+					if class.IsA(v, 'HxConnection') then
+						(v::any):Disconnect()
 					end
 				elseif v == nil then
 					table.remove(my_objects_array, i)
@@ -147,8 +151,13 @@ function private.new ()
 		is_alive = false
 		
 		for _,v in my_objects_array do
-			if typeof(v) == 'RBXScriptConnection' then
-				v:Disconnect()
+			local TypeV = typeof(v)
+			if TypeV == 'RBXScriptConnection' then
+				(v::any):Disconnect()
+			elseif TypeV == 'table' then
+				if class.IsA(v, 'HxConnection') then
+					(v::any):Disconnect()
+				end
 			end
 		end
 		

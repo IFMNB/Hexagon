@@ -13,6 +13,7 @@ local ClassNames_Hexagon_Map = {
 	
 			IHxPrimetive = 'IHxPrimetive'::'IHxPrimetive',
 				HxNumber = 'HxNumber'::'HxNumber',
+				HxBoolean = 'HxBoolean'::'HxBoolean',
 				HxString = 'HxString'::'HxString',
 				
 	
@@ -30,16 +31,18 @@ local ClassNames_Hexagon_Map = {
 					HxWeakMap = 'HxWeakMap'::'HxWeakMap',	
 	
 			IHxProperty = 'IHxProperty'::'IHxProperty',
-				HxObjectManager = 'HxObjectManager'::'HxObjectManager',
+				HxActionEmmiter = 'HxActionEmmiter',
+	
+				HxObjectManager = 'HxObjectManager'::'HxObjectManager',			
+				HxSignal = 'HxSignal'::'HxSignal',
+	
 				HxShade = 'HxShade'::'HxShade',
-				
+				HxHooker = 'HxHooker'::'HxHooker',
+	
 				HxAbstractMetalink = 'HxAbstractMetalink'::'HxAbstractMetalink',
 					HxMetalinkCreator = 'HxMetalinkNew'::'HxMetalinkNew',
-	
-				HxHooker = 'HxHooker'::'HxHooker',
-				HxActionEmmiter = 'HxActionEmmiter',
-					HxSignal = 'HxSignal'::'HxSignal',
-						HxEventCore = 'HxEventCore'::'HxEventCore',
+
+				
 	
 
 

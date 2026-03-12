@@ -67,7 +67,6 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 		@return Instance (@P HxConnection (ConnectionParallel))
 	]]
 	function this:ConnectParallel (Function: T?) : HxConnection
-		assert(main.Abstract.IsParallel(), 'Attempt to use parallel operation in unsupported ScriptContext')
 		return alive and Reactor(Function or this.DefaultFunction, 'Connection', 'Parallel', 'JustConnection') or error('Event is dead')
 	end
 	
@@ -81,7 +80,6 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 		@return Instance (@P HxConnection (OnceParallel))
 	]]
 	function this:OnceParallel (Function: T?) : HxConnection
-		assert(main.Abstract.IsParallel(), 'Attempt to use parallel operation in unsupported ScriptContext')
 		return alive and Reactor(Function or this.DefaultFunction, 'Once', 'Parallel', 'JustConnection') or error('Event is dead')
 	end
 	

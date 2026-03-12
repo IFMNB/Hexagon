@@ -1,4 +1,4 @@
-local main = require('./HxObjectManager')
+local main = require('./HxSignal')
 
 local private = {}
 local class = {}; class.__index=main.__HxBaseProperty.class; setmetatable(class,class)
