@@ -1,4 +1,4 @@
-local main = require('./')
+local main = require('./HxBoolean')
 local primetive = main._IHxPrimetive
 
 local private = {}
@@ -51,5 +51,5 @@ table.freeze(class)
 table.freeze(private)
 table.freeze(interface) 
 return main:expand({
-	String = interface
+	HxString = interface
 })

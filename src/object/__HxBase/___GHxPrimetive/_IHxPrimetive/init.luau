@@ -1,4 +1,4 @@
-local main = require('./___GHxProperty')
+local main = require('../')
 
 local private = {}
 local class = {}; class.__index=main.__HxBase.class;setmetatable(class,class);

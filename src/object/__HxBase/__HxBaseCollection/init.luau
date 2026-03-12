@@ -107,7 +107,7 @@ function private:collect_index (index: any)
 	return new
 end
 
-class.__index = main._IHxPrimetive.class;
+class.__index = main.__HxBase.class;
 class.ClassName = main.ClassNames.HxBaseCollection;
 class.Source = script;
 

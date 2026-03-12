@@ -11,8 +11,25 @@ local ClassNames_Hexagon_Map = {
 			HxConnection = 'HxConnection' :: 'HxConnection',
 			HxEvent = 'HxEvent' :: 'HxEvent',
 	
-			HxBaseProperty = 'HxBaseProperty'::'HxBaseProperty', 
+			IHxPrimetive = 'IHxPrimetive'::'IHxPrimetive',
+				HxNumber = 'HxNumber'::'HxNumber',
+				HxString = 'HxString'::'HxString',
+				
+	
+	
+			HxBaseCollection = 'HxBaseCollection'::'HxBaseCollection',
+				HxNode = 'HxNode'::'HxNode',
+					HxNodeList = 'HxList'::'HxList',
 
+				IHxList = 'IHxList'::'IHxList',
+					HxList = 'HxList'::'HxList',
+					HxWeakList = 'HxWeakList'::'HxWeakList',
+
+				IHxMap = 'IHxMap'::'IHxMap',
+					HxMap = 'HxMap'::'HxMap',
+					HxWeakMap = 'HxWeakMap'::'HxWeakMap',	
+	
+			IHxProperty = 'IHxProperty'::'IHxProperty',
 				HxObjectManager = 'HxObjectManager'::'HxObjectManager',
 				HxShade = 'HxShade'::'HxShade',
 				
@@ -24,24 +41,7 @@ local ClassNames_Hexagon_Map = {
 					HxSignal = 'HxSignal'::'HxSignal',
 						HxEventCore = 'HxEventCore'::'HxEventCore',
 	
-			IHxPrimetive = 'IHxPrimetive'::'IHxPrimetive',
-				HxString = 'HxString'::'HxString',
-					HxTranslationString = 'HxTranslationString'::'HxTranslationString',
-	
-				HxNumber = 'HxNumber'::'HxNumber',
-					HxNumberModifier = 'HxNumberModifier'::'HxNumberModifier',
-	
-				HxBaseCollection = 'HxBaseCollection'::'HxBaseCollection',
-					HxNode = 'HxNode'::'HxNode',
-						HxNodeList = 'HxList'::'HxList',
-	
-					IHxList = 'IHxList'::'IHxList',
-						HxList = 'HxList'::'HxList',
-						HxWeakList = 'HxWeakList'::'HxWeakList',
-	
-					IHxMap = 'IHxMap'::'IHxMap',
-						HxMap = 'HxMap'::'HxMap',
-						HxWeakMap = 'HxWeakMap'::'HxWeakMap',
+
 
 
 				
