@@ -14,29 +14,38 @@ function private.new <Y,T,U> (value: Y?, BackNode: T?, NextNode: U?)
 	}, class)
 end
 
-function private:Set (index: any, to: any)
-	local self = self :: HxNode;
-	assert(self.Value, 'doesnt have value')
-	assert(self.Value[index]==nil, 'override is not allowed')
+--[[
+	Removes the node from the line.
 	
-	self.Value[index] = to
-end
-
-function private:Get (index: any)
+	@class HxNode
+]]
+function private:remove_from_line ()
 	local self = self :: HxNode;
-	assert(self.Value , 'doesnt have value')
-	assert(self.Value[index]~=nil, 'not have this value')
-	return self.Value[index]
+
+	if self.BackNode then
+		if self.IsA(self.BackNode, 'HxNode') then
+			self.BackNode.NextNode = self.NextNode
+		end
+	end
+	
+	if self.NextNode then
+		if self.IsA(self.NextNode, 'HxNode') then
+			self.NextNode.BackNode = self.BackNode
+		end
+	end
+	
+	self.BackNode = nil;
+	self.NextNode = nil;
 end
 
 class.__index=main.__HxBaseCollection.class;
 class.Classindex=main.ClassNames.HxNode;
 class.Source=script;
+
 class.BackNode = nil :: HxNode?;
 class.NextNode = nil :: HxNode?;
 class.Value = nil :: {[any]:any}?;
-class.Set = private.Set;
-class.Get = private.Get;
+class.DoRemove = private.remove_from_line;
 
 interface.class = class;
 interface.new = private.new;

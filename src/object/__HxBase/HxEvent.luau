@@ -4,24 +4,25 @@ local private = {};
 local class = {}; setmetatable(class,class);
 local interface = {};
 
+local Snapshot = main.I_Object.Classes.HxSnapshot()
+
 type HxConnection = typeof(require('./HxConnection').HxConnection.new())
 type ConType = 'Connection'|'Once'
 type RunType = 'Parallel'|'Serial'
 type ActionType = 'JustConnection' | 'Wait'
 type DefaultFunction<T=any,U=any> = (...U)->T
 type FReactor = (DefaultFunction: DefaultFunction, ConnectionType: ConType, RunType: RunType, ActionType: ActionType)->HxConnection
-type HxEvent <Reacor_ = FReactor> = typeof(private.new(nil::Reacor_))
+type HxEvent <Reacor_ = FReactor> = typeof(private.new(nil::Reacor_).Snapshot.Event)
 type DeadWatch = (HxEvent: HxEvent)->()
 
 --[[
-	Creates a new HxEvent. Also returns a function that destroys the event.
+	Creates a new HxEvent that wrapped on the HxSnapshot object.
 
 	Please note: despite the fact that HxEvent instances are nominally always equal in one way or another,
 	due to the contravariance of functions and the structural type of event verification,
 	it is impossible to support this type of instance at the RBXScriptSignal level and not lose the typical markup for events.
 
 	@class HxEvent
-	@return Instance (@P HxEvent), Function
 ]]
 function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunction?, Name: U?)
 	local this = {}
@@ -66,6 +67,7 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 		@return Instance (@P HxConnection (ConnectionParallel))
 	]]
 	function this:ConnectParallel (Function: T?) : HxConnection
+		assert(main.Abstract.IsParallel(), 'Attempt to use parallel operation in unsupported ScriptContext')
 		return alive and Reactor(Function or this.DefaultFunction, 'Connection', 'Parallel', 'JustConnection') or error('Event is dead')
 	end
 	
@@ -79,6 +81,7 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 		@return Instance (@P HxConnection (OnceParallel))
 	]]
 	function this:OnceParallel (Function: T?) : HxConnection
+		assert(main.Abstract.IsParallel(), 'Attempt to use parallel operation in unsupported ScriptContext')
 		return alive and Reactor(Function or this.DefaultFunction, 'Once', 'Parallel', 'JustConnection') or error('Event is dead')
 	end
 	
@@ -141,13 +144,15 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 		watchers = nil
 	end
 	
-	return result :: typeof(assert(result)), labmda_disc
+	local HxSnap = Snapshot.new({Event = result :: typeof(assert(result)), Destroy = labmda_disc})
+	
+	return HxSnap
 end
 
 class.__index = main.__HxBase.class;
 class.ClassName = main.ClassNames.HxEvent;
 class.Source = script;
-class.DefaultFunction = (warn::any) :: DefaultFunction;
+class.DefaultFunction = (nil::any) :: DefaultFunction?;
 class.Connect = main.Abstract.SelfNotImplemented;
 class.Once = main.Abstract.SelfNotImplemented;
 class.ConnectParallel = main.Abstract.SelfNotImplemented;
@@ -155,11 +160,11 @@ class.OnceParallel = main.Abstract.SelfNotImplemented;
 class.WatchDeath = main.Abstract.SelfNotImplemented;
 class.Wait = main.Abstract.SelfNotImplemented;
 
-local instance, killinstance = private.new(nil::any, nil::any, nil::any);
-killinstance();table.freeze(instance);
+local instance = private.new(nil::any, nil::any, nil::any);
+instance.Snapshot.Destroy();table.freeze(instance.Snapshot.Event);
 
 interface.class = class;
-interface.instance = instance
+interface.instance = instance.Snapshot.Event
 interface.new = private.new;
 
 return main:expand({HxEvent = interface})

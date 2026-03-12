@@ -41,6 +41,13 @@ function private.Wrap <T,F, R, U...> (Callback: (...any)->()?, Call: F&((T, ...R
 	end) :: F
 end
 
+-- Returns true if the script is running in parallel, false if it is running in series.
+function private.is_parallel ()
+	local state = pcall(function(...) 
+		script.Parent=script.Parent
+	end)
+	return not state
+end
 
 abstract.ShouldOverrided = private.class_abstract_field
 abstract.SelfOverride = private.class_self_abstract
@@ -49,5 +56,6 @@ abstract.SelfNeverUse = private.class_self_overrided_error
 abstract.NotImplemented = private.class_not_implemented
 abstract.SelfNotImplemented = private.class_not_implemented_for_self
 abstract.Wrap = private.Wrap
+abstract.IsParallel = private.is_parallel
 
 return abstract

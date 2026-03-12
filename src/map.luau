@@ -18,7 +18,8 @@ local ClassNames_Hexagon_Map = {
 	
 				HxHooker = 'HxHooker'::'HxHooker',
 				HxActionEmmiter = 'HxActionEmmiter',
-					HxEventCore = 'HxEventCore'::'HxEventCore',
+					HxSignal = 'HxSignal'::'HxSignal',
+						HxEventCore = 'HxEventCore'::'HxEventCore',
 	
 			IHxPrimetive = 'IHxPrimetive'::'IHxPrimetive',
 				HxString = 'HxString'::'HxString',

@@ -10,7 +10,7 @@ local HxConnection = main.HxConnection
 local HxEvent = main.HxEvent
 
 type HxEventCore = typeof(class)
-type HxEvent <Reactor=any> = typeof(HxEvent.new(nil::Reactor))
+type HxEvent <Reactor=any> = typeof(HxEvent.new(nil::Reactor).Snapshot.Event)
 type HxEventConnection = typeof(HxConnection.new())
 type HxActionEmitter = typeof(main.HxActionEmitter.new())
 
@@ -123,10 +123,11 @@ end
 ]]
 function private.create_event <T,U> (self: SelfDefF<T,U>)
 	--local Event = private.new_event(self, self.Name);
-	local Event, KillEvent = HxEvent.new(function(DefaultFunction: DefaultFunction, ConnectionType: "Connection" | "Once", RunType: "Parallel" | "Serial") 
+	local Snapshot = HxEvent.new(function(DefaultFunction: DefaultFunction, ConnectionType: "Connection" | "Once", RunType: "Parallel" | "Serial") 
 		local self_ = self :: HxEventCore;
 		return self_:Reactor(DefaultFunction, ConnectionType, RunType)
 	end, self.DefaultFunction :: T, self.Name :: U)
+	local Event, KillEvent = Snapshot.Snapshot.Event, Snapshot.Snapshot.Destroy
 	
 	local self = self :: HxEventCore;
 	
