@@ -24,19 +24,21 @@ function src.Classes.HxConnection ()
 	return require('..//object/__HxBase/HxConnection').HxConnection
 end
 
-function src.Classes.HxEventCore ()
-	return require('..//object/__HxBase/__HxBaseProperty/HxActionEmitter/HxEventCore').HxEventCore
+function src.Classes.HxSignal ()
+	return require('..//object/__HxBase/___GHxProperty/__HxBaseProperty/HxActionEmitter/HxSignal').HxSignal
 end
 
+-- Does not have any analog.
+@deprecated
 function src.Classes.HxHooker ()
-	return require('..//object/__HxBase/__HxBaseProperty/HxHooker').Hooks
+	return require('..//object/__HxBase/___GHxProperty/__HxBaseProperty/HxHooker').HxHooker
 end
 function src.Classes.HxShade ()
-	return require('..//object/__HxBase/__HxBaseProperty/HxShade').Shade
+	return require('..//object/__HxBase/___GHxProperty/__HxBaseProperty/HxShade').HxShade
 end
 
 function src.Classes.HxActionEmitter ()
-	return require('..//object/__HxBase/__HxBaseProperty/HxActionEmitter').HxActionEmitter
+	return require('..//object/__HxBase/___GHxProperty/__HxBaseProperty/HxActionEmitter').HxActionEmitter
 end
 function src.Classes.HxMap ()
 	return require('..//object/__HxBase/_IHxPrimetive/__HxBaseCollection/IHxMap/HxMap').HxMap
@@ -56,7 +58,7 @@ end
 
 
 function src.Abstract.HxBaseProperty ()
-	return require('..//object/__HxBase/__HxBaseProperty').__HxBaseProperty
+	return require('..//object/__HxBase/___GHxProperty/__HxBaseProperty').__HxBaseProperty
 end
 
 function src.Abstract.HxBase ()

@@ -1,4 +1,4 @@
-local main = require('./')
+local main = require('../HxEvent')
 
 local private = {};
 local class = {}; class.__index=main.__HxBase.class; setmetatable(class,class);
@@ -9,6 +9,4 @@ class.Source=script;
 
 return main:expand({
 	__HxBaseProperty=interface;
-	HxConnection = require('./HxConnection').HxConnection;
-	HxEvent = require('./HxEvent').HxEvent;
 })

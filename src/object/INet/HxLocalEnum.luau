@@ -1,4 +1,4 @@
-local main = require('./')
+local main = require('./HxRuntimeException'):
 
 local private = {}
 local class = {}; setmetatable(class,class);

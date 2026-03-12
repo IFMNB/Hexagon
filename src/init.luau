@@ -5,6 +5,14 @@ root.Abstract = require('@self/protected/__abstract')
 root.Async = require('@self/protected/__async')
 root.Comparator = setmetatable({} :: {[any]: any}, {__mode='kvs'})
 
+
+--[[
+	_IHxClassName - interface class
+	__HxBase/AbstractClassName - abstract class
+	___GHxName - group of classes (definetly a enter-point of the abstract class descendants)
+	HxClassName - class
+]]
+
 --[[
 	Regarding the alignment of class names and values in the hierarchy.
 		The base class does not guarantee anything except that its signature is respected by descendants.

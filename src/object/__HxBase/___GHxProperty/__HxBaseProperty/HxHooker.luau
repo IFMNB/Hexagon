@@ -1,9 +1,9 @@
 --!strict
 --!optimize 0
 
-local main = require('./')
+local main =require('./__HxAbstractMetalink/HxMetalinkCreator')
 
-local shadow = require('./HxShade').Shade.new()
+local shadow = main.HxShade.new()
 
 local private = {}
 local class = {}; class.__index=main.__HxBaseProperty.class; setmetatable(class,class)
@@ -142,6 +142,7 @@ end
 
 
 -- Creates an instance of the class. Accepts a reactor (a function that is called when an event occurs) and a modification mode (the type of event that triggers the reactor).
+@deprecated
 function private.Constructor <t0> (reactor: func?, modify: t0 | metamodify?)
 	debug.profilebegin(script.Name..' .new_params')
 	
@@ -250,4 +251,4 @@ export type types = {
 
 -- The HookParams class provides tools for creating proxy reactants.
 
-return main:expand({Hooks=interface})
+return main:expand({HxHooker=interface})

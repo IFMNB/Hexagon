@@ -1,4 +1,4 @@
-local main = require('./')
+local main = require('./HxShade')
 
 local private = {};
 local class = {};

@@ -1,4 +1,4 @@
-local main = require('./')
+local main = require('./HxObjectManager')
 
 local private = {}
 local class = {}; class.__index=main.__HxBaseProperty.class; setmetatable(class,class)
@@ -7,7 +7,7 @@ local interface = {}; interface.class=class
 private.mt={__index=class}
 private.mt2={__mode='k'::'k'}
 
--- Special class for storing private instances data
+-- Special class for storing weak data
 function private.new ()
 	return main.new({Stored=setmetatable({},private.mt2)},class)
 end
@@ -37,4 +37,4 @@ interface.new = private.new
 table.freeze(class)
 table.freeze(private)
 table.freeze(interface)
-return main:expand({Shade=interface})
+return main:expand({HxShade=interface})

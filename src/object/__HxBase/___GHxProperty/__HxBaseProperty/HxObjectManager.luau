@@ -37,6 +37,7 @@ function private.new ()
 			or object_type == 'thread'
 			or object_type == 'SharedTable'
 			or object_type == 'function'
+			or object_type == "RBXScriptConnection"
 		)
 		
 		table.insert(my_objects_array, object)
@@ -69,6 +70,29 @@ function private.new ()
 		return false
 	end
 	
+		--[[
+		Repairs array-part of object manager and removes all nil-values and disconnected connections.
+	
+		@class HxObjectManager
+	]]
+	local function DoRemoveGarbage()
+		local CanIterate = next(my_objects_array)
+		if CanIterate then
+			for i,v in table.clone(my_objects_array) do
+				if typeof(v) == 'RBXScriptConnection' then
+					if not v.Connected then
+						this:RemoveObject(v)
+					end
+				elseif v == nil then
+					table.remove(my_objects_array, i)
+				end
+			end
+			
+			return true
+		end
+		return false
+	end
+	
 	--[[
 		@class HxObjectManager
 	]]
@@ -76,7 +100,7 @@ function private.new ()
 		local CanIterate = next(my_objects_array)
 		if CanIterate then
 			if this:IsAutoRepair() then
-				this:DoRemoveGarbage()
+				DoRemoveGarbage()
 			end
 			
 			for _, object in my_objects_array do
@@ -100,29 +124,6 @@ function private.new ()
 	]]
 	function this:SetAutoRepair (value: boolean)
 		is_auto_repair = value
-	end
-	
-	--[[
-		Repairs array-part of object manager and removes all nil-values and disconnected connections.
-	
-		@class HxObjectManager
-	]]
-	function this:DoRemoveGarbage()
-		local CanIterate = next(my_objects_array)
-		if CanIterate then
-			for i,v in table.clone(my_objects_array) do
-				if typeof(v) == 'RBXScriptConnection' then
-					if not v.Connected then
-						this:RemoveObject(v)
-					end
-				elseif v == nil then
-					table.remove(my_objects_array, i)
-				end
-			end
-			
-			return true
-		end
-		return false
 	end
 	
 	--[[
@@ -178,7 +179,7 @@ class.IsAlive = main.Abstract.SelfOverride;
 class.Destroy = main.Abstract.SelfOverride;
 class.IsAutoRepair = main.Abstract.SelfOverride;
 class.SetAutoRepair = main.Abstract.SelfOverride;
-class.DoRemoveGarbage = main.Abstract.SelfOverride;
+--class.DoRemoveGarbage = main.Abstract.SelfOverride;
 
 interface.class = class;
 interface.new = private.new;

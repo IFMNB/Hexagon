@@ -1,5 +1,7 @@
 local ClassNames_Hexagon_Map = {	
 	HxObject = 'HxObject'::'HxObject',
+		HxSnapshot = 'HxSnapshot'::'HxSnapshot',
+	
 		INet = 'INet' :: 'INet',
 			HxRuntimeException = 'HxRuntimeException'::'HxRuntimeException',
 			HxLocalEnum = 'HxLocalEnum'::'HxLocalEnum',
@@ -10,7 +12,7 @@ local ClassNames_Hexagon_Map = {
 			HxEvent = 'HxEvent' :: 'HxEvent',
 	
 			HxBaseProperty = 'HxBaseProperty'::'HxBaseProperty', 
-				HxSnapshot = 'HxSnapshot'::'HxSnapshot',
+
 				HxObjectManager = 'HxObjectManager'::'HxObjectManager',
 				HxShade = 'HxShade'::'HxShade',
 				

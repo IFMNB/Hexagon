@@ -1,4 +1,4 @@
-local main = require('./__HxBaseProperty')
+local main = require('./___GHxProperty')
 
 local private = {}
 local class = {}; class.__index=main.__HxBase.class;setmetatable(class,class);
@@ -16,9 +16,5 @@ table.freeze(private)
 table.freeze(class)
 table.freeze(interface)
 return main:expand({
-	_IHxPrimetive=interface,
-	HxEventCore = require('./__HxBaseProperty/HxActionEmitter/HxEventCore').HxEventCore,
-	Hooks = require('./__HxBaseProperty/HxHooker').Hooks,
-	Shade = require('./__HxBaseProperty/HxShade').Shade,
-	MetalinkCreator = require('./__HxBaseProperty/__HxAbstractMetalink/HxMetalinkCreator').HxMetalinkCreator;
+	_IHxPrimetive=interface
 })

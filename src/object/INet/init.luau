@@ -1,4 +1,4 @@
-local main = require('./')
+local main = require('./HxSnapshot')
 
 local http = game:GetService('HttpService')
 
