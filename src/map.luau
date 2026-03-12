@@ -11,6 +11,7 @@ local ClassNames_Hexagon_Map = {
 	
 			HxBaseProperty = 'HxBaseProperty'::'HxBaseProperty', 
 				HxSnapshot = 'HxSnapshot'::'HxSnapshot',
+				HxObjectManager = 'HxObjectManager'::'HxObjectManager',
 				HxShade = 'HxShade'::'HxShade',
 				
 				HxAbstractMetalink = 'HxAbstractMetalink'::'HxAbstractMetalink',
