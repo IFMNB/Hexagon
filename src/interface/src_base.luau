@@ -23,58 +23,40 @@ function src.Classes.HxConnection ()
 	return require('..//object/__HxBase/HxConnection').HxConnection
 end
 
-function src.Classes.HxSignal ()
-	return require('..//object/__HxBase/___GHxProperty/__HxBaseProperty/HxActionEmitter/HxSignal').HxSignal
+function src.Classes.HxMetalinkCreator ()
+	return require('..//object/__HxBase/___GHxProperty/_IHxProperty/__HxAbstractMetalink/HxMetalinkCreator').HxMetalinkCreator
 end
 
--- Does not have any analog.
-@deprecated
-function src.Classes.HxHooker ()
-	return require('..//object/__HxBase/___GHxProperty/__HxBaseProperty/HxHooker').HxHooker
+function src.Classes.HxSignal ()
+	return require('..//object/__HxBase/___GHxProperty/_IHxProperty/HxSignal').HxSignal
 end
-function src.Classes.HxShade ()
-	return require('..//object/__HxBase/___GHxProperty/__HxBaseProperty/HxShade').HxShade
+
+function src.Classes.HxObjectManager ()
+	return require('..//object/__HxBase/___GHxProperty/_IHxProperty/HxObjectManager').HxObjectManager
 end
 
 function src.Classes.HxActionEmitter ()
-	return require('..//object/__HxBase/___GHxProperty/__HxBaseProperty/HxActionEmitter').HxActionEmitter
-end
-function src.Classes.HxMap ()
-	return require('..//object/__HxBase/__HxBaseCollection/IHxMap/HxMap').HxMap
-end
-function src.Classes.HxWeakMap ()
-	return require('..//object/__HxBase/__HxBaseCollection/IHxMap/HxWeakMap').HxWeakMap
+	return require('..//object/__HxBase/___GHxProperty/_IHxProperty/HxActionEmitter').HxActionEmitter
 end
 function src.Classes.HxNode ()
-	return require('..//object/__HxBase/__HxBaseCollection/HxNode').HxNode
-end
-function src.Classes.HxList ()
-	return require('..//object/__HxBase/__HxBaseCollection/IHxList/HxList').HxList
-end
-function src.Classes.HxWeakList ()
-	return require('..//object/__HxBase/__HxBaseCollection/IHxList/HxWeakList').HxWeakList
+	return require('..//object/__HxBase/HxNode').HxNode
 end
 
 
-function src.Abstract.HxBaseProperty ()
-	return require('..//object/__HxBase/___GHxProperty/__HxBaseProperty').__HxBaseProperty
+function src.Interface.IHxProperty ()
+	return require('..//object/__HxBase/___GHxProperty/_IHxProperty')._IHxProperty
+end
+
+function src.Abstract.HxAbstractMetalink ()
+	return require('../object/__HxBase/___GHxProperty/_IHxProperty/__HxAbstractMetalink').__HxAbstractMetalink
 end
 
 function src.Abstract.HxBase ()
 	return require('..//object/__HxBase').__HxBase
 end
-function src.Abstract.HxBaseCollection ()
-	return require('..//object/__HxBase/__HxBaseCollection').__HxBaseCollection
-end
 
 function src.Interface.IHxPrimetive ()
 	return require('..//object/__HxBase/___GHxPrimetive/_IHxPrimetive')._IHxPrimetive
-end
-function src.Interface.IHxMap ()
-	return require('..//object/__HxBase/__HxBaseCollection/IHxMap')._IHxMap
-end
-function src.Interface.IHxList ()
-	return require('..//object/__HxBase/__HxBaseCollection/IHxList')._IHxList
 end
 
 

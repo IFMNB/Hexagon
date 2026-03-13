@@ -17,7 +17,6 @@ type DefCode=typeof(class.Code);
 function private.new <T,U> (Name : T?, Description: U?)
 	return main.new({
 		Code = Name :: REG<T,DefCode | string>,
-		Counter = 0,
 		Description = Description :: REG<U,DefDesc | string>
 	}, class)
 end
@@ -28,10 +27,8 @@ function private:throw (withStackTrace: boolean?)
 	self.Counter+=1
 	
 	local text = private.https:JSONEncode(self)
-	if withStackTrace then
-		text = string.format('%s\n%s', text, debug.traceback())
-	end
-	return error(text)
+	self:Warn(text, withStackTrace)
+	return error(self.Code)
 end
 -- Equalent to assert. Throws self if assertion is failed.
 function private:assert <T> (assertion: T) : typeof(assert(nil::T))

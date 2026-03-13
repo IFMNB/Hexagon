@@ -38,7 +38,7 @@ function private:remove_from_line ()
 	self.NextNode = nil;
 end
 
-class.__index=main.__HxBaseCollection.class;
+class.__index=main.__HxBase.class;
 class.Classindex=main.ClassNames.HxNode;
 class.Source=script;
 

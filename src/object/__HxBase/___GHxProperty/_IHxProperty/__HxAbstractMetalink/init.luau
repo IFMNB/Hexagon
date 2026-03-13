@@ -1,8 +1,8 @@
-local main = require('./HxHooker')
+local main = require('./HxSignal')
 
 local private = {};
 local class = {};
-class.__index = main.__HxBaseProperty.class;
+class.__index = main._IHxProperty.class;
 setmetatable(class,class);
 local interface = {};
 interface.class = class;

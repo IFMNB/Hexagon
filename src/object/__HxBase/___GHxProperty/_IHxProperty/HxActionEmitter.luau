@@ -1,4 +1,4 @@
-local main = require('./')
+local main = require('./HxObjectManager')
 
 local private = {};
 local class = {}; setmetatable(class,class);
@@ -67,7 +67,7 @@ function private:process (...: any)
 	return
 end
 
-class.__index = main.__HxBaseProperty.class;
+class.__index = main._IHxProperty.class;
 class.ClassName = main.ClassNames.HxActionEmmiter;
 class.Source=script;
 class.Listeners = {} :: {F};

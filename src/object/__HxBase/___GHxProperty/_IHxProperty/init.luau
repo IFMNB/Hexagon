@@ -4,9 +4,9 @@ local private = {};
 local class = {}; class.__index=main.__HxBase.class; setmetatable(class,class);
 local interface = {}; interface.class = class;
 
-class.ClassName=main.ClassNames.HxBaseProperty;
+class.ClassName=main.ClassNames.IHxProperty;
 class.Source=script;
 
 return main:expand({
-	__HxBaseProperty=interface;
+	_IHxProperty=interface;
 })

@@ -1,4 +1,4 @@
-local main = require('./HxObjectManager');
+local main = require('./HxActionEmitter');
 
 local private = {};
 local class = {}; setmetatable(class,class);
@@ -8,16 +8,15 @@ private.mk = {__mode='k'}
 
 local HxConnection = main.HxConnection
 local HxEvent = main.HxEvent
-local HxObjectManager = main.HxObjectManager
 
 type HxSignal = typeof(class)
-type HxEvent <Reactor=any> = typeof(HxEvent.new(nil::Reactor).Snapshot.Event)
+type HxEvent <Reactor=any> = typeof(HxEvent.new(nil::Reactor).Value.Event)
 type HxEventConnection = typeof(HxConnection.new())
 type HxActionEmitter = typeof(main.HxActionEmitter.new())
 
 type Name <T=string> = T
-type DefaultFunction = (...any)->()
-type Reactor = (self: HxSignal, TranslatedFunction: DefaultFunction|unknown, ConType: ConType|unknown, RunType: RunType|unknown, ActionType: ActionType|unknown) -> HxEventConnection
+type DefinedCallOut = (...any)->()
+type Reactor = (self: HxSignal, TranslatedFunction: DefinedCallOut|unknown, ConType: ConType|unknown, RunType: RunType|unknown, ActionType: ActionType|unknown) -> HxEventConnection
 type F = (...any)->()
 type ConType = 'Connection'|'Once'
 type RunType = 'Parallel'|'Serial'
@@ -30,24 +29,24 @@ type ListenerConnection = {
 }
 type Listener = ListenerConnection
 type Connect = (self: HxEvent, Function: F)->HxEventConnection
-type SelfDefF <T=()->...any, U=string> = {DefaultFunction: T, Name: U} | any
+type SelfDefF <T=()->...any, U=string> = {DefinedCallOut: T, Name: U} | any
 
 --[[
 	Creates a new HxSignal.
 	
 	@class HxSignal
 ]]
-function private.new_event_properties <U, T> (DefaultFunction: T|DefaultFunction?, Name: U|Name?)
+function private.new_event_properties <T> (DefinedCallOut: T|DefinedCallOut?)
 	local raw = {}
 	local lambda : HxSignal
 	
+	raw.Listeners = {}
 	raw.OnEventDestroyedWatchers = setmetatable({}, private.mk);
-	raw.Name = Name :: U;
-	raw.DefinedCallOut = DefaultFunction :: T;
+	raw.DefinedCallOut = DefinedCallOut :: T;
 	raw.EventDestroyersMap = setmetatable({}, private.mk)
-	
-	local my_manager = HxObjectManager.new()
+
 	local is_transfer = false
+	local is_alive = true
 	local my_reactor = private.default_reactor :: typeof(private.default_operator)
 	local my_operator = private.default_operator :: (Signal: HxSignal, ...any)->()|any
 	
@@ -67,25 +66,25 @@ function private.new_event_properties <U, T> (DefaultFunction: T|DefaultFunction
 		my_reactor = Reactor or private.default_reactor
 	end
 	
+	function raw:IsAlive ()
+		return is_alive
+	end
+	
 	function raw:GetOperator ()
 		return my_operator or private.default_operator
 	end
 	
-	function raw:DoForListeners (F: (i: number, v: ListenerConnection)->())
-		return my_manager:DoForAll(F)
+	--[[
+		@wrapped 
+		@class HxSignal
+	]]
+	function raw:Destroy ()
+		is_alive = false
+		return class.Destroy(self)
 	end
 	
 	function raw:SetOperator (Operator: (Signal: HxSignal, ...any)->()|any)
 		my_operator = Operator or private.default_operator
-	end
-	
-	--[[
-		@wrapped
-		@class HxSignal
-	]]	
-	function raw:Destroy ()
-		my_manager:Destroy()
-		return class.Destroy(self)
 	end
 	
 	--[[
@@ -137,7 +136,7 @@ function private.default_operator (signal: HxSignal, ...: any)
 				if not main.Abstract.IsParallel() then
 					signal:RemListener(v)
 					error('Parallel is not supported in this context')
-				end
+				end 
 				
 				if signal:IsTransferConnection() then
 					this.Connection.Output = this.Func(this.Connection, ...)
@@ -170,7 +169,7 @@ end
 	
 	@class HxSignal
 ]]
-function private:default_reactor (DefaultFunction: DefaultFunction, ConnectionType: ConType, RunType: RunType, _: ActionType)
+function private:default_reactor (DefinedCallOut: DefinedCallOut, ConnectionType: ConType, RunType: RunType, _: ActionType)
 	local this : ListenerConnection = {} :: any
 	local self = self :: HxSignal;
 	
@@ -181,7 +180,7 @@ function private:default_reactor (DefaultFunction: DefaultFunction, ConnectionTy
 	this.Connection = Connection;
 	this.Type = ConnectionType;
 	this.Run = RunType;
-	this.Func = DefaultFunction;
+	this.Func = DefinedCallOut;
 	
 	self:AddListener(this)
 	
@@ -259,19 +258,19 @@ end
 ]]
 function private.create_event <T,U> (self: SelfDefF<T,U>)
 	--local Event = private.new_event(self, self.Name);
-	local Snapshot = HxEvent.new(function(DefaultFunction: DefaultFunction, ConnectionType: "Connection" | "Once", RunType: "Parallel" | "Serial") 
+	local Snapshot = HxEvent.new(function(DefinedCallOut: DefinedCallOut, ConnectionType: "Connection" | "Once", RunType: "Parallel" | "Serial") 
 		local self_ = self :: HxSignal;
-		return (self_:GetReactor()::Reactor)(self_,DefaultFunction, ConnectionType, RunType)
-	end, self.DefaultFunction :: T, self.Name :: U)
-	local Event, EventDestroyersMap = Snapshot.Snapshot.Event, Snapshot.Snapshot.Destroy
+		return (self_:GetReactor()::Reactor)(self_,DefinedCallOut, ConnectionType, RunType)
+	end, self.DefinedCallOut :: T, class.ClassName)
+	local Event, EventDestroyersMap = Snapshot.Value.Event, Snapshot.Value.Destroy
 	
 	local self = self :: HxSignal;
 	
 	local HxActionEmitter = main.HxActionEmitter.new();
 	HxActionEmitter.OnceAction = true;
 	
-	self.OnEventDestroyedWatchers[Event] = HxActionEmitter;
-	self.EventDestroyersMap[Event]=EventDestroyersMap;
+	self.OnEventDestroyedWatchers[Event::any] = HxActionEmitter;
+	self.EventDestroyersMap[Event::any]=EventDestroyersMap;
 	return Event
 end
 
@@ -286,8 +285,7 @@ class.OnEventDestroyedWatchers = table.freeze(setmetatable({} :: {[HxEvent]: HxA
 class.EventDestroyersMap = table.freeze(setmetatable({} :: {[HxEvent]: ()->()}, private.mk));
 
 
-class.DefinedCallOut = error :: DefaultFunction;
-class.Name = '' :: Name;
+class.DefinedCallOut = error :: DefinedCallOut;
 
 class.AddEvent = private.create_event;
 class.RemEvent = private.destroy_event;

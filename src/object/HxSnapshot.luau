@@ -9,8 +9,8 @@ type Snapshot = typeof(private.new({}::any))
 
 function private.new <data> (object: data)
 	local self = main.new({
-		Snapshot = (class.IsA(object, 'HxObject') and main.new(object, class.GetClass(object)) or object) :: data;
-		Data = DateTime.now().UnixTimestamp
+		Value = (class.IsA(object, 'HxObject') and class.Clone(object,true) or object) :: data;
+		DataStamp = DateTime.now().UnixTimestamp
 	}, class)
 	
 	return self
@@ -21,8 +21,8 @@ end
 
 
 class.__index=main.Objects.class;
-class.Snapshot = nil :: unknown;
-class.Data = 0 :: number;
+class.Value = nil :: unknown;
+class.DataStamp = 0 :: number;
 class.Source=script;
 class.ClassName = main.ClassNames.HxSnapshot;
 class.IsReplicatable = true :: true;

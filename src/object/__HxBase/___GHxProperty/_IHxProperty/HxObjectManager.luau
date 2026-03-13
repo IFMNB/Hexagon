@@ -1,4 +1,4 @@
-local main = require('./HxActionEmitter');
+local main = require('./');
 
 local private = {};
 local class = {}; setmetatable(class,class);
@@ -61,7 +61,7 @@ function private.new ()
 	--[[
 		@class HxObjectManager
 	]]
-	function this:DoCatchAndCall(object: object, F: F)
+	function this:DoForCatched(object: object, F: F)
 		local target = my_objects_map[object]
 		if target then
 			xpcall(F,warn,target)
@@ -174,14 +174,14 @@ function private.new ()
 	return result
 end
 
-class.__index = main.__HxBaseProperty.class;
+class.__index = main._IHxProperty.class;
 class.ClassName = main.ClassNames.HxObjectManager;
 class.Source = script;
 
 class.Destroy = main.Abstract.SelfOverride;
 class.AddObject = main.Abstract.SelfOverride;
 class.RemoveObject = main.Abstract.SelfOverride;
-class.DoCatchAndCall = main.Abstract.SelfOverride;
+class.DoForCatched = main.Abstract.SelfOverride;
 class.DoForAll = main.Abstract.SelfOverride;
 class.IsObjectExists = main.Abstract.SelfOverride;
 class.IsAlive = main.Abstract.SelfOverride;

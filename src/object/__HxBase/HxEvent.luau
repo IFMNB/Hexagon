@@ -12,7 +12,7 @@ type RunType = 'Parallel'|'Serial'
 type ActionType = 'JustConnection' | 'Wait'
 type DefaultFunction<T=any,U=any> = (...U)->T
 type FReactor = (DefaultFunction: DefaultFunction, ConnectionType: ConType, RunType: RunType, ActionType: ActionType)->HxConnection
-type HxEvent <Reacor_ = FReactor> = typeof(private.new(nil::Reacor_).Snapshot.Event)
+type HxEvent <Reacor_ = FReactor> = typeof(private.new(nil::Reacor_).Value.Event)
 type DeadWatch = (HxEvent: HxEvent)->()
 
 --[[
@@ -39,7 +39,6 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 		If the event is destroyed, the connection will be disconnected.
 		
 		@class HxEvent
-		@return Instance (@P HxConnection (Connection))
 	]]
 	function this:Connect (Function: T?) : HxConnection
 		return alive and Reactor(Function or this.DefaultFunction, 'Connection', 'Serial', 'JustConnection') or error('Event is dead')
@@ -52,7 +51,6 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 		The function will be disconnected once the event is fired.
 		
 		@class HxEvent
-		@return Instance (@P HxConnection (Once))
 	]]
 	function this:Once (Function: T?) : HxConnection
 		return alive and Reactor(Function or this.DefaultFunction, 'Once', 'Serial', 'JustConnection') or error('Event is dead')
@@ -64,7 +62,6 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 		If the event is destroyed, the connection will be disconnected.
 		
 		@class HxEvent
-		@return Instance (@P HxConnection (ConnectionParallel))
 	]]
 	function this:ConnectParallel (Function: T?) : HxConnection
 		return alive and Reactor(Function or this.DefaultFunction, 'Connection', 'Parallel', 'JustConnection') or error('Event is dead')
@@ -77,7 +74,6 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 		The function will be disconnected once the event is fired.
 		
 		@class HxEvent
-		@return Instance (@P HxConnection (OnceParallel))
 	]]
 	function this:OnceParallel (Function: T?) : HxConnection
 		return alive and Reactor(Function or this.DefaultFunction, 'Once', 'Parallel', 'JustConnection') or error('Event is dead')
@@ -89,8 +85,6 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 		Returns a function that disconnects the connection.
 		
 		@class HxEvent
-		@return Function
-	
 	]]
 	function this:WatchDeath (Function: (HxEvent: typeof(assert(result)))->())
 		if not alive then error('Event is dead') end
@@ -112,7 +106,6 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 	
 		@yields
 		@class HxEvent
-		@return ...unknown
 	]]
 	function this:Wait () : ...unknown
 		local thread = coroutine.running()
@@ -130,7 +123,6 @@ function private.new <T,U> (Reactor: FReactor, DefaultFunction: T|DefaultFunctio
 		Destroys the event.
 	
 		@class HxEvent
-		@return ()
 	]]
 	local function labmda_disc ()
 		alive = nil;
@@ -159,10 +151,10 @@ class.WatchDeath = main.Abstract.SelfNotImplemented;
 class.Wait = main.Abstract.SelfNotImplemented;
 
 local instance = private.new(nil::any, nil::any, nil::any);
-instance.Snapshot.Destroy();table.freeze(instance.Snapshot.Event);
+instance.Value.Destroy();table.freeze(instance.Value.Event);
 
 interface.class = class;
-interface.instance = instance.Snapshot.Event
+interface.instance = instance.Value.Event
 interface.new = private.new;
 
 return main:expand({HxEvent = interface})

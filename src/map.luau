@@ -31,13 +31,9 @@ local ClassNames_Hexagon_Map = {
 					HxWeakMap = 'HxWeakMap'::'HxWeakMap',	
 	
 			IHxProperty = 'IHxProperty'::'IHxProperty',
-				HxActionEmmiter = 'HxActionEmmiter',
-	
-				HxObjectManager = 'HxObjectManager'::'HxObjectManager',			
+				HxObjectManager = 'HxObjectManager'::'HxObjectManager',	
+				HxActionEmmiter = 'HxActionEmmiter',		
 				HxSignal = 'HxSignal'::'HxSignal',
-	
-				HxShade = 'HxShade'::'HxShade',
-				HxHooker = 'HxHooker'::'HxHooker',
 	
 				HxAbstractMetalink = 'HxAbstractMetalink'::'HxAbstractMetalink',
 					HxMetalinkCreator = 'HxMetalinkNew'::'HxMetalinkNew',
